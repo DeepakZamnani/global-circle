@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // ============================================
 // GLOBAL CIRCLE EDU - Navbar + Hero Component
@@ -9,6 +9,8 @@ import React, { useState } from 'react';
 
 export default function NavbarHero() {
   const [hoveredNav, setHoveredNav] = useState(null);
+  
+  // hoveredNav is used in the nav-link onMouseEnter/Leave handlers below
 
   return (
     <div style={{
@@ -455,7 +457,7 @@ export default function NavbarHero() {
         {/* Background Decorative Elements */}
         {/* Small Orange Circle - Top Right */}
         <div 
-          className="decorative-circle"
+          className="decorative-circle floating floating-delay-1"
           style={{
           position: 'absolute',
           top: '15%',
@@ -465,11 +467,11 @@ export default function NavbarHero() {
           borderRadius: '50%',
           background: '#FF6B35',
           opacity: 0.6
-        }} className="floating floating-delay-1" />
+        }} />
         
         {/* Small Teal Circle - Top Left */}
         <div 
-          className="decorative-circle"
+          className="decorative-circle floating floating-delay-2"
           style={{
           position: 'absolute',
           top: '25%',
@@ -479,11 +481,11 @@ export default function NavbarHero() {
           borderRadius: '50%',
           background: '#2EC4B6',
           opacity: 0.5
-        }} className="floating floating-delay-2" />
+        }} />
 
         {/* Diamond Shape - Left */}
         <div 
-          className="decorative-circle"
+          className="decorative-circle floating-slow"
           style={{
           position: 'absolute',
           top: '60%',
@@ -494,7 +496,7 @@ export default function NavbarHero() {
           opacity: 0.3,
           transform: 'rotate(45deg)',
           borderRadius: '4px'
-        }} className="floating-slow" />
+        }} />
 
         {/* Main Content Grid */}
         <div 
