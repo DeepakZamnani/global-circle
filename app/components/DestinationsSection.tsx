@@ -63,7 +63,7 @@ export default function DestinationsSection() {
 
   return (
     <section style={{
-      padding: '120px 48px',
+      padding: '50px 48px',
     //   background: '#FFFFFF',
     background: '#F8FAFC',
       fontFamily: '"Plus Jakarta Sans", sans-serif',

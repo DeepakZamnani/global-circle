@@ -167,8 +167,8 @@ export default function Navbar() {
           <div className="nav-links" style={{ display: 'flex', gap: '40px' }}>
             <Link href="/destinations" className="nav-link">Destinations</Link>
             <Link href="#" className="nav-link">Programs</Link>
-            <Link href="#" className="nav-link">Services</Link>
-            <Link href="#" className="nav-link">About</Link>
+            <Link href="#" className="nav-link">Jobs</Link>
+            <Link href="#" className="nav-link">Forex</Link>
             <Link href="#" className="nav-link">Contact</Link>
           </div>
 
@@ -226,8 +226,8 @@ export default function Navbar() {
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
         <Link href="/destinations" onClick={() => setMobileMenuOpen(false)}>Destinations</Link>
         <Link href="/programs" onClick={() => setMobileMenuOpen(false)}>Programs</Link>
-        <Link href="/services" onClick={() => setMobileMenuOpen(false)}>Services</Link>
-        <Link href="/about" onClick={() => setMobileMenuOpen(false)}>About</Link>
+        <Link href="/jobs" onClick={() => setMobileMenuOpen(false)}>Jobs</Link>
+        <Link href="/forex" onClick={() => setMobileMenuOpen(false)}>Forex</Link>
         <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
       </div>
     </>

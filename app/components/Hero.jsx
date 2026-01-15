@@ -2336,7 +2336,7 @@ export default function HeroSection() {
         left: 0,
         right: 0,
         height: '80px',
-        background: '#F8FAFC',
+        background: '#1E3A5F',
         clipPath: 'polygon(0 100%, 100% 100%, 100% 0, 0 100%)'
       }} />
     </section>
