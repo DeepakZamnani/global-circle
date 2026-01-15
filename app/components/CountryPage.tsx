@@ -2,12 +2,11 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { countryData } from '../data/countryData'
+import { countryData } from '../data/countryData';
 import Navbar from './Navbar';
-import Footer from './Footer';
 
 // ============================================
-// COUNTRY PAGE - Luxury Minimal Design
+// COUNTRY PAGE - Mobile Friendly Version
 // Route: /destinations/[country]
 // ============================================
 
@@ -26,31 +25,36 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
     <div style={{
       minHeight: '100vh',
       background: '#FFFFFF',
-      fontFamily: '"Plus Jakarta Sans", sans-serif'
+      fontFamily: '"Plus Jakarta Sans", sans-serif',
+      overflowX: 'hidden'
     }}>
-      <Navbar/>
+    <Navbar/>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+        * {
+          box-sizing: border-box;
+        }
+
         .stat-card {
           background: white;
-          border-radius: 20px;
-          padding: 28px;
+          border-radius: 16px;
+          padding: 24px 16px;
           text-align: center;
           border: 1px solid #E2E8F0;
           transition: all 0.4s ease;
         }
 
         .stat-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+          transform: translateY(-4px);
+          box-shadow: 0 16px 32px rgba(0,0,0,0.08);
           border-color: #FF6B35;
         }
 
         .highlight-card {
           background: #FFFFFF;
-          border-radius: 24px;
-          padding: 32px;
+          border-radius: 20px;
+          padding: 24px;
           border: 2px solid #F1F5F9;
           transition: all 0.4s ease;
           position: relative;
@@ -80,11 +84,11 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
 
         .program-chip {
           display: inline-block;
-          padding: 14px 24px;
+          padding: 12px 20px;
           background: #F8FAFC;
           border: 2px solid #E2E8F0;
           border-radius: 50px;
-          font-size: 15px;
+          font-size: 14px;
           font-weight: 600;
           color: #1E3A5F;
           transition: all 0.3s ease;
@@ -95,33 +99,31 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           border-color: #FF6B35;
           background: #FFF7ED;
           color: #FF6B35;
-          transform: translateY(-2px);
         }
 
         .university-item {
           display: flex;
           align-items: center;
-          gap: 16px;
-          padding: 20px;
+          gap: 12px;
+          padding: 16px;
           background: #F8FAFC;
-          border-radius: 16px;
+          border-radius: 12px;
           transition: all 0.3s ease;
         }
 
         .university-item:hover {
           background: #FFF7ED;
-          transform: translateX(8px);
         }
 
         .city-badge {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 12px 20px;
+          gap: 8px;
+          padding: 10px 16px;
           background: white;
           border: 2px solid #E2E8F0;
           border-radius: 50px;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           color: #1E3A5F;
           transition: all 0.3s ease;
@@ -135,8 +137,8 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
         .req-item {
           display: flex;
           align-items: center;
-          gap: 16px;
-          padding: 18px 0;
+          gap: 12px;
+          padding: 14px 0;
           border-bottom: 1px solid #F1F5F9;
         }
 
@@ -145,14 +147,9 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
         }
 
         .gallery-img {
-          border-radius: 20px;
+          border-radius: 16px;
           overflow: hidden;
           transition: all 0.5s ease;
-        }
-
-        .gallery-img:hover {
-          transform: scale(1.03);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
         .gallery-img img {
@@ -163,44 +160,48 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
         }
 
         .gallery-img:hover img {
-          transform: scale(1.1);
+          transform: scale(1.05);
         }
 
         .cta-primary {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 18px 36px;
+          justify-content: center;
+          gap: 8px;
+          padding: 16px 28px;
           background: #FF6B35;
           color: white;
           border-radius: 50px;
           font-weight: 700;
-          font-size: 16px;
+          font-size: 15px;
           text-decoration: none;
           border: none;
           cursor: pointer;
           transition: all 0.3s ease;
+          width: 100%;
         }
 
         .cta-primary:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 12px 32px rgba(255,107,53,0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px rgba(255,107,53,0.4);
         }
 
         .cta-secondary {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          padding: 18px 36px;
+          justify-content: center;
+          gap: 8px;
+          padding: 16px 28px;
           background: transparent;
           color: #1E3A5F;
           border: 2px solid #E2E8F0;
           border-radius: 50px;
           font-weight: 700;
-          font-size: 16px;
+          font-size: 15px;
           text-decoration: none;
           cursor: pointer;
           transition: all 0.3s ease;
+          width: 100%;
         }
 
         .cta-secondary:hover {
@@ -208,58 +209,94 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           background: #F8FAFC;
         }
 
-        @media (max-width: 1024px) {
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-
-          .highlights-grid {
-            grid-template-columns: 1fr !important;
-          }
-
-          .gallery-grid {
-            grid-template-columns: 1fr !important;
-          }
-
-          .universities-grid {
-            grid-template-columns: 1fr !important;
-          }
+        /* Section base styles */
+        .section-base {
+          padding: 60px 20px;
         }
 
-        @media (max-width: 768px) {
-          .hero-content {
-            padding: 140px 20px 80px !important;
+        .section-title {
+          font-size: 28px;
+          font-weight: 800;
+          color: #1E3A5F;
+          letter-spacing: -0.5px;
+          margin-bottom: 24px;
+        }
+
+        .section-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 12px;
+        }
+
+        .section-label-line {
+          width: 28px;
+          height: 3px;
+          background: #FF6B35;
+          border-radius: 2px;
+        }
+
+        .section-label-text {
+          font-size: 12px;
+          font-weight: 700;
+          color: #64748B;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+        }
+
+        /* ==================== TABLET ==================== */
+        @media (min-width: 768px) {
+          .section-base {
+            padding: 80px 40px;
           }
 
-          .hero-title {
-            font-size: 36px !important;
-          }
-
-          .section-padding {
-            padding: 60px 20px !important;
-          }
-
-          .stats-grid {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 12px !important;
+          .section-title {
+            font-size: 36px;
           }
 
           .stat-card {
-            padding: 20px !important;
+            padding: 28px 20px;
           }
 
-          .cta-row {
-            flex-direction: column !important;
-            width: 100%;
+          .highlight-card {
+            padding: 28px;
           }
 
-          .cta-row a, .cta-row button {
-            width: 100%;
-            justify-content: center;
+          .cta-primary, .cta-secondary {
+            width: auto;
+            padding: 18px 32px;
+            font-size: 16px;
+          }
+        }
+
+        /* ==================== DESKTOP ==================== */
+        @media (min-width: 1024px) {
+          .section-base {
+            padding: 100px 48px;
           }
 
-          .info-grid {
-            grid-template-columns: 1fr !important;
+          .section-title {
+            font-size: 42px;
+          }
+
+          .stat-card {
+            padding: 32px 24px;
+            border-radius: 20px;
+          }
+
+          .highlight-card {
+            padding: 32px;
+            border-radius: 24px;
+          }
+
+          .program-chip {
+            padding: 14px 24px;
+            font-size: 15px;
+          }
+
+          .cta-primary, .cta-secondary {
+            padding: 20px 40px;
+            font-size: 17px;
           }
         }
       `}</style>
@@ -267,7 +304,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       {/* Hero Section */}
       <section style={{
         position: 'relative',
-        minHeight: '85vh',
+        minHeight: '100vh',
         overflow: 'hidden'
       }}>
         {/* Background Image */}
@@ -289,63 +326,59 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)'
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%)'
         }} />
 
         {/* Hero Content */}
-        <div 
-          className="hero-content"
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            minHeight: '85vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            padding: '60px 48px 80px',
-            maxWidth: '1400px',
-            margin: '0 auto'
-          }}
-        >
+        <div style={{
+          position: 'relative',
+          zIndex: 2,
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-end',
+          padding: '100px 20px 40px',
+          maxWidth: '1400px',
+          margin: '0 auto'
+        }}>
           {/* Back Link */}
           <Link 
             href="/destinations"
             style={{
               position: 'absolute',
-              top: '120px',
-              left: '48px',
+              top: '100px',
+              left: '20px',
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '6px',
               color: 'white',
               textDecoration: 'none',
               fontWeight: '600',
-              fontSize: '14px',
-              opacity: 0.8,
-              transition: 'all 0.3s ease'
+              fontSize: '13px',
+              opacity: 0.8
             }}
           >
             <span>←</span>
-            All Destinations
+            Back
           </Link>
 
           {/* Country Badge */}
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '12px',
-            padding: '12px 24px',
+            gap: '10px',
+            padding: '10px 18px',
             background: 'rgba(255,255,255,0.15)',
             backdropFilter: 'blur(10px)',
             borderRadius: '50px',
-            marginBottom: '24px',
+            marginBottom: '16px',
             width: 'fit-content'
           }}>
-            <span style={{ fontSize: '32px' }}>{country.flag}</span>
+            <span style={{ fontSize: '24px' }}>{country.flag}</span>
             <span style={{ 
               color: 'white', 
               fontWeight: '700', 
-              fontSize: '15px',
+              fontSize: '13px',
               letterSpacing: '1px',
               textTransform: 'uppercase'
             }}>
@@ -354,41 +387,47 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           </div>
 
           {/* Title */}
-          <h1 
-            className="hero-title"
-            style={{
-              fontSize: '64px',
-              fontWeight: '800',
-              color: 'white',
-              letterSpacing: '-2px',
-              lineHeight: '1.05',
-              marginBottom: '20px',
-              maxWidth: '800px'
-            }}
-          >
+          <h1 style={{
+            fontSize: 'clamp(32px, 8vw, 64px)',
+            fontWeight: '800',
+            color: 'white',
+            letterSpacing: '-1px',
+            lineHeight: '1.1',
+            marginBottom: '16px',
+            maxWidth: '800px'
+          }}>
             {country.tagline}
           </h1>
 
           {/* Description */}
           <p style={{
-            fontSize: '18px',
+            fontSize: 'clamp(15px, 4vw, 18px)',
             color: 'rgba(255,255,255,0.9)',
             lineHeight: '1.7',
             maxWidth: '600px',
-            marginBottom: '32px'
+            marginBottom: '24px'
           }}>
             {country.description}
           </p>
 
           {/* CTA Buttons */}
-          <div className="cta-row" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: '12px',
+            maxWidth: '400px'
+          }}>
             <Link href="/contact" className="cta-primary">
               Start Your Application
               <span>→</span>
             </Link>
             <button 
               className="cta-secondary"
-              style={{ background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}
+              style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                borderColor: 'rgba(255,255,255,0.3)', 
+                color: 'white' 
+              }}
             >
               Download Guide
             </button>
@@ -396,137 +435,101 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
         </div>
       </section>
 
-      {/* Stats Section - Floating Cards */}
+      {/* Stats Section */}
       <section style={{
-        marginTop: '-60px',
-        padding: '0 48px 80px',
+        padding: '20px',
+        marginTop: '-30px',
         position: 'relative',
         zIndex: 3
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div 
-            className="stats-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '20px'
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '12px'
+          }}>
             <div className="stat-card">
-              <div style={{ fontSize: '42px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
                 {country.stats.universities}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Universities</div>
+              <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600' }}>Universities</div>
             </div>
             <div className="stat-card">
-              <div style={{ fontSize: '42px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
                 {country.stats.programs}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Programs</div>
+              <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600' }}>Programs</div>
             </div>
             <div className="stat-card">
-              <div style={{ fontSize: '42px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
                 {country.stats.intlStudents}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Int'l Students</div>
+              <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600' }}>Int'l Students</div>
             </div>
             <div className="stat-card">
-              <div style={{ fontSize: '42px', fontWeight: '800', color: '#FF6B35', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'clamp(28px, 6vw, 42px)', fontWeight: '800', color: '#FF6B35', marginBottom: '4px' }}>
                 {country.stats.globalRank}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Global Rank</div>
+              <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600' }}>Global Rank</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Why Study Section */}
-      <section 
-        className="section-padding"
-        style={{ padding: '80px 48px', background: '#FFFFFF' }}
-      >
+      <section className="section-base" style={{ background: '#FFFFFF' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Section Header */}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'flex-end',
-            marginBottom: '48px',
-            flexWrap: 'wrap',
-            gap: '24px'
-          }}>
-            <div>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                marginBottom: '16px'
-              }}>
-                <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
-                <span style={{
-                  fontSize: '13px',
-                  fontWeight: '700',
-                  color: '#64748B',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase'
-                }}>
-                  Why {country.name}
-                </span>
-              </div>
-              <h2 style={{
-                fontSize: '42px',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                letterSpacing: '-1.5px'
-              }}>
-                Reasons to Choose<br />
-                <span style={{ color: '#FF6B35' }}>{country.name}</span>
-              </h2>
+          <div style={{ marginBottom: '32px' }}>
+            <div className="section-label">
+              <div className="section-label-line" />
+              <span className="section-label-text">Why {country.name}</span>
             </div>
+            <h2 className="section-title">
+              Reasons to Choose<br />
+              <span style={{ color: '#FF6B35' }}>{country.name}</span>
+            </h2>
           </div>
 
           {/* Highlights Grid */}
-          <div 
-            className="highlights-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '24px'
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '16px'
+          }}>
             {country.highlights.map((highlight, idx) => (
               <div key={idx} className="highlight-card">
                 <div style={{
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '20px'
+                  gap: '16px'
                 }}>
                   <div style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '16px',
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
                     background: '#FFF7ED',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: '#FF6B35',
                     fontWeight: '800',
-                    fontSize: '20px',
+                    fontSize: '18px',
                     flexShrink: 0
                   }}>
                     {String(idx + 1).padStart(2, '0')}
                   </div>
                   <div>
                     <h3 style={{
-                      fontSize: '20px',
+                      fontSize: '17px',
                       fontWeight: '700',
                       color: '#1E3A5F',
-                      marginBottom: '8px'
+                      marginBottom: '6px'
                     }}>
                       {highlight.title}
                     </h3>
                     <p style={{
-                      fontSize: '15px',
+                      fontSize: '14px',
                       color: '#64748B',
                       lineHeight: '1.6'
                     }}>
@@ -541,62 +544,44 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       </section>
 
       {/* Gallery Section */}
-      <section style={{ padding: '80px 48px', background: '#F8FAFC' }}>
+      <section style={{ padding: '40px 20px', background: '#F8FAFC' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div 
-            className="gallery-grid"
-            style={{
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '12px'
+          }}>
+            <div className="gallery-img" style={{ height: '200px' }}>
+              <img src={country.galleryImages[0]} alt={country.name} />
+            </div>
+            <div style={{
               display: 'grid',
-              gridTemplateColumns: '2fr 1fr 1fr',
-              gap: '20px',
-              height: '400px'
-            }}
-          >
-            <div className="gallery-img" style={{ gridRow: 'span 2' }}>
-              <img src={country.galleryImages[0]} alt={country.name} style={{ height: '100%' }} />
-            </div>
-            <div className="gallery-img">
-              <img src={country.galleryImages[1]} alt={country.name} style={{ height: '200px' }} />
-            </div>
-            <div className="gallery-img">
-              <img src={country.galleryImages[2]} alt={country.name} style={{ height: '200px' }} />
+              gridTemplateColumns: '1fr 1fr',
+              gap: '12px'
+            }}>
+              <div className="gallery-img" style={{ height: '150px' }}>
+                <img src={country.galleryImages[1]} alt={country.name} />
+              </div>
+              <div className="gallery-img" style={{ height: '150px' }}>
+                <img src={country.galleryImages[2]} alt={country.name} />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Popular Programs Section */}
-      <section className="section-padding" style={{ padding: '80px 48px' }}>
+      <section className="section-base">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginBottom: '16px'
-            }}>
-              <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
-              <span style={{
-                fontSize: '13px',
-                fontWeight: '700',
-                color: '#64748B',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase'
-              }}>
-                Programs
-              </span>
+          <div style={{ marginBottom: '24px' }}>
+            <div className="section-label">
+              <div className="section-label-line" />
+              <span className="section-label-text">Programs</span>
             </div>
-            <h2 style={{
-              fontSize: '36px',
-              fontWeight: '800',
-              color: '#1E3A5F',
-              letterSpacing: '-1px'
-            }}>
-              Popular Fields of Study
-            </h2>
+            <h2 className="section-title">Popular Fields of Study</h2>
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {country.popularPrograms.map((program, idx) => (
               <span key={idx} className="program-chip">{program}</span>
             ))}
@@ -605,62 +590,40 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       </section>
 
       {/* Top Universities Section */}
-      <section style={{ padding: '80px 48px', background: '#F8FAFC' }}>
+      <section className="section-base" style={{ background: '#F8FAFC' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginBottom: '16px'
-            }}>
-              <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
-              <span style={{
-                fontSize: '13px',
-                fontWeight: '700',
-                color: '#64748B',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase'
-              }}>
-                Universities
-              </span>
+          <div style={{ marginBottom: '24px' }}>
+            <div className="section-label">
+              <div className="section-label-line" />
+              <span className="section-label-text">Universities</span>
             </div>
-            <h2 style={{
-              fontSize: '36px',
-              fontWeight: '800',
-              color: '#1E3A5F',
-              letterSpacing: '-1px'
-            }}>
-              Top Universities in {country.name}
-            </h2>
+            <h2 className="section-title">Top Universities</h2>
           </div>
 
-          <div 
-            className="universities-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '16px'
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '12px'
+          }}>
             {country.topUniversities.map((uni, idx) => (
               <div key={idx} className="university-item">
                 <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '12px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
                   background: '#1E3A5F',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'white',
                   fontWeight: '700',
-                  fontSize: '16px'
+                  fontSize: '14px',
+                  flexShrink: 0
                 }}>
                   {String(idx + 1).padStart(2, '0')}
                 </div>
                 <span style={{
-                  fontSize: '17px',
+                  fontSize: '15px',
                   fontWeight: '600',
                   color: '#1E3A5F'
                 }}>
@@ -673,25 +636,15 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       </section>
 
       {/* Top Cities Section */}
-      <section className="section-padding" style={{ padding: '80px 48px' }}>
+      <section className="section-base">
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '40px' }}>
-            <h2 style={{
-              fontSize: '36px',
-              fontWeight: '800',
-              color: '#1E3A5F',
-              letterSpacing: '-1px'
-            }}>
-              Top Student Cities
-            </h2>
-          </div>
-
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+          <h2 className="section-title">Top Student Cities</h2>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {country.topCities.map((city, idx) => (
               <span key={idx} className="city-badge">
                 <span style={{
-                  width: '10px',
-                  height: '10px',
+                  width: '8px',
+                  height: '8px',
                   borderRadius: '50%',
                   background: '#2EC4B6'
                 }} />
@@ -703,55 +656,32 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       </section>
 
       {/* Cost & Requirements Section */}
-      <section style={{ padding: '80px 48px', background: '#F8FAFC' }}>
+      <section className="section-base" style={{ background: '#F8FAFC' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div 
-            className="info-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '40px'
-            }}
-          >
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '32px'
+          }}>
             {/* Requirements */}
             <div>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                marginBottom: '16px'
-              }}>
-                <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
-                <span style={{
-                  fontSize: '13px',
-                  fontWeight: '700',
-                  color: '#64748B',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase'
-                }}>
-                  Requirements
-                </span>
+              <div className="section-label">
+                <div className="section-label-line" />
+                <span className="section-label-text">Requirements</span>
               </div>
-              <h2 style={{
-                fontSize: '32px',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '32px'
-              }}>
-                What You Need
-              </h2>
+              <h2 className="section-title" style={{ marginBottom: '20px' }}>What You Need</h2>
 
               <div style={{
                 background: 'white',
-                borderRadius: '24px',
-                padding: '24px 32px',
+                borderRadius: '20px',
+                padding: '20px',
                 border: '1px solid #E2E8F0'
               }}>
                 {country.requirements.map((req, idx) => (
                   <div key={idx} className="req-item">
                     <div style={{
-                      width: '28px',
-                      height: '28px',
+                      width: '24px',
+                      height: '24px',
                       borderRadius: '50%',
                       background: '#ECFDF5',
                       display: 'flex',
@@ -759,12 +689,12 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                       justifyContent: 'center',
                       color: '#10B981',
                       fontWeight: '700',
-                      fontSize: '14px',
+                      fontSize: '12px',
                       flexShrink: 0
                     }}>
                       ✓
                     </div>
-                    <span style={{ fontSize: '15px', color: '#1E3A5F', fontWeight: '500' }}>
+                    <span style={{ fontSize: '14px', color: '#1E3A5F', fontWeight: '500' }}>
                       {req}
                     </span>
                   </div>
@@ -774,44 +704,24 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
 
             {/* Cost & Intakes */}
             <div>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                marginBottom: '16px'
-              }}>
-                <div style={{ width: '36px', height: '3px', background: '#2EC4B6', borderRadius: '2px' }} />
-                <span style={{
-                  fontSize: '13px',
-                  fontWeight: '700',
-                  color: '#64748B',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase'
-                }}>
-                  Cost & Intakes
-                </span>
+              <div className="section-label">
+                <div className="section-label-line" style={{ background: '#2EC4B6' }} />
+                <span className="section-label-text">Cost & Intakes</span>
               </div>
-              <h2 style={{
-                fontSize: '32px',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '32px'
-              }}>
-                Plan Your Budget
-              </h2>
+              <h2 className="section-title" style={{ marginBottom: '20px' }}>Plan Your Budget</h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {/* Tuition */}
                 <div style={{
                   background: 'white',
-                  borderRadius: '20px',
-                  padding: '24px',
+                  borderRadius: '16px',
+                  padding: '20px',
                   border: '1px solid #E2E8F0'
                 }}>
-                  <div style={{ fontSize: '13px', color: '#64748B', fontWeight: '600', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600', marginBottom: '6px' }}>
                     TUITION FEES
                   </div>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#1E3A5F' }}>
+                  <div style={{ fontSize: 'clamp(18px, 5vw, 24px)', fontWeight: '800', color: '#1E3A5F' }}>
                     {country.tuitionRange}
                   </div>
                 </div>
@@ -819,14 +729,14 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 {/* Living Cost */}
                 <div style={{
                   background: 'white',
-                  borderRadius: '20px',
-                  padding: '24px',
+                  borderRadius: '16px',
+                  padding: '20px',
                   border: '1px solid #E2E8F0'
                 }}>
-                  <div style={{ fontSize: '13px', color: '#64748B', fontWeight: '600', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600', marginBottom: '6px' }}>
                     LIVING EXPENSES
                   </div>
-                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#1E3A5F' }}>
+                  <div style={{ fontSize: 'clamp(18px, 5vw, 24px)', fontWeight: '800', color: '#1E3A5F' }}>
                     {country.livingCost}
                   </div>
                 </div>
@@ -834,10 +744,10 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 {/* Intakes */}
                 <div style={{
                   background: '#1E3A5F',
-                  borderRadius: '20px',
-                  padding: '24px'
+                  borderRadius: '16px',
+                  padding: '20px'
                 }}>
-                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', fontWeight: '600', marginBottom: '12px' }}>
+                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontWeight: '600', marginBottom: '10px' }}>
                     AVAILABLE INTAKES
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -845,10 +755,10 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                       <span 
                         key={idx}
                         style={{
-                          padding: '8px 16px',
+                          padding: '8px 14px',
                           background: 'rgba(255,255,255,0.1)',
                           borderRadius: '50px',
-                          fontSize: '14px',
+                          fontSize: '13px',
                           fontWeight: '600',
                           color: 'white'
                         }}
@@ -864,34 +774,40 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
         </div>
       </section>
 
-      {/* CTA Section
+      {/* CTA Section */}
       <section style={{
-        padding: '120px 48px',
+        padding: '80px 20px',
         background: 'linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%)',
         textAlign: 'center'
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <span style={{ fontSize: '64px', marginBottom: '24px', display: 'block' }}>{country.flag}</span>
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <span style={{ fontSize: '48px', marginBottom: '20px', display: 'block' }}>{country.flag}</span>
           <h2 style={{
-            fontSize: '44px',
+            fontSize: 'clamp(28px, 6vw, 44px)',
             fontWeight: '800',
             color: 'white',
-            marginBottom: '16px',
-            letterSpacing: '-1.5px'
+            marginBottom: '12px',
+            letterSpacing: '-1px'
           }}>
             Ready to Study in {country.name}?
           </h2>
           <p style={{
-            fontSize: '18px',
+            fontSize: '16px',
             color: 'rgba(255,255,255,0.7)',
-            marginBottom: '40px',
+            marginBottom: '32px',
             lineHeight: '1.7'
           }}>
-            Book a free consultation with our expert counselors and start your journey today
+            Book a free consultation with our expert counselors
           </p>
           
-          <div className="cta-row" style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <Link href="/contact" className="cta-primary" style={{ padding: '20px 40px', fontSize: '17px' }}>
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            gap: '12px',
+            maxWidth: '350px',
+            margin: '0 auto'
+          }}>
+            <Link href="/contact" className="cta-primary">
               Book Free Consultation
               <span>→</span>
             </Link>
@@ -901,17 +817,15 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
               style={{ 
                 background: 'transparent', 
                 borderColor: 'rgba(255,255,255,0.3)', 
-                color: 'white',
-                padding: '20px 40px',
-                fontSize: '17px'
+                color: 'white'
               }}
             >
               Explore Other Countries
             </Link>
           </div>
         </div>
-      </section> */}
-      <Footer/>
+      </section>
+      <Navbar/>
     </div>
   );
 }
