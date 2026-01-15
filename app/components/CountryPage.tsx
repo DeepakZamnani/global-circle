@@ -2,161 +2,14 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { countryData } from '../data/countryData'
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 // ============================================
-// COUNTRY PAGE TEMPLATE
-// Reusable for all destinations
+// COUNTRY PAGE - Luxury Minimal Design
+// Route: /destinations/[country]
 // ============================================
-
-// Country Data - All destinations with unique info
-export const countryData: Record<string, CountryInfo> = {
-  canada: {
-    name: 'Canada',
-    slug: 'canada',
-    flag: '🇨🇦',
-    heroImage: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=1600&q=80',
-    tagline: 'Your Gateway to Global Success',
-    description: 'Experience world-class education in one of the most welcoming and multicultural countries, offering high-quality programs, post-graduation work opportunities, and an excellent quality of life.',
-    color: '#DC2626',
-    stats: {
-      universities: '96+',
-      programs: '15,000+',
-      students: '800K+',
-      ranking: '#3 Globally'
-    },
-    highlights: [
-      { title: 'Post-Graduation Work Permit', desc: 'Stay and work for up to 3 years after graduation' },
-      { title: 'Multicultural Environment', desc: 'One of the most diverse and welcoming countries' },
-      { title: 'High Living Standards', desc: 'Excellent healthcare, safety, and quality of life' },
-      { title: 'Pathway to PR', desc: 'Clear immigration pathways for international students' }
-    ],
-    popularPrograms: ['Business & MBA', 'Computer Science', 'Engineering', 'Healthcare', 'Data Science'],
-    topCities: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
-    requirements: [
-      'Valid passport',
-      'Proof of acceptance from DLI',
-      'Proof of financial support',
-      'IELTS/TOEFL scores',
-      'Statement of Purpose'
-    ],
-    intakes: ['Fall (September)', 'Winter (January)', 'Summer (May)']
-  },
-  australia: {
-    name: 'Australia',
-    slug: 'australia',
-    flag: '🇦🇺',
-    heroImage: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=1600&q=80',
-    tagline: 'World-Class Education & Lifestyle',
-    description: 'Experience world-class education in a multicultural environment with globally recognized universities, offering excellent research opportunities and an outstanding quality of life.',
-    color: '#1E3A5F',
-    stats: {
-      universities: '43+',
-      programs: '22,000+',
-      students: '750K+',
-      ranking: '#2 Globally'
-    },
-    highlights: [
-      { title: 'World-Class Universities', desc: '7 universities in global top 100' },
-      { title: 'Post-Study Work Rights', desc: '2-4 years post-study work visa' },
-      { title: 'Multicultural Environment', desc: 'Students from 190+ countries' },
-      { title: 'Amazing Lifestyle', desc: 'Beaches, cities, and natural wonders' }
-    ],
-    popularPrograms: ['Business & Management', 'IT & Computer Science', 'Engineering', 'Nursing', 'Hospitality'],
-    topCities: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide'],
-    requirements: [
-      'Valid passport',
-      'Confirmation of Enrolment (CoE)',
-      'Genuine Temporary Entrant (GTE)',
-      'IELTS 6.0+ / PTE 50+',
-      'Financial capacity proof'
-    ],
-    intakes: ['February (Main)', 'July (Mid-year)']
-  },
-  france: {
-    name: 'France',
-    slug: 'france',
-    flag: '🇫🇷',
-    heroImage: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1600&q=80',
-    tagline: 'Where Culture Meets Excellence',
-    description: 'Experience world-class education in one of Europe\'s most culturally rich countries, offering prestigious programs across diverse fields including fashion, culinary arts, and business.',
-    color: '#1E3A5F',
-    stats: {
-      universities: '72+',
-      programs: '3,500+',
-      students: '370K+',
-      ranking: '#6 Globally'
-    },
-    highlights: [
-      { title: 'Rich Cultural Heritage', desc: 'Art, history, and cuisine at your doorstep' },
-      { title: 'Affordable Education', desc: 'Low tuition fees even for international students' },
-      { title: 'Post-Study Work Options', desc: 'Work permit for graduates' },
-      { title: 'Central EU Location', desc: 'Easy access to all of Europe' }
-    ],
-    popularPrograms: ['Fashion & Design', 'Culinary Arts', 'Business & MBA', 'Engineering', 'Arts & Humanities'],
-    topCities: ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice'],
-    requirements: [
-      'Valid passport',
-      'Acceptance letter from institution',
-      'Proof of accommodation',
-      'Financial guarantee',
-      'French/English proficiency'
-    ],
-    intakes: ['September (Main)', 'January']
-  },
-  spain: {
-    name: 'Spain',
-    slug: 'spain',
-    flag: '🇪🇸',
-    heroImage: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1600&q=80',
-    tagline: 'Vibrant Life, Quality Education',
-    description: 'Experience world-class education in Spain while immersing yourself in a rich cultural heritage and vibrant student life with affordable living costs.',
-    color: '#FF6B35',
-    stats: {
-      universities: '84+',
-      programs: '2,800+',
-      students: '200K+',
-      ranking: '#10 Globally'
-    },
-    highlights: [
-      { title: 'Vibrant Student Life', desc: 'Amazing social scene and festivals' },
-      { title: 'Affordable Education', desc: 'Low tuition and living costs' },
-      { title: 'Historic Universities', desc: 'Some of the oldest in the world' },
-      { title: 'Learn Spanish', desc: '2nd most spoken language globally' }
-    ],
-    popularPrograms: ['Business & Tourism', 'Architecture', 'Medicine', 'Arts & Design', 'Spanish Language'],
-    topCities: ['Madrid', 'Barcelona', 'Valencia', 'Seville', 'Bilbao'],
-    requirements: [
-      'Valid passport',
-      'University acceptance',
-      'Proof of funds',
-      'Health insurance',
-      'Spanish/English proficiency'
-    ],
-    intakes: ['September (Main)', 'February']
-  }
-};
-
-// Type definitions
-interface CountryInfo {
-  name: string;
-  slug: string;
-  flag: string;
-  heroImage: string;
-  tagline: string;
-  description: string;
-  color: string;
-  stats: {
-    universities: string;
-    programs: string;
-    students: string;
-    ranking: string;
-  };
-  highlights: { title: string; desc: string }[];
-  popularPrograms: string[];
-  topCities: string[];
-  requirements: string[];
-  intakes: string[];
-}
 
 interface CountryPageProps {
   countrySlug: string;
@@ -175,68 +28,60 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       background: '#FFFFFF',
       fontFamily: '"Plus Jakarta Sans", sans-serif'
     }}>
-      
+      <Navbar/>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-        .country-hero {
-          position: relative;
-          height: 70vh;
-          min-height: 500px;
-          overflow: hidden;
-        }
-
-        .country-hero-img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-size: cover;
-          background-position: center;
-        }
-
-        .country-hero-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(180deg, rgba(30,58,95,0.4) 0%, rgba(30,58,95,0.85) 100%);
-        }
 
         .stat-card {
           background: white;
           border-radius: 20px;
-          padding: 24px;
+          padding: 28px;
           text-align: center;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
           border: 1px solid #E2E8F0;
-          transition: all 0.3s ease;
+          transition: all 0.4s ease;
         }
 
         .stat-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+          transform: translateY(-6px);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+          border-color: #FF6B35;
         }
 
         .highlight-card {
-          background: #F8FAFC;
-          border-radius: 20px;
-          padding: 28px;
-          border: 1px solid #E2E8F0;
-          transition: all 0.3s ease;
+          background: #FFFFFF;
+          border-radius: 24px;
+          padding: 32px;
+          border: 2px solid #F1F5F9;
+          transition: all 0.4s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .highlight-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 100%;
+          background: #FF6B35;
+          transform: scaleY(0);
+          transition: transform 0.4s ease;
         }
 
         .highlight-card:hover {
           border-color: #FF6B35;
-          background: #FFF7ED;
+          background: #FFFBF8;
         }
 
-        .program-tag {
+        .highlight-card:hover::before {
+          transform: scaleY(1);
+        }
+
+        .program-chip {
           display: inline-block;
-          padding: 12px 24px;
-          background: white;
+          padding: 14px 24px;
+          background: #F8FAFC;
           border: 2px solid #E2E8F0;
           border-radius: 50px;
           font-size: 15px;
@@ -246,79 +91,121 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           cursor: pointer;
         }
 
-        .program-tag:hover {
+        .program-chip:hover {
           border-color: #FF6B35;
           background: #FFF7ED;
           color: #FF6B35;
+          transform: translateY(-2px);
         }
 
-        .city-chip {
+        .university-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 20px;
+          background: #F8FAFC;
+          border-radius: 16px;
+          transition: all 0.3s ease;
+        }
+
+        .university-item:hover {
+          background: #FFF7ED;
+          transform: translateX(8px);
+        }
+
+        .city-badge {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 10px 20px;
-          background: #F1F5F9;
+          gap: 10px;
+          padding: 12px 20px;
+          background: white;
+          border: 2px solid #E2E8F0;
           border-radius: 50px;
           font-size: 14px;
           font-weight: 600;
           color: #1E3A5F;
+          transition: all 0.3s ease;
+        }
+
+        .city-badge:hover {
+          border-color: #2EC4B6;
+          background: #F0FDFA;
         }
 
         .req-item {
           display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          padding: 16px 0;
-          border-bottom: 1px solid #E2E8F0;
+          align-items: center;
+          gap: 16px;
+          padding: 18px 0;
+          border-bottom: 1px solid #F1F5F9;
         }
 
         .req-item:last-child {
           border-bottom: none;
         }
 
-        .cta-btn {
+        .gallery-img {
+          border-radius: 20px;
+          overflow: hidden;
+          transition: all 0.5s ease;
+        }
+
+        .gallery-img:hover {
+          transform: scale(1.03);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .gallery-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .gallery-img:hover img {
+          transform: scale(1.1);
+        }
+
+        .cta-primary {
           display: inline-flex;
           align-items: center;
           gap: 10px;
           padding: 18px 36px;
           background: #FF6B35;
-          border-radius: 50px;
-          font-size: 16px;
-          font-weight: 700;
           color: white;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 16px;
           text-decoration: none;
           border: none;
           cursor: pointer;
           transition: all 0.3s ease;
         }
 
-        .cta-btn:hover {
-          transform: translateY(-2px);
+        .cta-primary:hover {
+          transform: translateY(-3px);
           box-shadow: 0 12px 32px rgba(255,107,53,0.4);
         }
 
-        .cta-btn-secondary {
-          background: #1E3A5F;
-        }
-
-        .cta-btn-secondary:hover {
-          box-shadow: 0 12px 32px rgba(30,58,95,0.4);
-        }
-
-        .back-link {
+        .cta-secondary {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          color: white;
+          gap: 10px;
+          padding: 18px 36px;
+          background: transparent;
+          color: #1E3A5F;
+          border: 2px solid #E2E8F0;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 16px;
           text-decoration: none;
-          font-weight: 600;
-          font-size: 14px;
-          opacity: 0.8;
-          transition: opacity 0.3s;
+          cursor: pointer;
+          transition: all 0.3s ease;
         }
 
-        .back-link:hover {
-          opacity: 1;
+        .cta-secondary:hover {
+          border-color: #1E3A5F;
+          background: #F8FAFC;
         }
 
         @media (max-width: 1024px) {
@@ -327,122 +214,192 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           }
 
           .highlights-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-columns: 1fr !important;
+          }
+
+          .gallery-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .universities-grid {
+            grid-template-columns: 1fr !important;
           }
         }
 
         @media (max-width: 768px) {
-          .country-hero {
-            height: 60vh;
+          .hero-content {
+            padding: 140px 20px 80px !important;
           }
 
           .hero-title {
-            font-size: 42px !important;
-          }
-
-          .stats-grid {
-            grid-template-columns: 1fr !important;
-          }
-
-          .highlights-grid {
-            grid-template-columns: 1fr !important;
+            font-size: 36px !important;
           }
 
           .section-padding {
             padding: 60px 20px !important;
           }
 
-          .cta-section {
+          .stats-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 12px !important;
+          }
+
+          .stat-card {
+            padding: 20px !important;
+          }
+
+          .cta-row {
             flex-direction: column !important;
-            text-align: center;
+            width: 100%;
+          }
+
+          .cta-row a, .cta-row button {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .info-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>
 
       {/* Hero Section */}
-      <section className="country-hero">
-        <div 
-          className="country-hero-img"
-          style={{ backgroundImage: `url(${country.heroImage})` }}
-        />
-        <div className="country-hero-overlay" />
-        
-        {/* Hero Content */}
+      <section style={{
+        position: 'relative',
+        minHeight: '85vh',
+        overflow: 'hidden'
+      }}>
+        {/* Background Image */}
         <div style={{
-          position: 'relative',
-          zIndex: 2,
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: '32px 48px 60px',
-          maxWidth: '1400px',
-          margin: '0 auto'
-        }}>
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: `url(${country.heroImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }} />
+        
+        {/* Overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)'
+        }} />
+
+        {/* Hero Content */}
+        <div 
+          className="hero-content"
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            minHeight: '85vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            padding: '60px 48px 80px',
+            maxWidth: '1400px',
+            margin: '0 auto'
+          }}
+        >
           {/* Back Link */}
-          <Link href="/destinations" className="back-link">
+          <Link 
+            href="/destinations"
+            style={{
+              position: 'absolute',
+              top: '120px',
+              left: '48px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              color: 'white',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '14px',
+              opacity: 0.8,
+              transition: 'all 0.3s ease'
+            }}
+          >
             <span>←</span>
             All Destinations
           </Link>
 
-          {/* Hero Text */}
-          <div>
-            {/* Flag & Country Badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '12px 24px',
-              background: 'rgba(255,255,255,0.15)',
-              backdropFilter: 'blur(10px)',
-              borderRadius: '50px',
-              marginBottom: '24px'
+          {/* Country Badge */}
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px 24px',
+            background: 'rgba(255,255,255,0.15)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '50px',
+            marginBottom: '24px',
+            width: 'fit-content'
+          }}>
+            <span style={{ fontSize: '32px' }}>{country.flag}</span>
+            <span style={{ 
+              color: 'white', 
+              fontWeight: '700', 
+              fontSize: '15px',
+              letterSpacing: '1px',
+              textTransform: 'uppercase'
             }}>
-              <span style={{ fontSize: '32px' }}>{country.flag}</span>
-              <span style={{ 
-                color: 'white', 
-                fontWeight: '700', 
-                fontSize: '16px',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                Study in {country.name}
-              </span>
-            </div>
+              Study in {country.name}
+            </span>
+          </div>
 
-            {/* Title */}
-            <h1 
-              className="hero-title"
-              style={{
-                fontSize: '64px',
-                fontWeight: '800',
-                color: 'white',
-                letterSpacing: '-2px',
-                lineHeight: '1.1',
-                marginBottom: '16px',
-                maxWidth: '700px'
-              }}
+          {/* Title */}
+          <h1 
+            className="hero-title"
+            style={{
+              fontSize: '64px',
+              fontWeight: '800',
+              color: 'white',
+              letterSpacing: '-2px',
+              lineHeight: '1.05',
+              marginBottom: '20px',
+              maxWidth: '800px'
+            }}
+          >
+            {country.tagline}
+          </h1>
+
+          {/* Description */}
+          <p style={{
+            fontSize: '18px',
+            color: 'rgba(255,255,255,0.9)',
+            lineHeight: '1.7',
+            maxWidth: '600px',
+            marginBottom: '32px'
+          }}>
+            {country.description}
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="cta-row" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <Link href="/contact" className="cta-primary">
+              Start Your Application
+              <span>→</span>
+            </Link>
+            <button 
+              className="cta-secondary"
+              style={{ background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.3)', color: 'white' }}
             >
-              {country.tagline}
-            </h1>
-
-            {/* Description */}
-            <p style={{
-              fontSize: '18px',
-              color: 'rgba(255,255,255,0.85)',
-              lineHeight: '1.7',
-              maxWidth: '600px'
-            }}>
-              {country.description}
-            </p>
+              Download Guide
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Stats Section - Overlapping Cards */}
+      {/* Stats Section - Floating Cards */}
       <section style={{
         marginTop: '-60px',
-        padding: '0 48px',
+        padding: '0 48px 80px',
         position: 'relative',
         zIndex: 3
       }}>
@@ -456,71 +413,76 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
             }}
           >
             <div className="stat-card">
-              <div style={{ fontSize: '36px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
+              <div style={{ fontSize: '42px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
                 {country.stats.universities}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '500' }}>Universities</div>
+              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Universities</div>
             </div>
             <div className="stat-card">
-              <div style={{ fontSize: '36px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
+              <div style={{ fontSize: '42px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
                 {country.stats.programs}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '500' }}>Programs</div>
+              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Programs</div>
             </div>
             <div className="stat-card">
-              <div style={{ fontSize: '36px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
-                {country.stats.students}
+              <div style={{ fontSize: '42px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>
+                {country.stats.intlStudents}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '500' }}>Int'l Students</div>
+              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Int'l Students</div>
             </div>
             <div className="stat-card">
-              <div style={{ fontSize: '36px', fontWeight: '800', color: '#FF6B35', marginBottom: '4px' }}>
-                {country.stats.ranking}
+              <div style={{ fontSize: '42px', fontWeight: '800', color: '#FF6B35', marginBottom: '4px' }}>
+                {country.stats.globalRank}
               </div>
-              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '500' }}>For Education</div>
+              <div style={{ fontSize: '14px', color: '#64748B', fontWeight: '600' }}>Global Rank</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Study Here Section */}
+      {/* Why Study Section */}
       <section 
         className="section-padding"
-        style={{ padding: '100px 48px' }}
+        style={{ padding: '80px 48px', background: '#FFFFFF' }}
       >
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Section Header */}
-          <div style={{ marginBottom: '48px' }}>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginBottom: '16px'
-            }}>
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'flex-end',
+            marginBottom: '48px',
+            flexWrap: 'wrap',
+            gap: '24px'
+          }}>
+            <div>
               <div style={{
-                width: '36px',
-                height: '3px',
-                background: '#FF6B35',
-                borderRadius: '2px'
-              }} />
-              <span style={{
-                fontSize: '13px',
-                fontWeight: '700',
-                color: '#64748B',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase'
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '16px'
               }}>
-                Why {country.name}?
-              </span>
+                <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
+                <span style={{
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  color: '#64748B',
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase'
+                }}>
+                  Why {country.name}
+                </span>
+              </div>
+              <h2 style={{
+                fontSize: '42px',
+                fontWeight: '800',
+                color: '#1E3A5F',
+                letterSpacing: '-1.5px'
+              }}>
+                Reasons to Choose<br />
+                <span style={{ color: '#FF6B35' }}>{country.name}</span>
+              </h2>
             </div>
-            <h2 style={{
-              fontSize: '40px',
-              fontWeight: '800',
-              color: '#1E3A5F',
-              letterSpacing: '-1px'
-            }}>
-              Your Reasons to Study in {country.name}
-            </h2>
           </div>
 
           {/* Highlights Grid */}
@@ -535,99 +497,203 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
             {country.highlights.map((highlight, idx) => (
               <div key={idx} className="highlight-card">
                 <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '14px',
-                  background: '#FF6B35',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'white',
-                  fontWeight: '800',
-                  fontSize: '18px',
-                  marginBottom: '20px'
+                  alignItems: 'flex-start',
+                  gap: '20px'
                 }}>
-                  {String(idx + 1).padStart(2, '0')}
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '16px',
+                    background: '#FFF7ED',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FF6B35',
+                    fontWeight: '800',
+                    fontSize: '20px',
+                    flexShrink: 0
+                  }}>
+                    {String(idx + 1).padStart(2, '0')}
+                  </div>
+                  <div>
+                    <h3 style={{
+                      fontSize: '20px',
+                      fontWeight: '700',
+                      color: '#1E3A5F',
+                      marginBottom: '8px'
+                    }}>
+                      {highlight.title}
+                    </h3>
+                    <p style={{
+                      fontSize: '15px',
+                      color: '#64748B',
+                      lineHeight: '1.6'
+                    }}>
+                      {highlight.desc}
+                    </p>
+                  </div>
                 </div>
-                <h3 style={{
-                  fontSize: '20px',
-                  fontWeight: '700',
-                  color: '#1E3A5F',
-                  marginBottom: '8px'
-                }}>
-                  {highlight.title}
-                </h3>
-                <p style={{
-                  fontSize: '15px',
-                  color: '#64748B',
-                  lineHeight: '1.6'
-                }}>
-                  {highlight.desc}
-                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Gallery Section */}
+      <section style={{ padding: '80px 48px', background: '#F8FAFC' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div 
+            className="gallery-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr 1fr',
+              gap: '20px',
+              height: '400px'
+            }}
+          >
+            <div className="gallery-img" style={{ gridRow: 'span 2' }}>
+              <img src={country.galleryImages[0]} alt={country.name} style={{ height: '100%' }} />
+            </div>
+            <div className="gallery-img">
+              <img src={country.galleryImages[1]} alt={country.name} style={{ height: '200px' }} />
+            </div>
+            <div className="gallery-img">
+              <img src={country.galleryImages[2]} alt={country.name} style={{ height: '200px' }} />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Popular Programs Section */}
-      <section style={{
-        padding: '80px 48px',
-        background: '#F8FAFC'
-      }}>
+      <section className="section-padding" style={{ padding: '80px 48px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ marginBottom: '40px' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              marginBottom: '16px'
+            }}>
+              <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
+              <span style={{
+                fontSize: '13px',
+                fontWeight: '700',
+                color: '#64748B',
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase'
+              }}>
+                Programs
+              </span>
+            </div>
             <h2 style={{
-              fontSize: '32px',
+              fontSize: '36px',
               fontWeight: '800',
               color: '#1E3A5F',
-              letterSpacing: '-0.5px',
-              marginBottom: '8px'
+              letterSpacing: '-1px'
             }}>
-              Popular Programs
+              Popular Fields of Study
             </h2>
-            <p style={{ fontSize: '16px', color: '#64748B' }}>
-              Most sought-after fields of study in {country.name}
-            </p>
           </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
             {country.popularPrograms.map((program, idx) => (
-              <span key={idx} className="program-tag">{program}</span>
+              <span key={idx} className="program-chip">{program}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top Universities Section */}
+      <section style={{ padding: '80px 48px', background: '#F8FAFC' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              marginBottom: '16px'
+            }}>
+              <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
+              <span style={{
+                fontSize: '13px',
+                fontWeight: '700',
+                color: '#64748B',
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase'
+              }}>
+                Universities
+              </span>
+            </div>
+            <h2 style={{
+              fontSize: '36px',
+              fontWeight: '800',
+              color: '#1E3A5F',
+              letterSpacing: '-1px'
+            }}>
+              Top Universities in {country.name}
+            </h2>
+          </div>
+
+          <div 
+            className="universities-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: '16px'
+            }}
+          >
+            {country.topUniversities.map((uni, idx) => (
+              <div key={idx} className="university-item">
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '12px',
+                  background: '#1E3A5F',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontWeight: '700',
+                  fontSize: '16px'
+                }}>
+                  {String(idx + 1).padStart(2, '0')}
+                </div>
+                <span style={{
+                  fontSize: '17px',
+                  fontWeight: '600',
+                  color: '#1E3A5F'
+                }}>
+                  {uni}
+                </span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Top Cities Section */}
-      <section 
-        className="section-padding"
-        style={{ padding: '80px 48px' }}
-      >
+      <section className="section-padding" style={{ padding: '80px 48px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ marginBottom: '40px' }}>
             <h2 style={{
-              fontSize: '32px',
+              fontSize: '36px',
               fontWeight: '800',
               color: '#1E3A5F',
-              letterSpacing: '-0.5px',
-              marginBottom: '8px'
+              letterSpacing: '-1px'
             }}>
               Top Student Cities
             </h2>
-            <p style={{ fontSize: '16px', color: '#64748B' }}>
-              Best places to study and live in {country.name}
-            </p>
           </div>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
             {country.topCities.map((city, idx) => (
-              <span key={idx} className="city-chip">
+              <span key={idx} className="city-badge">
                 <span style={{
-                  width: '8px',
-                  height: '8px',
+                  width: '10px',
+                  height: '10px',
                   borderRadius: '50%',
-                  background: '#FF6B35'
+                  background: '#2EC4B6'
                 }} />
                 {city}
               </span>
@@ -636,129 +702,216 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
         </div>
       </section>
 
-      {/* Requirements Section */}
-      <section style={{
-        padding: '80px 48px',
-        background: '#F8FAFC'
-      }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '40px', textAlign: 'center' }}>
-            <h2 style={{
-              fontSize: '32px',
-              fontWeight: '800',
-              color: '#1E3A5F',
-              letterSpacing: '-0.5px',
-              marginBottom: '8px'
-            }}>
-              Requirements
-            </h2>
-            <p style={{ fontSize: '16px', color: '#64748B' }}>
-              What you need to study in {country.name}
-            </p>
-          </div>
-
-          <div style={{
-            background: 'white',
-            borderRadius: '24px',
-            padding: '32px',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.06)'
-          }}>
-            {country.requirements.map((req, idx) => (
-              <div key={idx} className="req-item">
-                <div style={{
-                  width: '28px',
-                  height: '28px',
-                  borderRadius: '50%',
-                  background: '#ECFDF5',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#10B981',
-                  fontWeight: '700',
-                  fontSize: '14px',
-                  flexShrink: 0
-                }}>
-                  ✓
-                </div>
+      {/* Cost & Requirements Section */}
+      <section style={{ padding: '80px 48px', background: '#F8FAFC' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div 
+            className="info-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '40px'
+            }}
+          >
+            {/* Requirements */}
+            <div>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '16px'
+              }}>
+                <div style={{ width: '36px', height: '3px', background: '#FF6B35', borderRadius: '2px' }} />
                 <span style={{
-                  fontSize: '16px',
-                  color: '#1E3A5F',
-                  fontWeight: '500'
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  color: '#64748B',
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase'
                 }}>
-                  {req}
+                  Requirements
                 </span>
               </div>
-            ))}
-          </div>
+              <h2 style={{
+                fontSize: '32px',
+                fontWeight: '800',
+                color: '#1E3A5F',
+                marginBottom: '32px'
+              }}>
+                What You Need
+              </h2>
 
-          {/* Intakes */}
-          <div style={{
-            marginTop: '32px',
-            padding: '24px',
-            background: '#1E3A5F',
-            borderRadius: '16px',
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '32px',
-            flexWrap: 'wrap'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', marginBottom: '4px' }}>
-                Available Intakes
+              <div style={{
+                background: 'white',
+                borderRadius: '24px',
+                padding: '24px 32px',
+                border: '1px solid #E2E8F0'
+              }}>
+                {country.requirements.map((req, idx) => (
+                  <div key={idx} className="req-item">
+                    <div style={{
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      background: '#ECFDF5',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#10B981',
+                      fontWeight: '700',
+                      fontSize: '14px',
+                      flexShrink: 0
+                    }}>
+                      ✓
+                    </div>
+                    <span style={{ fontSize: '15px', color: '#1E3A5F', fontWeight: '500' }}>
+                      {req}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div style={{ fontSize: '16px', color: 'white', fontWeight: '600' }}>
-                {country.intakes.join(' • ')}
+            </div>
+
+            {/* Cost & Intakes */}
+            <div>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                marginBottom: '16px'
+              }}>
+                <div style={{ width: '36px', height: '3px', background: '#2EC4B6', borderRadius: '2px' }} />
+                <span style={{
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  color: '#64748B',
+                  letterSpacing: '1.5px',
+                  textTransform: 'uppercase'
+                }}>
+                  Cost & Intakes
+                </span>
+              </div>
+              <h2 style={{
+                fontSize: '32px',
+                fontWeight: '800',
+                color: '#1E3A5F',
+                marginBottom: '32px'
+              }}>
+                Plan Your Budget
+              </h2>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Tuition */}
+                <div style={{
+                  background: 'white',
+                  borderRadius: '20px',
+                  padding: '24px',
+                  border: '1px solid #E2E8F0'
+                }}>
+                  <div style={{ fontSize: '13px', color: '#64748B', fontWeight: '600', marginBottom: '8px' }}>
+                    TUITION FEES
+                  </div>
+                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#1E3A5F' }}>
+                    {country.tuitionRange}
+                  </div>
+                </div>
+
+                {/* Living Cost */}
+                <div style={{
+                  background: 'white',
+                  borderRadius: '20px',
+                  padding: '24px',
+                  border: '1px solid #E2E8F0'
+                }}>
+                  <div style={{ fontSize: '13px', color: '#64748B', fontWeight: '600', marginBottom: '8px' }}>
+                    LIVING EXPENSES
+                  </div>
+                  <div style={{ fontSize: '24px', fontWeight: '800', color: '#1E3A5F' }}>
+                    {country.livingCost}
+                  </div>
+                </div>
+
+                {/* Intakes */}
+                <div style={{
+                  background: '#1E3A5F',
+                  borderRadius: '20px',
+                  padding: '24px'
+                }}>
+                  <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', fontWeight: '600', marginBottom: '12px' }}>
+                    AVAILABLE INTAKES
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {country.intakes.map((intake, idx) => (
+                      <span 
+                        key={idx}
+                        style={{
+                          padding: '8px 16px',
+                          background: 'rgba(255,255,255,0.1)',
+                          borderRadius: '50px',
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: 'white'
+                        }}
+                      >
+                        {intake}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section
       <section style={{
-        padding: '100px 48px',
-        background: 'linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%)'
+        padding: '120px 48px',
+        background: 'linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%)',
+        textAlign: 'center'
       }}>
-        <div 
-          className="cta-section"
-          style={{ 
-            maxWidth: '1000px', 
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '40px'
-          }}
-        >
-          <div>
-            <h2 style={{
-              fontSize: '36px',
-              fontWeight: '800',
-              color: 'white',
-              marginBottom: '12px',
-              letterSpacing: '-1px'
-            }}>
-              Ready to Study in {country.name}?
-            </h2>
-            <p style={{
-              fontSize: '18px',
-              color: 'rgba(255,255,255,0.7)'
-            }}>
-              Book a free consultation with our expert counselors today
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <button className="cta-btn">
-              Apply Now
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <span style={{ fontSize: '64px', marginBottom: '24px', display: 'block' }}>{country.flag}</span>
+          <h2 style={{
+            fontSize: '44px',
+            fontWeight: '800',
+            color: 'white',
+            marginBottom: '16px',
+            letterSpacing: '-1.5px'
+          }}>
+            Ready to Study in {country.name}?
+          </h2>
+          <p style={{
+            fontSize: '18px',
+            color: 'rgba(255,255,255,0.7)',
+            marginBottom: '40px',
+            lineHeight: '1.7'
+          }}>
+            Book a free consultation with our expert counselors and start your journey today
+          </p>
+          
+          <div className="cta-row" style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+            <Link href="/contact" className="cta-primary" style={{ padding: '20px 40px', fontSize: '17px' }}>
+              Book Free Consultation
               <span>→</span>
-            </button>
-            <button className="cta-btn" style={{ background: 'rgba(255,255,255,0.1)', border: '2px solid rgba(255,255,255,0.3)' }}>
-              Talk to Expert
-            </button>
+            </Link>
+            <Link 
+              href="/destinations" 
+              className="cta-secondary"
+              style={{ 
+                background: 'transparent', 
+                borderColor: 'rgba(255,255,255,0.3)', 
+                color: 'white',
+                padding: '20px 40px',
+                fontSize: '17px'
+              }}
+            >
+              Explore Other Countries
+            </Link>
           </div>
         </div>
-      </section>
+      </section> */}
+      <Footer/>
     </div>
   );
 }
