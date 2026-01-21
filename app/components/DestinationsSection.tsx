@@ -69,6 +69,7 @@ export default function DestinationsSection() {
       fontFamily: '"Plus Jakarta Sans", sans-serif',
       position: 'relative',
       overflow: 'hidden'
+      
     }}>
       
       <style>{`

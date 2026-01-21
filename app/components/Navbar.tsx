@@ -169,7 +169,7 @@ export default function Navbar() {
             <Link href="#" className="nav-link">Programs</Link>
             <Link href="#" className="nav-link">Jobs</Link>
             <Link href="#" className="nav-link">Forex</Link>
-            <Link href="#" className="nav-link">Contact</Link>
+            <Link href="/contact" className="nav-link">Contact</Link>
           </div>
 
           {/* Right Side */}
