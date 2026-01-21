@@ -1430,10 +1430,12 @@ import { comprehensiveCountryData } from '../data/countryData';
 import { getUniversitiesByCountry } from '../data/universityData';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import ApplicationModal from './AppliactionModal';
 
 // ============================================
 // COUNTRY PAGE - Professional with Curves + Boxes Balance
 // 1:1 ratio of curves to sharp boxes - Sexy modern design
+// With Application Modal Integration
 // ============================================
 
 interface CountryPageProps {
@@ -1444,6 +1446,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
   const country = comprehensiveCountryData[countrySlug];
   const universities = getUniversitiesByCountry(countrySlug);
   const [activeTab, setActiveTab] = useState<'about' | 'universities'>('about');
+  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
 
   if (!country) {
     return <div>Country not found</div>;
@@ -1456,6 +1459,14 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
       fontFamily: '"Plus Jakarta Sans", sans-serif',
     }}>
       <Navbar />
+      
+      {/* Application Modal */}
+      <ApplicationModal
+        isOpen={isApplicationModalOpen}
+        onClose={() => setIsApplicationModalOpen(false)}
+        countryCode={countrySlug}
+        countryName={country.name}
+      />
       
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -1670,7 +1681,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           border: none;
           border-radius: 50px;
           font-weight: 700;
-          fontSize: 15px;
+          font-size: 15px;
           letter-spacing: 0.3px;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -1693,7 +1704,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           color: white;
           border: none;
           font-weight: 700;
-          fontSize: 15px;
+          font-size: 15px;
           letter-spacing: 0.3px;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -1866,9 +1877,13 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
             gap: '16px',
             maxWidth: '600px'
           }}>
-            <Link href="/contact" className="btn-curved">
-              Start Application →
-            </Link>
+            {/* APPLY NOW BUTTON - Opens Modal */}
+            <button 
+              onClick={() => setIsApplicationModalOpen(true)}
+              className="btn-curved"
+            >
+              Apply Now →
+            </button>
             
             <button style={{
               display: 'inline-flex',
@@ -2301,43 +2316,93 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                   </div>
                 </div>
 
-                <div style={{
-                  background: '#1E3A5F',
-                  padding: '28px',
-                  border: '1px solid #1E3A5F'
-                }}>
+                <div className="sharp-card">
                   <div style={{
                     fontSize: '12px',
-                    color: 'rgba(255,255,255,0.8)',
+                    color: '#64748B',
                     fontWeight: '700',
                     marginBottom: '12px',
                     letterSpacing: '1px',
                     textTransform: 'uppercase'
                   }}>
-                    Total First Year
+                    Other Expenses
                   </div>
                   <div style={{
-                    fontSize: 'clamp(22px, 3vw, 32px)',
+                    fontSize: 'clamp(20px, 3vw, 28px)',
                     fontWeight: '800',
-                    color: 'white',
+                    color: '#1E3A5F',
                     marginBottom: '4px',
                     letterSpacing: '-0.5px'
                   }}>
-                    {country.costs.totalFirstYear}
+                    {country.costs.otherExpenses}
                   </div>
                   <div style={{
                     fontSize: '13px',
-                    color: 'rgba(255,255,255,0.8)',
+                    color: '#64748B',
                     fontWeight: '600'
                   }}>
-                    All inclusive
+                    Per year
+                  </div>
+                </div>
+              </div>
+
+              {/* Total Cost Highlight - CURVED */}
+              <div className="curved-card" style={{
+                background: 'linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%)',
+                border: 'none',
+                maxWidth: '600px'
+              }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '32px'
+                }}>
+                  <div>
+                    <div style={{
+                      fontSize: '12px',
+                      color: 'rgba(255,255,255,0.7)',
+                      fontWeight: '700',
+                      marginBottom: '12px',
+                      letterSpacing: '1px',
+                      textTransform: 'uppercase'
+                    }}>
+                      First Year Total
+                    </div>
+                    <div style={{
+                      fontSize: 'clamp(22px, 4vw, 32px)',
+                      fontWeight: '800',
+                      color: 'white',
+                      letterSpacing: '-0.5px'
+                    }}>
+                      {country.costs.totalFirstYear}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{
+                      fontSize: '12px',
+                      color: 'rgba(255,255,255,0.7)',
+                      fontWeight: '700',
+                      marginBottom: '12px',
+                      letterSpacing: '1px',
+                      textTransform: 'uppercase'
+                    }}>
+                      Complete Course
+                    </div>
+                    <div style={{
+                      fontSize: 'clamp(22px, 4vw, 32px)',
+                      fontWeight: '800',
+                      color: '#FF6B35',
+                      letterSpacing: '-0.5px'
+                    }}>
+                      {country.costs.totalCourse}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Eligibility - CURVED */}
+          {/* Eligibility & Documents - SHARP cards */}
           <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
             <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
               <div className="section-label">
@@ -2352,130 +2417,151 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 marginBottom: '48px',
                 letterSpacing: '-1px'
               }}>
-                Eligibility Criteria
+                Eligibility & Documents
               </h2>
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '20px',
-                marginBottom: '48px'
+                gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+                gap: '24px'
               }}>
-                <div className="curved-card">
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600',
-                    marginBottom: '12px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}>
-                    NEET Requirement
-                  </div>
-                  <div style={{
-                    fontSize: '18px',
-                    fontWeight: '700',
+                {/* Eligibility Card - SHARP */}
+                <div className="sharp-card">
+                  <h3 style={{
+                    fontSize: '20px',
+                    fontWeight: '800',
                     color: '#1E3A5F',
-                    lineHeight: '1.5'
+                    marginBottom: '24px',
+                    letterSpacing: '-0.3px'
                   }}>
-                    {country.eligibility.neetRequirement}
-                  </div>
-                </div>
-
-                <div className="curved-card">
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600',
-                    marginBottom: '12px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}>
-                    Academic Percentage
-                  </div>
-                  <div style={{
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    color: '#1E3A5F',
-                    lineHeight: '1.5'
-                  }}>
-                    {country.eligibility.academicRequirement}
-                  </div>
-                </div>
-
-                <div className="curved-card">
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600',
-                    marginBottom: '12px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}>
-                    Age Limit
-                  </div>
-                  <div style={{
-                    fontSize: '18px',
-                    fontWeight: '700',
-                    color: '#1E3A5F',
-                    lineHeight: '1.5'
-                  }}>
-                    {country.eligibility.ageLimit}
-                  </div>
-                </div>
-              </div>
-
-              <div className="sharp-card" style={{ marginTop: '32px' }}>
-                <h3 style={{
-                  fontSize: '20px',
-                  fontWeight: '700',
-                  color: '#1E3A5F',
-                  marginBottom: '24px',
-                  letterSpacing: '-0.3px'
-                }}>
-                  Required Documents
-                </h3>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                  gap: '16px'
-                }}>
-                  {country.eligibility.documents.map((doc, idx) => (
-                    <div key={idx} style={{
+                    Eligibility Criteria
+                  </h3>
+                  
+                  <div style={{ display: 'grid', gap: '16px' }}>
+                    <div style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '12px',
-                      padding: '12px 16px',
+                      padding: '16px',
                       background: '#F8FAFC',
-                      border: '1px solid #E2E8F0'
+                      borderRadius: '8px'
                     }}>
                       <div style={{
-                        width: '6px',
-                        height: '6px',
+                        width: '8px',
+                        height: '8px',
                         background: '#FF6B35',
-                        flexShrink: 0
+                        borderRadius: '50%'
                       }} />
                       <span style={{
                         fontSize: '14px',
-                        color: '#1E3A5F',
                         fontWeight: '600',
-                        lineHeight: '1.5'
+                        color: '#1E3A5F'
                       }}>
-                        {doc}
+                        {country.eligibility.neetRequirement}
                       </span>
                     </div>
-                  ))}
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '16px',
+                      background: '#F8FAFC',
+                      borderRadius: '8px'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        background: '#FF6B35',
+                        borderRadius: '50%'
+                      }} />
+                      <span style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#1E3A5F'
+                      }}>
+                        {country.eligibility.academicRequirement}
+                      </span>
+                    </div>
+                    
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '16px',
+                      background: '#F8FAFC',
+                      borderRadius: '8px'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        background: '#FF6B35',
+                        borderRadius: '50%'
+                      }} />
+                      <span style={{
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#1E3A5F'
+                      }}>
+                        Age: {country.eligibility.ageLimit}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Documents Card - CURVED */}
+                <div className="curved-card">
+                  <h3 style={{
+                    fontSize: '20px',
+                    fontWeight: '800',
+                    color: '#1E3A5F',
+                    marginBottom: '24px',
+                    letterSpacing: '-0.3px'
+                  }}>
+                    Required Documents
+                  </h3>
+                  
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '12px'
+                  }}>
+                    {country.eligibility.documents.map((doc, idx) => (
+                      <div key={idx} style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        padding: '12px',
+                        background: '#FFF7ED',
+                        borderRadius: '8px'
+                      }}>
+                        <div style={{
+                          width: '6px',
+                          height: '6px',
+                          background: '#FF6B35',
+                          borderRadius: '50%'
+                        }} />
+                        <span style={{
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          color: '#1E3A5F'
+                        }}>
+                          {doc}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Living Information - SHARP */}
+          {/* Visa & Intake Info */}
           <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
             <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
               <div className="section-label">
                 <div className="section-label-line" />
-                <span className="section-label-text">Living in {country.name}</span>
+                <span className="section-label-text">Important Information</span>
               </div>
 
               <h2 style={{
@@ -2485,13 +2571,130 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 marginBottom: '48px',
                 letterSpacing: '-1px'
               }}>
-                Student Life & Environment
+                Visa & Intake Details
               </h2>
 
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '16px'
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: '20px'
+              }}>
+                {/* Intake Info - CURVED */}
+                <div className="curved-card">
+                  <h4 style={{
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#64748B',
+                    marginBottom: '16px',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase'
+                  }}>
+                    Main Intake
+                  </h4>
+                  <div style={{
+                    fontSize: '28px',
+                    fontWeight: '800',
+                    color: '#1E3A5F',
+                    marginBottom: '8px',
+                    letterSpacing: '-0.5px'
+                  }}>
+                    {country.intakes.main}
+                  </div>
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#64748B',
+                    fontWeight: '600'
+                  }}>
+                    Application Deadline: {country.intakes.applicationDeadline}
+                  </p>
+                </div>
+
+                {/* Visa Type - SHARP */}
+                <div className="sharp-card">
+                  <h4 style={{
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#64748B',
+                    marginBottom: '16px',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase'
+                  }}>
+                    Visa Type
+                  </h4>
+                  <div style={{
+                    fontSize: '24px',
+                    fontWeight: '800',
+                    color: '#1E3A5F',
+                    marginBottom: '8px',
+                    letterSpacing: '-0.5px'
+                  }}>
+                    {country.visa.type}
+                  </div>
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#64748B',
+                    fontWeight: '600'
+                  }}>
+                    Processing: {country.visa.processingTime}
+                  </p>
+                </div>
+
+                {/* Visa Validity - CURVED */}
+                <div className="curved-card">
+                  <h4 style={{
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: '#64748B',
+                    marginBottom: '16px',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase'
+                  }}>
+                    Visa Validity
+                  </h4>
+                  <div style={{
+                    fontSize: '24px',
+                    fontWeight: '800',
+                    color: '#FF6B35',
+                    marginBottom: '8px',
+                    letterSpacing: '-0.5px'
+                  }}>
+                    {country.visa.validity}
+                  </div>
+                  <p style={{
+                    fontSize: '14px',
+                    color: '#64748B',
+                    fontWeight: '600'
+                  }}>
+                    Renewable annually
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Living Info & Recognition */}
+          <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
+            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+              <div className="section-label">
+                <div className="section-label-line" />
+                <span className="section-label-text">Student Life</span>
+              </div>
+
+              <h2 style={{
+                fontSize: 'clamp(28px, 5vw, 42px)',
+                fontWeight: '800',
+                color: '#1E3A5F',
+                marginBottom: '48px',
+                letterSpacing: '-1px'
+              }}>
+                Living in {country.name}
+              </h2>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '16px',
+                marginBottom: '48px'
               }}>
                 {[
                   { label: 'Climate', value: country.livingInfo.climate },
@@ -2499,70 +2702,49 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                   { label: 'Currency', value: country.livingInfo.currency },
                   { label: 'Time Zone', value: country.livingInfo.timeZone },
                   { label: 'Indian Community', value: country.livingInfo.indianCommunity },
-                  { label: 'Safety Rating', value: country.livingInfo.safetyRating },
-                  { label: 'Indian Food', value: country.livingInfo.foodAvailability }
-                ].map((info, idx) => (
-                  <div key={idx} className="info-grid-sharp">
+                  { label: 'Safety', value: country.livingInfo.safetyRating }
+                ].map((item, idx) => (
+                  <div key={idx} className={idx % 2 === 0 ? 'curved-card' : 'sharp-card'} style={{ padding: '20px' }}>
                     <div style={{
                       fontSize: '11px',
-                      color: '#64748B',
                       fontWeight: '700',
-                      marginBottom: '10px',
+                      color: '#64748B',
+                      marginBottom: '8px',
                       letterSpacing: '1px',
                       textTransform: 'uppercase'
                     }}>
-                      {info.label}
+                      {item.label}
                     </div>
                     <div style={{
-                      fontSize: '15px',
+                      fontSize: '14px',
                       fontWeight: '700',
                       color: '#1E3A5F',
-                      lineHeight: '1.5'
+                      lineHeight: '1.4'
                     }}>
-                      {info.value}
+                      {item.value}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
 
-          {/* Recognition - CURVED PILLS */}
-          <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Accreditation</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '24px',
-                letterSpacing: '-1px'
-              }}>
-                Global Recognition
-              </h2>
-
-              <p style={{
-                fontSize: '17px',
-                color: '#64748B',
-                marginBottom: '48px',
-                fontWeight: '500',
-                maxWidth: '800px'
-              }}>
-                Medical degrees from {country.name} are recognized by major international medical councils
-              </p>
-
+              {/* Recognitions */}
               <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '12px'
+                gap: '12px',
+                alignItems: 'center'
               }}>
-                {country.recognitions.map((recognition, idx) => (
+                <span style={{
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  color: '#64748B',
+                  marginRight: '8px'
+                }}>
+                  Recognized by:
+                </span>
+                {country.recognitions.map((rec, idx) => (
                   <div key={idx} className="pill-badge">
-                    {recognition}
+                    {rec}
                   </div>
                 ))}
               </div>
@@ -2573,39 +2755,38 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
 
       {/* UNIVERSITIES TAB CONTENT */}
       {activeTab === 'universities' && (
-        <section style={{ padding: '80px 20px', background: '#FAFBFC', minHeight: '60vh' }}>
+        <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
           <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '64px' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Medical Universities</span>
-              </div>
-              
-              <h2 style={{
-                fontSize: 'clamp(32px, 6vw, 56px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '16px',
-                letterSpacing: '-1.5px'
-              }}>
-                NMC Approved Universities
-              </h2>
-              
-              <p style={{
-                fontSize: '18px',
-                color: '#64748B',
-                fontWeight: '500',
-                maxWidth: '700px'
-              }}>
-                Explore {universities.length > 0 ? universities.length : country.topUniversities.length} internationally recognized medical institutions
-              </p>
+            <div className="section-label">
+              <div className="section-label-line" />
+              <span className="section-label-text">All Universities</span>
             </div>
+            
+            <h2 style={{
+              fontSize: 'clamp(28px, 5vw, 48px)',
+              fontWeight: '800',
+              color: '#1E3A5F',
+              marginBottom: '16px',
+              letterSpacing: '-1.5px'
+            }}>
+              NMC Approved Universities
+            </h2>
+            
+            <p style={{
+              fontSize: '18px',
+              color: '#64748B',
+              fontWeight: '500',
+              maxWidth: '700px'
+            }}>
+              Explore {universities.length > 0 ? universities.length : country.topUniversities.length} internationally recognized medical institutions
+            </p>
 
             {universities.length > 0 ? (
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
-                gap: '24px'
+                gap: '24px',
+                marginTop: '48px'
               }}>
                 {universities.map((uni, idx) => (
                   <div key={uni.id} className="university-card-curved">
@@ -2703,8 +2884,12 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                       </div>
                     </div>
 
-                    <button className="btn-curved" style={{ width: '100%', padding: '16px', fontSize: '14px' }}>
-                      View University Details →
+                    <button 
+                      onClick={() => setIsApplicationModalOpen(true)}
+                      className="btn-curved" 
+                      style={{ width: '100%', padding: '16px', fontSize: '14px' }}
+                    >
+                      Apply to This University →
                     </button>
                   </div>
                 ))}
@@ -2714,7 +2899,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 textAlign: 'center',
                 padding: '80px 40px',
                 maxWidth: '600px',
-                margin: '0 auto'
+                margin: '48px auto 0'
               }}>
                 <h3 style={{
                   fontSize: '24px',
@@ -2804,9 +2989,14 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
             maxWidth: '500px',
             margin: '0 auto'
           }}>
-            <Link href="/contact" className="btn-curved">
-              Schedule Free Consultation →
-            </Link>
+            {/* APPLY NOW - Opens Modal */}
+            <button 
+              onClick={() => setIsApplicationModalOpen(true)}
+              className="btn-curved"
+              style={{ justifyContent: 'center' }}
+            >
+              Apply Now →
+            </button>
 
             <Link href="/destinations" style={{
               display: 'inline-flex',
@@ -2817,6 +3007,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
               background: 'transparent',
               color: 'white',
               border: '1px solid rgba(255,255,255,0.3)',
+              borderRadius: '50px',
               textDecoration: 'none',
               fontWeight: '700',
               fontSize: '16px',

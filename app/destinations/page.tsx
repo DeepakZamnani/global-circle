@@ -1,268 +1,13 @@
-// "use client";
-
-// import React from 'react';
-// import Link from 'next/link';
-// import Navbar from '../components/Navbar';
-// import Footer from '../components/Footer';
-// // ============================================
-// // ALL DESTINATIONS PAGE
-// // /destinations
-// // ============================================
-
-// const allCountries = [
-//   { name: 'Canada', slug: 'canada', flag: '🇨🇦', universities: '96+', featured: true },
-//   { name: 'Australia', slug: 'australia', flag: '🇦🇺', universities: '43+', featured: true },
-//   { name: 'Farance', slug: 'france', flag: '🇫🇷', universities: '72+', featured: true },
-//   { name: 'Spain', slug: 'spain', flag: '🇪🇸', universities: '84+', featured: true },
-//   { name: 'Portugal', slug: 'portugal', flag: '🇵🇹', universities: '40+', featured: false },
-//   { name: 'Ireland', slug: 'ireland', flag: '🇮🇪', universities: '34+', featured: false },
-//   { name: 'Poland', slug: 'poland', flag: '🇵🇱', universities: '45+', featured: false },
-//   { name: 'Italy', slug: 'italy', flag: '🇮🇹', universities: '90+', featured: false },
-//   { name: 'Germany', slug: 'germany', flag: '🇩🇪', universities: '120+', featured: false },
-//   { name: 'Sweden', slug: 'sweden', flag: '🇸🇪', universities: '35+', featured: false },
-//   { name: 'Denmark', slug: 'denmark', flag: '🇩🇰', universities: '28+', featured: false },
-//   { name: 'Norway', slug: 'norway', flag: '🇳🇴', universities: '30+', featured: false },
-//   { name: 'Finland', slug: 'finland', flag: '🇫🇮', universities: '38+', featured: false },
-//   { name: 'Netherlands', slug: 'netherlands', flag: '🇳🇱', universities: '55+', featured: false },
-//   { name: 'Czech Republic', slug: 'czech-republic', flag: '🇨🇿', universities: '26+', featured: false },
-//   { name: 'Greece', slug: 'greece', flag: '🇬🇷', universities: '24+', featured: false },
-//   { name: 'Croatia', slug: 'croatia', flag: '🇭🇷', universities: '18+', featured: false },
-//   { name: 'Slovenia', slug: 'slovenia', flag: '🇸🇮', universities: '12+', featured: false },
-//   { name: 'Estonia', slug: 'estonia', flag: '🇪🇪', universities: '15+', featured: false },
-//   { name: 'Latvia', slug: 'latvia', flag: '🇱🇻', universities: '20+', featured: false },
-//   { name: 'Lithuania', slug: 'lithuania', flag: '🇱🇹', universities: '22+', featured: false },
-//   { name: 'Slovakia', slug: 'slovakia', flag: '🇸🇰', universities: '18+', featured: false },
-//   { name: 'Malta', slug: 'malta', flag: '🇲🇹', universities: '8+', featured: false },
-//   { name: 'Cyprus', slug: 'cyprus', flag: '🇨🇾', universities: '12+', featured: false },
-//   { name: 'Georgia', slug: 'georgia', flag: '🇬🇪', universities: '20+', featured: false },
-//   { name: 'UAE', slug: 'uae', flag: '🇦🇪', universities: '35+', featured: false },
-// ];
-
-// export default function DestinationsListPage() {
-//   return (
-//     <div style={{
-//       minHeight: '100vh',
-//       background: '#FFFFFF',
-//       fontFamily: '"Plus Jakarta Sans", sans-serif'
-//     }}>
-//       <Navbar />
-//       <style>{`
-//         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-//         .country-card {
-//           background: white;
-//           border: 2px solid #E2E8F0;
-//           border-radius: 20px;
-//           padding: 24px;
-//           text-decoration: none;
-//           transition: all 0.3s ease;
-//           display: flex;
-//           align-items: center;
-//           gap: 16px;
-//         }
-
-//         .country-card:hover {
-//           border-color: #FF6B35;
-//           transform: translateY(-4px);
-//           box-shadow: 0 12px 32px rgba(0,0,0,0.1);
-//         }
-
-//         .country-card.featured {
-//           background: linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%);
-//           border-color: #1E3A5F;
-//         }
-
-//         .country-card.featured:hover {
-//           border-color: #FF6B35;
-//         }
-
-//         @media (max-width: 768px) {
-//           .countries-grid {
-//             grid-template-columns: 1fr !important;
-//           }
-//         }
-//       `}</style>
-
-//       {/* Hero */}
-//       <section style={{
-//         padding: '140px 48px 80px',
-//         background: '#F8FAFC',
-//         textAlign: 'center'
-//       }}>
-//         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-//           <div style={{
-//             display: 'inline-flex',
-//             alignItems: 'center',
-//             gap: '10px',
-//             marginBottom: '20px'
-//           }}>
-//             <div style={{
-//               width: '36px',
-//               height: '3px',
-//               background: '#FF6B35',
-//               borderRadius: '2px'
-//             }} />
-//             <span style={{
-//               fontSize: '13px',
-//               fontWeight: '700',
-//               color: '#64748B',
-//               letterSpacing: '1.5px',
-//               textTransform: 'uppercase'
-//             }}>
-//               26 Countries
-//             </span>
-//             <div style={{
-//               width: '36px',
-//               height: '3px',
-//               background: '#FF6B35',
-//               borderRadius: '2px'
-//             }} />
-//           </div>
-
-//           <h1 style={{
-//             fontSize: '52px',
-//             fontWeight: '800',
-//             color: '#1E3A5F',
-//             letterSpacing: '-2px',
-//             marginBottom: '16px'
-//           }}>
-//             All Study Destinations
-//           </h1>
-
-//           <p style={{
-//             fontSize: '18px',
-//             color: '#64748B',
-//             lineHeight: '1.7'
-//           }}>
-//             Explore world-class education opportunities across 26 countries with 500+ partner universities
-//           </p>
-//         </div>
-//       </section>
-
-//       {/* Countries Grid */}
-//       <section style={{ padding: '80px 48px' }}>
-//         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          
-//           {/* Featured */}
-//           <div style={{ marginBottom: '60px' }}>
-//             <h2 style={{
-//               fontSize: '24px',
-//               fontWeight: '700',
-//               color: '#1E3A5F',
-//               marginBottom: '24px'
-//             }}>
-//               Featured Destinations
-//             </h2>
-            
-//             <div 
-//               className="countries-grid"
-//               style={{
-//                 display: 'grid',
-//                 gridTemplateColumns: 'repeat(2, 1fr)',
-//                 gap: '20px'
-//               }}
-//             >
-//               {allCountries.filter(c => c.featured).map((country) => (
-//                 <Link 
-//                   key={country.slug}
-//                   href={`/destinations/${country.slug}`}
-//                   className="country-card featured"
-//                 >
-//                   <span style={{ fontSize: '40px' }}>{country.flag}</span>
-//                   <div style={{ flex: 1 }}>
-//                     <div style={{
-//                       fontSize: '22px',
-//                       fontWeight: '700',
-//                       color: 'white',
-//                       marginBottom: '4px'
-//                     }}>
-//                       {country.name}
-//                     </div>
-//                     <div style={{
-//                       fontSize: '14px',
-//                       color: 'rgba(255,255,255,0.7)'
-//                     }}>
-//                       {country.universities} Universities
-//                     </div>
-//                   </div>
-//                   <span style={{
-//                     color: '#FF6B35',
-//                     fontSize: '20px',
-//                     fontWeight: '600'
-//                   }}>→</span>
-//                 </Link>
-//               ))}
-//             </div>
-//           </div>
-
-//           {/* All Countries */}
-//           <div>
-//             <h2 style={{
-//               fontSize: '24px',
-//               fontWeight: '700',
-//               color: '#1E3A5F',
-//               marginBottom: '24px'
-//             }}>
-//               All Countries
-//             </h2>
-            
-//             <div 
-//               className="countries-grid"
-//               style={{
-//                 display: 'grid',
-//                 gridTemplateColumns: 'repeat(3, 1fr)',
-//                 gap: '16px'
-//               }}
-//             >
-//               {allCountries.filter(c => !c.featured).map((country) => (
-//                 <Link 
-//                   key={country.slug}
-//                   href={`/destinations/${country.slug}`}
-//                   className="country-card"
-//                 >
-//                   <span style={{ fontSize: '32px' }}>{country.flag}</span>
-//                   <div style={{ flex: 1 }}>
-//                     <div style={{
-//                       fontSize: '18px',
-//                       fontWeight: '700',
-//                       color: '#1E3A5F',
-//                       marginBottom: '2px'
-//                     }}>
-//                       {country.name}
-//                     </div>
-//                     <div style={{
-//                       fontSize: '13px',
-//                       color: '#64748B'
-//                     }}>
-//                       {country.universities} Unis
-//                     </div>
-//                   </div>
-//                   <span style={{
-//                     color: '#FF6B35',
-//                     fontSize: '18px'
-//                   }}>→</span>
-//                 </Link>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-//           <Footer/>
-    
-//     </div>
-    
-//   );
-// }
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
 
 // ============================================
-// ALL DESTINATIONS PAGE - Redesigned
-// Hero with background, sectorized countries
+// DESTINATIONS PAGE - Mixed Design Elements
+// Hero same, mid content with mixed curves/sharp
 // ============================================
 
 const regions = {
@@ -275,49 +20,49 @@ const regions = {
         slug: 'russia', 
         flag: '🇷🇺', 
         universities: '60+', 
-        image: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=400&q=80' // Moscow Red Square
+        image: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=400&q=80'
       },
       { 
         name: 'China', 
         slug: 'china', 
         flag: '🇨🇳', 
         universities: '45+', 
-        image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=80' // Great Wall/Beijing
+        image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=80'
       },
       { 
         name: 'Kazakhstan', 
         slug: 'kazakhstan', 
         flag: '🇰🇿', 
         universities: '15+', 
-        image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80' // Astana/Almaty
+        image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80'
       },
       { 
         name: 'Kyrgyzstan', 
         slug: 'kyrgyzstan', 
         flag: '🇰🇬', 
         universities: '10+', 
-        image: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=400&q=80' // Kyrgyz mountains
+        image: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=400&q=80'
       },
       { 
         name: 'Georgia', 
         slug: 'georgia', 
         flag: '🇬🇪', 
         universities: '12+', 
-        image: 'https://images.unsplash.com/photo-1591265670940-5643c0c3cb17?w=400&q=80' // Tbilisi
+        image: 'https://images.unsplash.com/photo-1591265670940-5643c0c3cb17?w=400&q=80'
       },
       { 
         name: 'Philippines', 
         slug: 'philippines', 
         flag: '🇵🇭', 
         universities: '40+', 
-        image: 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=400&q=80' // Manila/Philippines
+        image: 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=400&q=80'
       },
       { 
         name: 'Uzbekistan', 
         slug: 'uzbekistan', 
         flag: '🇺🇿', 
         universities: '8+', 
-        image: 'https://images.unsplash.com/photo-1597075933405-2c6c7e9df88c?w=400&q=80' // Samarkand
+        image: 'https://images.unsplash.com/photo-1597075933405-2c6c7e9df88c?w=400&q=80'
       },
     ]
   },
@@ -330,14 +75,14 @@ const regions = {
         slug: 'nepal', 
         flag: '🇳🇵', 
         universities: '20+',
-        image: 'https://images.unsplash.com/photo-1504197832061-98356e3dcdcf?w=400&q=80' // Nepal mountains/Kathmandu
+        image: 'https://images.unsplash.com/photo-1504197832061-98356e3dcdcf?w=400&q=80'
       },
       { 
         name: 'Bangladesh', 
         slug: 'bangladesh', 
         flag: '🇧🇩', 
         universities: '25+',
-        image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&q=80' // Dhaka
+        image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&q=80'
       },
     ]
   },
@@ -350,42 +95,42 @@ const regions = {
         slug: 'poland', 
         flag: '🇵🇱', 
         universities: '20+',
-        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Krakow/Warsaw
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80'
       },
       { 
         name: 'Romania', 
         slug: 'romania', 
         flag: '🇷🇴', 
         universities: '12+',
-        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Bucharest/Romania
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80'
       },
       { 
         name: 'Latvia', 
         slug: 'latvia', 
         flag: '🇱🇻', 
         universities: '8+',
-        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Riga
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80'
       },
       { 
         name: 'Lithuania', 
         slug: 'lithuania', 
         flag: '🇱🇹', 
         universities: '8+',
-        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Vilnius
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80'
       },
       { 
         name: 'Ukraine', 
         slug: 'ukraine', 
         flag: '🇺🇦', 
         universities: '30+',
-        image: 'https://images.unsplash.com/photo-1568619655021-15bbbf17f40c?w=400&q=80' // Kiev
+        image: 'https://images.unsplash.com/photo-1568619655021-15bbbf17f40c?w=400&q=80'
       },
       { 
         name: 'Belarus', 
         slug: 'belarus', 
         flag: '🇧🇾', 
         universities: '15+',
-        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80' // Minsk
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80'
       },
     ]
   },
@@ -398,52 +143,53 @@ const regions = {
         slug: 'armenia', 
         flag: '🇦🇲', 
         universities: '10+',
-        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80' // Armenian monastery
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80'
       },
       { 
         name: 'Egypt', 
         slug: 'egypt', 
         flag: '🇪🇬', 
         universities: '25+',
-        image: 'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400&q=80' // Cairo/Pyramids
+        image: 'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400&q=80'
       },
       { 
         name: 'Malaysia', 
         slug: 'malaysia', 
         flag: '🇲🇾', 
         universities: '15+',
-        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80' // Kuala Lumpur
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80'
       },
       { 
         name: 'Mauritius', 
         slug: 'mauritius', 
         flag: '🇲🇺', 
         universities: '5+',
-        image: 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=80' // Mauritius island
+        image: 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=80'
       },
       { 
         name: 'Azerbaijan', 
         slug: 'azerbaijan', 
         flag: '🇦🇿', 
         universities: '10+',
-        image: 'https://images.unsplash.com/photo-1585128903994-03e4d2a1acc4?w=400&q=80' // Baku
+        image: 'https://images.unsplash.com/photo-1585128903994-03e4d2a1acc4?w=400&q=80'
       },
     ]
   }
 };
 
 export default function DestinationsListPage() {
-  const [activeRegion, setActiveRegion] = useState<string | null>(null);
-
   return (
     <div style={{
       minHeight: '100vh',
       background: '#FFFFFF',
       fontFamily: '"Plus Jakarta Sans", sans-serif'
-    }}><Navbar/>
+    }}>
+      <Navbar />
+      
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+        /* Pills */
         .region-btn {
           padding: 12px 24px;
           border-radius: 50px;
@@ -451,38 +197,40 @@ export default function DestinationsListPage() {
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
-          border: 2px solid transparent;
           text-decoration: none;
           display: inline-block;
         }
 
         .region-btn:hover {
           transform: translateY(-2px);
+          box-shadow: 0 8px 16px rgba(0,0,0,0.15);
         }
 
-        .country-card {
-          background: white;
-          border-radius: 20px;
-          overflow: hidden;
-          text-decoration: none;
-          transition: all 0.4s ease;
-          border: 2px solid #E2E8F0;
-          display: block;
+        .stat-badge-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 20px;
+          background: rgba(255,255,255,0.1);
+          border-radius: 50px;
+          backdrop-filter: blur(10px);
         }
 
-        .country-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-          border-color: #FF6B35;
-        }
-
-        .country-card:hover .card-arrow {
-          transform: translateX(4px);
-        }
-
+        /* Featured Cards - Rounded */
         .country-card-featured {
           position: relative;
           height: 280px;
+          border-radius: 24px;
+          overflow: hidden;
+          text-decoration: none;
+          transition: all 0.4s ease;
+          border: none;
+          display: block;
+        }
+
+        .country-card-featured:hover {
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 24px 48px rgba(0,0,0,0.15);
         }
 
         .country-card-featured .card-bg {
@@ -493,11 +241,11 @@ export default function DestinationsListPage() {
           bottom: 0;
           background-size: cover;
           background-position: center;
-          transition: transform 0.5s ease;
+          transition: transform 0.6s ease;
         }
 
         .country-card-featured:hover .card-bg {
-          transform: scale(1.1);
+          transform: scale(1.15);
         }
 
         .country-card-featured .card-overlay {
@@ -506,9 +254,78 @@ export default function DestinationsListPage() {
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(180deg, rgba(30,58,95,0.2) 0%, rgba(30,58,95,0.9) 100%);
+          background: linear-gradient(180deg, rgba(30,58,95,0.1) 0%, rgba(30,58,95,0.85) 100%);
         }
 
+        /* Regular Cards - Mix of sharp and curved */
+        .country-card-compact {
+          background: white;
+          padding: 20px;
+          text-decoration: none;
+          transition: all 0.3s ease;
+          border: 2px solid #E2E8F0;
+          display: block;
+          position: relative;
+        }
+
+        .country-card-compact::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: transparent;
+          transition: all 0.3s ease;
+        }
+
+        .country-card-compact:hover {
+          transform: translateX(4px);
+          border-color: #CBD5E1;
+          box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+
+        .country-card-compact:hover::before {
+          background: var(--region-color);
+        }
+
+        .country-card-compact:hover .card-arrow {
+          transform: translateX(4px);
+        }
+
+        /* Flag Circle - Curved */
+        .flag-circle {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 28px;
+          flex-shrink: 0;
+          transition: all 0.3s ease;
+        }
+
+        .country-card-compact:hover .flag-circle {
+          transform: rotate(10deg) scale(1.1);
+        }
+
+        /* Region Header Badge - Sharp */
+        .region-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 0;
+          margin-bottom: 12px;
+        }
+
+        .region-dot {
+          width: 12px;
+          height: 12px;
+          flex-shrink: 0;
+        }
+
+        /* Section Styling */
         .region-section {
           padding: 80px 48px;
           border-bottom: 1px solid #E2E8F0;
@@ -519,25 +336,16 @@ export default function DestinationsListPage() {
         }
 
         .region-section:nth-child(even) {
-          background: #F8FAFC;
+          background: #FAFBFC;
         }
 
-        .stat-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 20px;
-          background: rgba(255,255,255,0.1);
-          border-radius: 50px;
-          backdrop-filter: blur(10px);
-        }
-
+        /* Responsive */
         @media (max-width: 1024px) {
           .featured-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
 
-          .countries-grid {
+          .countries-grid-compact {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
@@ -559,7 +367,7 @@ export default function DestinationsListPage() {
             grid-template-columns: 1fr !important;
           }
 
-          .countries-grid {
+          .countries-grid-compact {
             grid-template-columns: 1fr !important;
           }
 
@@ -575,7 +383,7 @@ export default function DestinationsListPage() {
         }
       `}</style>
 
-      {/* Hero Section with Background Image */}
+      {/* Hero Section - KEEP SAME */}
       <section style={{
         position: 'relative',
         padding: '180px 48px 120px',
@@ -594,7 +402,7 @@ export default function DestinationsListPage() {
           backgroundPosition: 'center'
         }} />
         
-        {/* Overlay - lighter to show image */}
+        {/* Overlay */}
         <div style={{
           position: 'absolute',
           top: 0,
@@ -611,7 +419,7 @@ export default function DestinationsListPage() {
           margin: '0 auto',
           textAlign: 'center'
         }}>
-          {/* Badge */}
+          {/* Badge - CURVED PILLS */}
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -668,7 +476,7 @@ export default function DestinationsListPage() {
             Explore world-class education opportunities across 26 countries with 500+ partner universities
           </p>
 
-          {/* Stats */}
+          {/* Stats - CURVED PILLS */}
           <div 
             className="stats-row"
             style={{
@@ -677,21 +485,21 @@ export default function DestinationsListPage() {
               gap: '24px'
             }}
           >
-            <div className="stat-badge">
+            <div className="stat-badge-pill">
               <span style={{ fontSize: '28px', fontWeight: '800', color: 'white' }}>26</span>
               <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>Countries</span>
             </div>
-            <div className="stat-badge">
+            <div className="stat-badge-pill">
               <span style={{ fontSize: '28px', fontWeight: '800', color: 'white' }}>500+</span>
               <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>Universities</span>
             </div>
-            <div className="stat-badge">
+            <div className="stat-badge-pill">
               <span style={{ fontSize: '28px', fontWeight: '800', color: 'white' }}>50+</span>
               <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>Programs</span>
             </div>
           </div>
 
-          {/* Quick Region Buttons */}
+          {/* Quick Region Buttons - CURVED PILLS */}
           <div 
             className="region-buttons"
             style={{
@@ -702,7 +510,7 @@ export default function DestinationsListPage() {
               flexWrap: 'wrap'
             }}
           >
-            {Object.entries(regions).slice(0, 5).map(([regionName, regionData]) => (
+            {Object.entries(regions).slice(0, 4).map(([regionName, regionData]) => (
               <a
                 key={regionName}
                 href={`#${regionName.toLowerCase().replace(/\s+/g, '-')}`}
@@ -719,7 +527,7 @@ export default function DestinationsListPage() {
         </div>
       </section>
 
-      {/* Region Sections */}
+      {/* Region Sections - MIXED DESIGN */}
       {Object.entries(regions).map(([regionName, regionData], regionIdx) => (
         <section 
           key={regionName}
@@ -728,28 +536,22 @@ export default function DestinationsListPage() {
         >
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             
-            {/* Region Header */}
+            {/* Region Header - SHARP badge with CURVED button */}
             <div style={{
               display: 'flex',
               alignItems: 'flex-end',
               justifyContent: 'space-between',
-              marginBottom: '40px',
+              marginBottom: '48px',
               flexWrap: 'wrap',
-              gap: '16px'
+              gap: '24px'
             }}>
               <div>
-                <div style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  marginBottom: '12px'
-                }}>
-                  <div style={{
-                    width: '12px',
-                    height: '12px',
-                    borderRadius: '4px',
-                    background: regionData.color
-                  }} />
+                {/* Sharp Badge */}
+                <div className="region-badge">
+                  <div 
+                    className="region-dot"
+                    style={{ background: regionData.color }}
+                  />
                   <span style={{
                     fontSize: '13px',
                     fontWeight: '700',
@@ -760,49 +562,61 @@ export default function DestinationsListPage() {
                     {regionData.countries.length} Countries
                   </span>
                 </div>
+                
                 <h2 style={{
-                  fontSize: '36px',
+                  fontSize: '40px',
                   fontWeight: '800',
                   color: '#1E3A5F',
                   letterSpacing: '-1px',
-                  marginBottom: '8px'
+                  marginBottom: '12px',
+                  lineHeight: '1.2'
                 }}>
                   {regionName}
                 </h2>
+                
                 <p style={{
-                  fontSize: '16px',
+                  fontSize: '17px',
                   color: '#64748B',
-                  maxWidth: '500px'
+                  maxWidth: '600px',
+                  lineHeight: '1.6'
                 }}>
                   {regionData.description}
                 </p>
               </div>
 
-              {/* Region CTA */}
+              {/* Curved CTA Button */}
               <Link
                 href="/contact"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  padding: '14px 28px',
+                  gap: '10px',
+                  padding: '16px 32px',
                   background: regionData.color,
                   color: 'white',
                   borderRadius: '50px',
                   fontWeight: '700',
-                  fontSize: '14px',
+                  fontSize: '15px',
                   textDecoration: 'none',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  boxShadow: `0 8px 16px ${regionData.color}33`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = `0 12px 24px ${regionData.color}55`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = `0 8px 16px ${regionData.color}33`;
                 }}
               >
-                Get Guidance
-                <span>→</span>
+                Get Guidance →
               </Link>
             </div>
 
             {/* Countries Grid */}
             {regionIdx === 0 ? (
-              // Featured destinations with images
+              // Featured destinations - CURVED CARDS with images
               <div 
                 className="featured-grid"
                 style={{
@@ -815,7 +629,7 @@ export default function DestinationsListPage() {
                   <Link
                     key={country.slug}
                     href={`/destinations/${country.slug}`}
-                    className="country-card country-card-featured"
+                    className="country-card-featured"
                   >
                     <div 
                       className="card-bg"
@@ -829,14 +643,15 @@ export default function DestinationsListPage() {
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
-                      padding: '24px'
+                      padding: '28px'
                     }}>
-                      <span style={{ fontSize: '36px', marginBottom: '8px' }}>{country.flag}</span>
+                      <span style={{ fontSize: '40px', marginBottom: '12px' }}>{country.flag}</span>
                       <h3 style={{
                         fontSize: '24px',
                         fontWeight: '800',
                         color: 'white',
-                        marginBottom: '4px'
+                        marginBottom: '6px',
+                        letterSpacing: '-0.5px'
                       }}>
                         {country.name}
                       </h3>
@@ -847,7 +662,8 @@ export default function DestinationsListPage() {
                       }}>
                         <span style={{
                           fontSize: '14px',
-                          color: 'rgba(255,255,255,0.8)'
+                          color: 'rgba(255,255,255,0.9)',
+                          fontWeight: '600'
                         }}>
                           {country.universities} Universities
                         </span>
@@ -855,7 +671,7 @@ export default function DestinationsListPage() {
                           className="card-arrow"
                           style={{
                             color: '#FF6B35',
-                            fontSize: '20px',
+                            fontSize: '24px',
                             fontWeight: '700',
                             transition: 'transform 0.3s ease'
                           }}
@@ -866,62 +682,63 @@ export default function DestinationsListPage() {
                 ))}
               </div>
             ) : (
-              // Regular country cards
+              // Regular cards - SHARP with curved flag circles
               <div 
-                className="countries-grid"
+                className="countries-grid-compact"
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(4, 1fr)',
-                  gap: '16px'
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: '20px'
                 }}
               >
                 {regionData.countries.map((country: any) => (
                   <Link
                     key={country.slug}
                     href={`/destinations/${country.slug}`}
-                    className="country-card"
-                    style={{ padding: '20px' }}
+                    className="country-card-compact"
+                    style={{ '--region-color': regionData.color } as React.CSSProperties}
                   >
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '16px'
                     }}>
-                      <div style={{
-                        width: '56px',
-                        height: '56px',
-                        borderRadius: '16px',
-                        background: `${regionData.color}15`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '28px',
-                        flexShrink: 0
-                      }}>
+                      {/* Circular flag badge */}
+                      <div 
+                        className="flag-circle"
+                        style={{
+                          background: `${regionData.color}15`,
+                          border: `2px solid ${regionData.color}30`
+                        }}
+                      >
                         {country.flag}
                       </div>
+                      
                       <div style={{ flex: 1 }}>
                         <h3 style={{
                           fontSize: '18px',
                           fontWeight: '700',
                           color: '#1E3A5F',
-                          marginBottom: '2px'
+                          marginBottom: '4px',
+                          letterSpacing: '-0.3px'
                         }}>
                           {country.name}
                         </h3>
                         <span style={{
                           fontSize: '13px',
-                          color: '#64748B'
+                          color: '#64748B',
+                          fontWeight: '600'
                         }}>
                           {country.universities} Universities
                         </span>
                       </div>
+                      
                       <span 
                         className="card-arrow"
                         style={{
                           color: regionData.color,
                           fontSize: '20px',
-                          fontWeight: '600',
+                          fontWeight: '700',
                           transition: 'transform 0.3s ease'
                         }}
                       >→</span>
@@ -934,78 +751,7 @@ export default function DestinationsListPage() {
         </section>
       ))}
 
-      {/* Bottom CTA */}
-      {/* <section style={{
-        padding: '100px 48px',
-        background: 'linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%)',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: '40px',
-            fontWeight: '800',
-            color: 'white',
-            marginBottom: '16px',
-            letterSpacing: '-1px'
-          }}>
-            Not Sure Where to Study?
-          </h2>
-          <p style={{
-            fontSize: '18px',
-            color: 'rgba(255,255,255,0.7)',
-            marginBottom: '32px',
-            lineHeight: '1.7'
-          }}>
-            Our expert counselors will help you find the perfect destination based on your goals, budget, and preferences.
-          </p>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '16px',
-            flexWrap: 'wrap'
-          }}>
-            <Link
-              href="/contact"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '18px 36px',
-                background: '#FF6B35',
-                color: 'white',
-                borderRadius: '50px',
-                fontWeight: '700',
-                fontSize: '16px',
-                textDecoration: 'none',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              Book Free Consultation
-              <span>→</span>
-            </Link>
-            <Link
-              href="/programs"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '18px 36px',
-                background: 'transparent',
-                color: 'white',
-                borderRadius: '50px',
-                fontWeight: '700',
-                fontSize: '16px',
-                textDecoration: 'none',
-                border: '2px solid rgba(255,255,255,0.3)',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              View Programs
-            </Link>
-          </div>
-        </div>
-      </section> */}
-      <Footer/>
+      <Footer />
     </div>
   );
 }

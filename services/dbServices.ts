@@ -1,9 +1,4 @@
-// ============================================
-// DATABASE SERVICE
-// All Firebase Firestore operations
-// ============================================
-
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { ContactFormData, ApplicationFormData } from '../types';
 
@@ -60,5 +55,52 @@ export const submitFormData = async (
   } catch (error) {
     console.error(`Error submitting to ${collectionName}:`, error);
     throw new Error(`Failed to submit to ${collectionName}`);
+  }
+};
+
+/**
+ * Submit application with custom document ID (applicationId as document ID)
+ * This allows using the applicationId as the primary key in Firestore
+ * 
+ * Firestore structure:
+ * applications/
+ *   └── {applicationId}/
+ *       ├── applicationId: string
+ *       ├── countryCode: string
+ *       ├── countryName: string
+ *       ├── fullName: string
+ *       ├── email: string
+ *       ├── phoneNumber: string
+ *       ├── age: string
+ *       ├── country: string
+ *       ├── city: string
+ *       ├── submittedAt: string
+ *       ├── status: string
+ *       └── source: string
+ * 
+ * @param formData - Application form data with applicationId
+ * @returns Promise<string> - Document ID (applicationId)
+ */
+export const submitApplicationWithCustomId = async (
+  formData: Record<string, any>
+): Promise<string> => {
+  try {
+    const applicationId = formData.applicationId;
+    
+    if (!applicationId) {
+      throw new Error('Application ID is required');
+    }
+
+    // Use setDoc with the applicationId as the document ID
+    const docRef = doc(db, 'applications', applicationId);
+    await setDoc(docRef, {
+      ...formData,
+      submittedAt: formData.submittedAt || new Date().toISOString()
+    });
+    
+    return applicationId;
+  } catch (error) {
+    console.error('Error submitting application:', error);
+    throw new Error('Failed to submit application');
   }
 };
