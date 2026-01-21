@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { submitContactForm } from '../../services/dbServices';
+import { submitContactForm } from '../services/dbServices';
 import type { ContactFormData, Message } from '@/types';
-import Navbar from '../components/Navbar';
+import Navbar from '../app/components/Navbar';
 
 // ============================================
 // CONTACT PAGE - Luxury Professional Design
