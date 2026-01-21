@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { submitApplicationForm } from '../services/dbServices';
+import { submitApplicationForm } from '../../services/dbServices';
 import type { ApplicationFormData, Message } from '@/types';
 
 export default function ApplicationForm() {
