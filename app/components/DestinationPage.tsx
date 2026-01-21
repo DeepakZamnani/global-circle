@@ -1,5 +1,5 @@
 import CountryPage  from './CountryPage';
-import { countryData } from '../data/countryData'
+import { comprehensiveCountryData } from '../data/countryData'
 import { notFound } from 'next/navigation';
 
 // ============================================

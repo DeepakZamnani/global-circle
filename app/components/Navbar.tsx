@@ -54,7 +54,7 @@ export default function Navbar() {
           color: white;
           border: none;
           padding: 14px 28px;
-          border-radius: 50px;
+          border-radius: 12px;
           font-weight: 700;
           font-size: 15px;
           cursor: pointer;

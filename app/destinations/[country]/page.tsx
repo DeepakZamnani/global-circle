@@ -1,5 +1,5 @@
 import CountryPage from '../../components/CountryPage';
-import { countryData } from '../../data/countryData'
+import { comprehensiveCountryData } from '../../data/countryData'
 import { notFound } from 'next/navigation';
 
 // ============================================
@@ -10,7 +10,7 @@ import { notFound } from 'next/navigation';
 export default async function DestinationPage({ params }: { params: Promise<{ country: string }> }) {
   const { country } = await params;
   
-  if (!countryData[country]) {
+  if (!comprehensiveCountryData[country]) {
     notFound();
   }
 

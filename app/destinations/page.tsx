@@ -266,68 +266,168 @@ import Navbar from '../components/Navbar';
 // ============================================
 
 const regions = {
-  'Popular Destinations': {
-    description: 'Most sought-after study destinations by our students',
+  'Popular MBBS Destinations': {
+    description: 'Most preferred affordable & NMC-approved destinations for Indian students in 2025-2026',
     color: '#FF6B35',
     countries: [
-      { name: 'Canada', slug: 'canada', flag: '🇨🇦', universities: '96+', image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=400&q=80' },
-      { name: 'Australia', slug: 'australia', flag: '🇦🇺', universities: '43+', image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=400&q=80' },
-      { name: 'France', slug: 'france', flag: '🇫🇷', universities: '72+', image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80' },
-      { name: 'Spain', slug: 'spain', flag: '🇪🇸', universities: '84+', image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=400&q=80' },
+      { 
+        name: 'Russia', 
+        slug: 'russia', 
+        flag: '🇷🇺', 
+        universities: '60+', 
+        image: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=400&q=80' // Moscow Red Square
+      },
+      { 
+        name: 'China', 
+        slug: 'china', 
+        flag: '🇨🇳', 
+        universities: '45+', 
+        image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=80' // Great Wall/Beijing
+      },
+      { 
+        name: 'Kazakhstan', 
+        slug: 'kazakhstan', 
+        flag: '🇰🇿', 
+        universities: '15+', 
+        image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80' // Astana/Almaty
+      },
+      { 
+        name: 'Kyrgyzstan', 
+        slug: 'kyrgyzstan', 
+        flag: '🇰🇬', 
+        universities: '10+', 
+        image: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=400&q=80' // Kyrgyz mountains
+      },
+      { 
+        name: 'Georgia', 
+        slug: 'georgia', 
+        flag: '🇬🇪', 
+        universities: '12+', 
+        image: 'https://images.unsplash.com/photo-1591265670940-5643c0c3cb17?w=400&q=80' // Tbilisi
+      },
+      { 
+        name: 'Philippines', 
+        slug: 'philippines', 
+        flag: '🇵🇭', 
+        universities: '40+', 
+        image: 'https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=400&q=80' // Manila/Philippines
+      },
+      { 
+        name: 'Uzbekistan', 
+        slug: 'uzbekistan', 
+        flag: '🇺🇿', 
+        universities: '8+', 
+        image: 'https://images.unsplash.com/photo-1597075933405-2c6c7e9df88c?w=400&q=80' // Samarkand
+      },
     ]
   },
-  'Western Europe': {
-    description: 'Rich history, world-class education, and vibrant cultures',
-    color: '#1E3A5F',
-    countries: [
-      { name: 'Germany', slug: 'germany', flag: '🇩🇪', universities: '120+' },
-      { name: 'Ireland', slug: 'ireland', flag: '🇮🇪', universities: '34+' },
-      { name: 'Netherlands', slug: 'netherlands', flag: '🇳🇱', universities: '55+' },
-      { name: 'Portugal', slug: 'portugal', flag: '🇵🇹', universities: '40+' },
-      { name: 'Italy', slug: 'italy', flag: '🇮🇹', universities: '90+' },
-    ]
-  },
-  'Northern Europe': {
-    description: 'Innovation hubs with high quality of life',
+  'South Asia & Nearby': {
+    description: 'Proximate options with cultural similarity, direct NMC recognition & affordable fees',
     color: '#2EC4B6',
     countries: [
-      { name: 'Sweden', slug: 'sweden', flag: '🇸🇪', universities: '35+' },
-      { name: 'Denmark', slug: 'denmark', flag: '🇩🇰', universities: '28+' },
-      { name: 'Norway', slug: 'norway', flag: '🇳🇴', universities: '30+' },
-      { name: 'Finland', slug: 'finland', flag: '🇫🇮', universities: '38+' },
-      { name: 'Estonia', slug: 'estonia', flag: '🇪🇪', universities: '15+' },
-      { name: 'Latvia', slug: 'latvia', flag: '🇱🇻', universities: '20+' },
-      { name: 'Lithuania', slug: 'lithuania', flag: '🇱🇹', universities: '22+' },
+      { 
+        name: 'Nepal', 
+        slug: 'nepal', 
+        flag: '🇳🇵', 
+        universities: '20+',
+        image: 'https://images.unsplash.com/photo-1504197832061-98356e3dcdcf?w=400&q=80' // Nepal mountains/Kathmandu
+      },
+      { 
+        name: 'Bangladesh', 
+        slug: 'bangladesh', 
+        flag: '🇧🇩', 
+        universities: '25+',
+        image: 'https://images.unsplash.com/photo-1566552881560-0be862a7c445?w=400&q=80' // Dhaka
+      },
     ]
   },
-  'Central Europe': {
-    description: 'Affordable education in the heart of Europe',
+  'Eastern & Central Europe': {
+    description: 'European-standard MBBS with good clinical exposure & growing popularity',
     color: '#8B5CF6',
     countries: [
-      { name: 'Poland', slug: 'poland', flag: '🇵🇱', universities: '45+' },
-      { name: 'Czech Republic', slug: 'czech-republic', flag: '🇨🇿', universities: '26+' },
-      { name: 'Slovakia', slug: 'slovakia', flag: '🇸🇰', universities: '18+' },
-      { name: 'Slovenia', slug: 'slovenia', flag: '🇸🇮', universities: '12+' },
+      { 
+        name: 'Poland', 
+        slug: 'poland', 
+        flag: '🇵🇱', 
+        universities: '20+',
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Krakow/Warsaw
+      },
+      { 
+        name: 'Romania', 
+        slug: 'romania', 
+        flag: '🇷🇴', 
+        universities: '12+',
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Bucharest/Romania
+      },
+      { 
+        name: 'Latvia', 
+        slug: 'latvia', 
+        flag: '🇱🇻', 
+        universities: '8+',
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Riga
+      },
+      { 
+        name: 'Lithuania', 
+        slug: 'lithuania', 
+        flag: '🇱🇹', 
+        universities: '8+',
+        image: 'https://images.unsplash.com/photo-1564507592333-c5f3f5e4d8e3?w=400&q=80' // Vilnius
+      },
+      { 
+        name: 'Ukraine', 
+        slug: 'ukraine', 
+        flag: '🇺🇦', 
+        universities: '30+',
+        image: 'https://images.unsplash.com/photo-1568619655021-15bbbf17f40c?w=400&q=80' // Kiev
+      },
+      { 
+        name: 'Belarus', 
+        slug: 'belarus', 
+        flag: '🇧🇾', 
+        universities: '15+',
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80' // Minsk
+      },
     ]
   },
-  'Southern Europe & Mediterranean': {
-    description: 'Sunny climates and rich cultural heritage',
-    color: '#F59E0B',
-    countries: [
-      { name: 'Greece', slug: 'greece', flag: '🇬🇷', universities: '24+' },
-      { name: 'Croatia', slug: 'croatia', flag: '🇭🇷', universities: '18+' },
-      { name: 'Malta', slug: 'malta', flag: '🇲🇹', universities: '8+' },
-      { name: 'Cyprus', slug: 'cyprus', flag: '🇨🇾', universities: '12+' },
-    ]
-  },
-  'Other Regions': {
-    description: 'Emerging destinations with growing opportunities',
+  'Other MBBS Destinations': {
+    description: 'Emerging & specialized options with NMC recognition & varied benefits',
     color: '#64748B',
     countries: [
-      { name: 'UAE', slug: 'uae', flag: '🇦🇪', universities: '35+' },
-      { name: 'Georgia', slug: 'georgia', flag: '🇬🇪', universities: '20+' },
-      { name: 'Belarus', slug: 'belarus', flag: '🇧🇾', universities: '15+' },
-      { name: 'Bosnia', slug: 'bosnia', flag: '🇧🇦', universities: '10+' },
+      { 
+        name: 'Armenia', 
+        slug: 'armenia', 
+        flag: '🇦🇲', 
+        universities: '10+',
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80' // Armenian monastery
+      },
+      { 
+        name: 'Egypt', 
+        slug: 'egypt', 
+        flag: '🇪🇬', 
+        universities: '25+',
+        image: 'https://images.unsplash.com/photo-1572252009286-268acec5ca0a?w=400&q=80' // Cairo/Pyramids
+      },
+      { 
+        name: 'Malaysia', 
+        slug: 'malaysia', 
+        flag: '🇲🇾', 
+        universities: '15+',
+        image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&q=80' // Kuala Lumpur
+      },
+      { 
+        name: 'Mauritius', 
+        slug: 'mauritius', 
+        flag: '🇲🇺', 
+        universities: '5+',
+        image: 'https://images.unsplash.com/photo-1555993539-1732b0258235?w=400&q=80' // Mauritius island
+      },
+      { 
+        name: 'Azerbaijan', 
+        slug: 'azerbaijan', 
+        flag: '🇦🇿', 
+        universities: '10+',
+        image: 'https://images.unsplash.com/photo-1585128903994-03e4d2a1acc4?w=400&q=80' // Baku
+      },
     ]
   }
 };
