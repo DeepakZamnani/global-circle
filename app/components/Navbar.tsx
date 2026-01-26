@@ -3,11 +3,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
-// ============================================
-// NAVBAR COMPONENT - Standalone
-// Use on every page
-// ============================================
-
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -47,6 +42,50 @@ export default function Navbar() {
         .nav-link:hover::before {
           opacity: 1;
           bottom: -8px;
+        }
+
+        .nav-dropdown {
+          position: relative;
+        }
+
+        .nav-dropdown-content {
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          margin-top: 16px;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+          min-width: 200px;
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s ease;
+          z-index: 1001;
+          padding: 8px;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-content {
+          opacity: 1;
+          visibility: visible;
+          margin-top: 8px;
+        }
+
+        .nav-dropdown-item {
+          padding: 12px 16px;
+          color: #1E293B;
+          text-decoration: none;
+          display: block;
+          font-weight: 600;
+          font-size: 14px;
+          transition: all 0.2s ease;
+          border-radius: 8px;
+          white-space: nowrap;
+        }
+
+        .nav-dropdown-item:hover {
+          background: #FFF5F2;
+          color: #FF6B35;
         }
 
         .nav-btn-primary {
@@ -164,12 +203,18 @@ export default function Navbar() {
           </Link>
 
           {/* Nav Links - Desktop */}
-          <div className="nav-links" style={{ display: 'flex', gap: '40px' }}>
+          <div className="nav-links" style={{ display: 'flex', gap: '40px', alignItems: 'center' }}>
             <Link href="/destinations" className="nav-link">Destinations</Link>
-            <Link href="#" className="nav-link">Programs</Link>
+            {/* <Link href="#" className="nav-link">Programs</Link> */}
             <Link href="#" className="nav-link">Jobs</Link>
             <Link href="#" className="nav-link">Forex</Link>
-            <Link href="/contact" className="nav-link">Contact</Link>
+            <div className="nav-dropdown">
+              <span className="nav-link" style={{ cursor: 'pointer' }}>Contact</span>
+              <div className="nav-dropdown-content">
+                <Link href="/contact" className="nav-dropdown-item">Contact</Link>
+                <Link href="/partner-with-us" className="nav-dropdown-item">Partner with Us</Link>
+              </div>
+            </div>
           </div>
 
           {/* Right Side */}
@@ -225,10 +270,11 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
         <Link href="/destinations" onClick={() => setMobileMenuOpen(false)}>Destinations</Link>
-        <Link href="/programs" onClick={() => setMobileMenuOpen(false)}>Programs</Link>
+        {/* <Link href="/programs" onClick={() => setMobileMenuOpen(false)}>Programs</Link> */}
         <Link href="/jobs" onClick={() => setMobileMenuOpen(false)}>Jobs</Link>
         <Link href="/forex" onClick={() => setMobileMenuOpen(false)}>Forex</Link>
         <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+        <Link href="/partner-with-us" onClick={() => setMobileMenuOpen(false)}>Partner with Us</Link>
       </div>
     </>
   );

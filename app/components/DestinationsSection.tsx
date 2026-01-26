@@ -14,6 +14,26 @@ export default function DestinationsSection() {
   const featuredDestinations = [
     {
       id: 0,
+      country: 'Russia',
+      slug: 'russia',
+      tagline: 'Your Gateway to Success',
+      highlights: ['Post-Grad Work Permit', 'Multicultural', 'High Quality of Life'],
+      image: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=400&q=80',
+      flag: '🇷🇺',
+      universities: '60+'
+    },
+    {
+      id: 1,
+      country: 'China',
+      slug: 'china',
+      tagline: 'World-Class Education',
+      highlights: ['Top Universities', 'Work Rights', 'Amazing Lifestyle'],
+      image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=80',
+      flag: '🇨🇳',
+      universities: '45+'
+    },
+   {
+      id: 2,
       country: 'Canada',
       slug: 'canada',
       tagline: 'Your Gateway to Success',
@@ -23,33 +43,13 @@ export default function DestinationsSection() {
       universities: '96+'
     },
     {
-      id: 1,
-      country: 'Australia',
-      slug: 'australia',
-      tagline: 'World-Class Education',
-      highlights: ['Top Universities', 'Work Rights', 'Amazing Lifestyle'],
-      image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=800&q=80',
-      flag: '🇦🇺',
-      universities: '43+'
-    },
-    {
-      id: 2,
-      country: 'France',
-      slug: 'france',
-      tagline: 'Culture Meets Excellence',
-      highlights: ['Rich Heritage', 'Affordable', 'Fashion & Arts'],
-      image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80',
-      flag: '🇫🇷',
-      universities: '72+'
-    },
-    {
       id: 3,
-      country: 'Spain',
-      slug: 'spain',
+      country: 'Georgia',
+      slug: 'georgia',
       tagline: 'Vibrant Student Life',
       highlights: ['Historic Unis', 'Low Cost', 'Great Weather'],
-      image: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=800&q=80',
-      flag: '🇪🇸',
+       image: 'https://images.unsplash.com/photo-1563413613822-2e335ab72e74?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGdlb3JnaWF8ZW58MHx8MHx8fDA%3D',
+       flag: '🇬🇪',
       universities: '84+'
     }
   ];
@@ -327,8 +327,9 @@ export default function DestinationsSection() {
           }}
         >
           {/* Canada - Large Card (2x2) */}
+          
           <Link 
-            href={`/destinations/${featuredDestinations[0].slug}`}
+            href="https://globalrusiec.com/"
             className="dest-card dest-card-large diagonal-cut"
             style={{
               gridColumn: 'span 2',

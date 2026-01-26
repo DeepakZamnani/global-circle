@@ -1431,6 +1431,8 @@ import { getUniversitiesByCountry } from '../data/universityData';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ApplicationModal from './AppliactionModal';
+import PromoAd from './PromoAd';
+import { Shield } from 'lucide-react';
 
 // ============================================
 // COUNTRY PAGE - Professional with Curves + Boxes Balance
@@ -1841,7 +1843,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
               letterSpacing: '1.5px',
               textTransform: 'uppercase'
             }}>
-              Study MBBS in {country.name}
+              Study  in {country.name}
             </span>
           </div>
 
@@ -2052,7 +2054,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 lineHeight: '1.2',
                 maxWidth: '900px'
               }}>
-                Why Choose {country.name} for MBBS
+                Why Choose {country.name} 
               </h2>
 
               <div style={{
@@ -2138,7 +2140,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                 marginBottom: '16px',
                 letterSpacing: '-1px'
               }}>
-                NMC Approved Medical Universities
+                 Approved Medical Universities
               </h2>
 
               <p style={{
@@ -2186,7 +2188,6 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                       </div>
                       {uni.nmcApproved && (
                         <div className="sharp-badge">
-                          NMC
                         </div>
                       )}
                     </div>
@@ -2671,7 +2672,14 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
               </div>
             </div>
           </section>
-
+          {/* <PromoAd
+    icon={Shield}
+    title="Student Insurance Plans"
+    description="Protect yourself with comprehensive health and travel insurance tailored for international students."
+    buttonText="View Plans"
+    buttonHref="/insurance"
+    variant="default"
+  /> */}
           {/* Living Info & Recognition */}
           <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
             <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -2769,7 +2777,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
               marginBottom: '16px',
               letterSpacing: '-1.5px'
             }}>
-              NMC Approved Universities
+              Approved Universities
             </h2>
             
             <p style={{
@@ -2821,7 +2829,6 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
                       </div>
                       {uni.nmcApproved && (
                         <div className="sharp-badge">
-                          NMC
                         </div>
                       )}
                     </div>
@@ -2979,7 +2986,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
             maxWidth: '600px',
             margin: '0 auto 48px'
           }}>
-            Schedule a consultation with our expert counselors for personalized guidance on studying MBBS in {country.name}
+            Schedule a consultation with our expert counselors for personalized guidance on studying  in {country.name}
           </p>
 
           <div style={{
@@ -3032,3 +3039,1132 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
     </div>
   );
 }
+// "use client";
+
+// import React, { useState, useEffect } from 'react';
+// import Link from 'next/link';
+// import { getCountryBySlug, getUniversitiesByCountry } from '../../services/dbServices';
+// import type { CountryInfo, UniversityInfo } from '../../services/dbServices';
+// import Navbar from './Navbar';
+// import Footer from './Footer';
+
+// // ============================================
+// // COUNTRY PAGE - Firestore-Powered Version
+// // Fetches country and university data from Firestore
+// // ============================================
+
+// interface CountryPageProps {
+//   countrySlug: string;
+// }
+
+// export default function CountryPage({ countrySlug }: CountryPageProps) {
+//   const [country, setCountry] = useState<CountryInfo | null>(null);
+//   const [universities, setUniversities] = useState<UniversityInfo[]>([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState<string | null>(null);
+//   const [activeTab, setActiveTab] = useState<'about' | 'universities'>('about');
+//   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
+
+//   // Fetch country and university data from Firestore
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setLoading(true);
+//         setError(null);
+
+//         // Fetch country data
+//         const countryData = await getCountryBySlug(countrySlug);
+        
+//         if (!countryData) {
+//           setError('Country not found');
+//           setLoading(false);
+//           return;
+//         }
+
+//         setCountry(countryData);
+
+//         // Fetch universities for this country
+//         const universitiesData = await getUniversitiesByCountry(countrySlug);
+//         setUniversities(universitiesData);
+
+//         setLoading(false);
+//       } catch (err) {
+//         console.error('Error fetching data:', err);
+//         setError('Failed to load country data');
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchData();
+//   }, [countrySlug]);
+
+//   // Loading state
+//   if (loading) {
+//     return (
+//       <div style={{
+//         minHeight: '100vh',
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         background: '#FFFFFF',
+//         fontFamily: '"Plus Jakarta Sans", sans-serif'
+//       }}>
+//         <div style={{ textAlign: 'center' }}>
+//           <div style={{
+//             width: '60px',
+//             height: '60px',
+//             border: '4px solid #E2E8F0',
+//             borderTop: '4px solid #FF6B35',
+//             borderRadius: '50%',
+//             animation: 'spin 1s linear infinite',
+//             margin: '0 auto 20px'
+//           }} />
+//           <p style={{
+//             fontSize: '16px',
+//             color: '#64748B',
+//             fontWeight: '600'
+//           }}>
+//             Loading country data...
+//           </p>
+//         </div>
+//         <style>{`
+//           @keyframes spin {
+//             0% { transform: rotate(0deg); }
+//             100% { transform: rotate(360deg); }
+//           }
+//         `}</style>
+//       </div>
+//     );
+//   }
+
+//   // Error state
+//   if (error || !country) {
+//     return (
+//       <div style={{
+//         minHeight: '100vh',
+//         display: 'flex',
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         background: '#FFFFFF',
+//         fontFamily: '"Plus Jakarta Sans", sans-serif'
+//       }}>
+//         <div style={{
+//           textAlign: 'center',
+//           maxWidth: '500px',
+//           padding: '40px'
+//         }}>
+//           <h1 style={{
+//             fontSize: '48px',
+//             fontWeight: '800',
+//             color: '#1E3A5F',
+//             marginBottom: '16px'
+//           }}>
+//             Country Not Found
+//           </h1>
+//           <p style={{
+//             fontSize: '16px',
+//             color: '#64748B',
+//             marginBottom: '32px',
+//             lineHeight: '1.6'
+//           }}>
+//             {error || 'The country you are looking for does not exist.'}
+//           </p>
+//           <Link href="/destinations" style={{
+//             display: 'inline-block',
+//             padding: '16px 32px',
+//             background: '#FF6B35',
+//             color: 'white',
+//             textDecoration: 'none',
+//             fontWeight: '700',
+//             borderRadius: '50px'
+//           }}>
+//             Browse All Destinations
+//           </Link>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div style={{
+//       minHeight: '100vh',
+//       background: '#FFFFFF',
+//       fontFamily: '"Plus Jakarta Sans", sans-serif',
+//     }}>
+//       <Navbar />
+      
+//       <style>{`
+//         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+//         * {
+//           box-sizing: border-box;
+//           margin: 0;
+//           padding: 0;
+//         }
+
+//         /* Professional Card Styles */
+//         .pro-card {
+//           background: white;
+//           border: 1px solid #E2E8F0;
+//           padding: 28px;
+//           transition: all 0.3s ease;
+//         }
+
+//         .pro-card:hover {
+//           border-color: #CBD5E1;
+//           box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+//         }
+
+//         .pro-card-elevated {
+//           background: white;
+//           border: 1px solid #E2E8F0;
+//           padding: 32px;
+//           box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+//           transition: all 0.3s ease;
+//         }
+
+//         .pro-card-elevated:hover {
+//           box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+//         }
+
+//         /* Tab System */
+//         .tab-bar {
+//           position: sticky;
+//           top: 80px;
+//           background: rgba(255, 255, 255, 0.98);
+//           backdrop-filter: blur(20px);
+//           border-bottom: 1px solid #E2E8F0;
+//           z-index: 40;
+//         }
+
+//         .tab-container {
+//           max-width: 1400px;
+//           margin: 0 auto;
+//           padding: 0 20px;
+//           display: flex;
+//           gap: 0;
+//         }
+
+//         .tab-button {
+//           flex: 1;
+//           max-width: 280px;
+//           padding: 20px 32px;
+//           background: transparent;
+//           border: none;
+//           border-bottom: 3px solid transparent;
+//           font-size: 15px;
+//           font-weight: 700;
+//           color: #64748B;
+//           cursor: pointer;
+//           transition: all 0.2s ease;
+//           letter-spacing: 0.3px;
+//         }
+
+//         .tab-button.active {
+//           color: #1E3A5F;
+//           border-bottom-color: #FF6B35;
+//         }
+
+//         .tab-button:hover:not(.active) {
+//           color: #1E3A5F;
+//           background: #F8FAFC;
+//         }
+
+//         /* Number Badge */
+//         .number-badge {
+//           display: inline-flex;
+//           align-items: center;
+//           justify-content: center;
+//           min-width: 40px;
+//           height: 40px;
+//           background: #1E3A5F;
+//           color: white;
+//           font-weight: 800;
+//           font-size: 14px;
+//         }
+
+//         /* Stats Box */
+//         .stat-box {
+//           background: white;
+//           border: 1px solid #E2E8F0;
+//           padding: 28px 24px;
+//           text-align: center;
+//           transition: all 0.3s ease;
+//         }
+
+//         .stat-box:hover {
+//           border-color: #FF6B35;
+//           transform: translateY(-4px);
+//           box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+//         }
+
+//         /* Info Grid Item */
+//         .info-grid-item {
+//           background: white;
+//           border: 1px solid #E2E8F0;
+//           padding: 24px;
+//           transition: all 0.3s ease;
+//         }
+
+//         .info-grid-item:hover {
+//           border-color: #CBD5E1;
+//           background: #FAFBFC;
+//         }
+
+//         /* University Card */
+//         .university-card {
+//           background: white;
+//           border: 1px solid #E2E8F0;
+//           padding: 28px;
+//           transition: all 0.3s ease;
+//           position: relative;
+//         }
+
+//         .university-card:hover {
+//           border-color: #FF6B35;
+//           box-shadow: 0 16px 32px rgba(0,0,0,0.08);
+//         }
+
+//         /* Curved Button */
+//         .btn-curved {
+//           display: inline-flex;
+//           align-items: center;
+//           gap: 12px;
+//           padding: 20px 40px;
+//           background: #FF6B35;
+//           color: white;
+//           border: none;
+//           border-radius: 50px;
+//           font-weight: 700;
+//           font-size: 16px;
+//           letter-spacing: 0.3px;
+//           cursor: pointer;
+//           transition: all 0.3s ease;
+//         }
+
+//         .btn-curved:hover {
+//           background: #E55A2B;
+//           transform: translateY(-2px);
+//           box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+//         }
+
+//         /* Curved Card */
+//         .curved-card {
+//           background: white;
+//           border: 1px solid #E2E8F0;
+//           border-radius: 16px;
+//           padding: 32px;
+//           transition: all 0.3s ease;
+//         }
+
+//         .curved-card:hover {
+//           border-color: #CBD5E1;
+//           box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+//         }
+
+//         /* Sharp Badge */
+//         .sharp-badge {
+//           padding: 6px 12px;
+//           background: #10B981;
+//           color: white;
+//           font-size: 11px;
+//           font-weight: 700;
+//           letter-spacing: 0.5px;
+//         }
+
+//         /* Responsive */
+//         @media (min-width: 768px) {
+//           .tab-button {
+//             padding: 24px 40px;
+//             font-size: 16px;
+//           }
+
+//           .pro-card {
+//             padding: 36px;
+//           }
+
+//           .stat-box {
+//             padding: 36px 28px;
+//           }
+//         }
+
+//         @media (min-width: 1024px) {
+//           .pro-card {
+//             padding: 40px;
+//           }
+
+//           .stat-box {
+//             padding: 40px 32px;
+//           }
+//         }
+//       `}</style>
+
+//       {/* Hero Section with Backdrop */}
+//       <section style={{
+//         position: 'relative',
+//         minHeight: '100vh',
+//         overflow: 'hidden'
+//       }}>
+//         {/* Background Image */}
+//         <div style={{
+//           position: 'absolute',
+//           top: 0,
+//           left: 0,
+//           right: 0,
+//           bottom: 0,
+//           backgroundImage: `url(${country.heroImage})`,
+//           backgroundSize: 'cover',
+//           backgroundPosition: 'center'
+//         }} />
+        
+//         {/* Dark Overlay */}
+//         <div style={{
+//           position: 'absolute',
+//           top: 0,
+//           left: 0,
+//           right: 0,
+//           bottom: 0,
+//           background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.75) 100%)'
+//         }} />
+
+//         {/* Hero Content */}
+//         <div style={{
+//           position: 'relative',
+//           zIndex: 2,
+//           minHeight: '100vh',
+//           display: 'flex',
+//           flexDirection: 'column',
+//           justifyContent: 'flex-end',
+//           padding: '100px 20px 60px',
+//           maxWidth: '1400px',
+//           margin: '0 auto'
+//         }}>
+//           <div style={{
+//             display: 'inline-flex',
+//             alignItems: 'center',
+//             gap: '12px',
+//             marginBottom: '24px'
+//           }}>
+//             <span style={{
+//               fontSize: '48px',
+//               lineHeight: '1'
+//             }}>
+//               {country.flag}
+//             </span>
+//             <div style={{
+//               width: '3px',
+//               height: '40px',
+//               background: 'rgba(255,255,255,0.4)'
+//             }} />
+//             <span style={{
+//               fontSize: '14px',
+//               fontWeight: '700',
+//               color: 'rgba(255,255,255,0.9)',
+//               letterSpacing: '2px',
+//               textTransform: 'uppercase'
+//             }}>
+//               Study Destination
+//             </span>
+//           </div>
+
+//           <h1 style={{
+//             fontSize: 'clamp(40px, 8vw, 96px)',
+//             fontWeight: '800',
+//             color: 'white',
+//             marginBottom: '24px',
+//             letterSpacing: '-2px',
+//             lineHeight: '1.1'
+//           }}>
+//             {country.name}
+//           </h1>
+
+//           <p style={{
+//             fontSize: 'clamp(18px, 3vw, 24px)',
+//             color: 'rgba(255,255,255,0.95)',
+//             marginBottom: '40px',
+//             maxWidth: '700px',
+//             lineHeight: '1.6',
+//             fontWeight: '500'
+//           }}>
+//             {country.tagline}
+//           </p>
+
+//           <div style={{
+//             display: 'flex',
+//             flexWrap: 'wrap',
+//             gap: '16px'
+//           }}>
+//             <button 
+//               onClick={() => setIsApplicationModalOpen(true)}
+//               className="btn-curved"
+//             >
+//               Apply Now →
+//             </button>
+            
+//             <button
+//               onClick={() => {
+//                 document.getElementById('country-info')?.scrollIntoView({ 
+//                   behavior: 'smooth' 
+//                 });
+//               }}
+//               style={{
+//                 padding: '20px 40px',
+//                 background: 'transparent',
+//                 color: 'white',
+//                 border: '1px solid rgba(255,255,255,0.3)',
+//                 borderRadius: '50px',
+//                 fontWeight: '700',
+//                 fontSize: '16px',
+//                 letterSpacing: '0.3px',
+//                 cursor: 'pointer',
+//                 transition: 'all 0.3s ease'
+//               }}
+//               onMouseEnter={(e) => {
+//                 e.currentTarget.style.borderColor = 'white';
+//                 e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+//               }}
+//               onMouseLeave={(e) => {
+//                 e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
+//                 e.currentTarget.style.background = 'transparent';
+//               }}
+//             >
+//               Explore More
+//             </button>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Tab Navigation */}
+//       <div className="tab-bar">
+//         <div className="tab-container">
+//           <button
+//             className={`tab-button ${activeTab === 'about' ? 'active' : ''}`}
+//             onClick={() => setActiveTab('about')}
+//           >
+//             About {country.name}
+//           </button>
+//           <button
+//             className={`tab-button ${activeTab === 'universities' ? 'active' : ''}`}
+//             onClick={() => setActiveTab('universities')}
+//           >
+//             Universities ({universities.length || country.topUniversities.length})
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* About Tab Content */}
+//       {activeTab === 'about' && (
+//         <>
+//           {/* Stats Section */}
+//           <section id="country-info" style={{
+//             padding: '80px 20px',
+//             background: '#FAFBFC'
+//           }}>
+//             <div style={{
+//               maxWidth: '1400px',
+//               margin: '0 auto'
+//             }}>
+//               <div style={{
+//                 display: 'grid',
+//                 gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+//                 gap: '24px'
+//               }}>
+//                 <div className="stat-box">
+//                   <div style={{
+//                     fontSize: '40px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '8px',
+//                     letterSpacing: '-1px'
+//                   }}>
+//                     {country.stats.universities}
+//                   </div>
+//                   <div style={{
+//                     fontSize: '13px',
+//                     color: '#64748B',
+//                     fontWeight: '700',
+//                     letterSpacing: '1px',
+//                     textTransform: 'uppercase'
+//                   }}>
+//                     Universities
+//                   </div>
+//                 </div>
+
+//                 <div className="stat-box">
+//                   <div style={{
+//                     fontSize: '40px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '8px',
+//                     letterSpacing: '-1px'
+//                   }}>
+//                     {country.stats.programs}
+//                   </div>
+//                   <div style={{
+//                     fontSize: '13px',
+//                     color: '#64748B',
+//                     fontWeight: '700',
+//                     letterSpacing: '1px',
+//                     textTransform: 'uppercase'
+//                   }}>
+//                     Programs
+//                   </div>
+//                 </div>
+
+//                 <div className="stat-box">
+//                   <div style={{
+//                     fontSize: '40px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '8px',
+//                     letterSpacing: '-1px'
+//                   }}>
+//                     {country.stats.intlStudents}
+//                   </div>
+//                   <div style={{
+//                     fontSize: '13px',
+//                     color: '#64748B',
+//                     fontWeight: '700',
+//                     letterSpacing: '1px',
+//                     textTransform: 'uppercase'
+//                   }}>
+//                     Intl Students
+//                   </div>
+//                 </div>
+
+//                 <div className="stat-box">
+//                   <div style={{
+//                     fontSize: '40px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '8px',
+//                     letterSpacing: '-1px'
+//                   }}>
+//                     {country.stats.globalRank}
+//                   </div>
+//                   <div style={{
+//                     fontSize: '13px',
+//                     color: '#64748B',
+//                     fontWeight: '700',
+//                     letterSpacing: '1px',
+//                     textTransform: 'uppercase'
+//                   }}>
+//                     Global Rank
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </section>
+
+//           {/* Description Section */}
+//           <section style={{
+//             padding: '80px 20px',
+//             background: 'white'
+//           }}>
+//             <div style={{
+//               maxWidth: '1000px',
+//               margin: '0 auto',
+//               textAlign: 'center'
+//             }}>
+//               <h2 style={{
+//                 fontSize: 'clamp(32px, 6vw, 48px)',
+//                 fontWeight: '800',
+//                 color: '#1E3A5F',
+//                 marginBottom: '24px',
+//                 letterSpacing: '-1px'
+//               }}>
+//                 Why Study in {country.name}?
+//               </h2>
+//               <p style={{
+//                 fontSize: '18px',
+//                 color: '#475569',
+//                 lineHeight: '1.8',
+//                 fontWeight: '500'
+//               }}>
+//                 {country.description}
+//               </p>
+//             </div>
+//           </section>
+
+//           {/* Highlights Section */}
+//           <section style={{
+//             padding: '80px 20px',
+//             background: '#FAFBFC'
+//           }}>
+//             <div style={{
+//               maxWidth: '1400px',
+//               margin: '0 auto'
+//             }}>
+//               <h2 style={{
+//                 fontSize: 'clamp(28px, 5vw, 40px)',
+//                 fontWeight: '800',
+//                 color: '#1E3A5F',
+//                 marginBottom: '48px',
+//                 textAlign: 'center',
+//                 letterSpacing: '-1px'
+//               }}>
+//                 Key Highlights
+//               </h2>
+
+//               <div style={{
+//                 display: 'grid',
+//                 gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+//                 gap: '24px'
+//               }}>
+//                 {country.highlights.map((highlight, idx) => (
+//                   <div key={idx} className="pro-card">
+//                     <div className="number-badge" style={{
+//                       marginBottom: '20px'
+//                     }}>
+//                       {String(idx + 1).padStart(2, '0')}
+//                     </div>
+//                     <h3 style={{
+//                       fontSize: '20px',
+//                       fontWeight: '800',
+//                       color: '#1E3A5F',
+//                       marginBottom: '12px',
+//                       letterSpacing: '-0.3px'
+//                     }}>
+//                       {highlight.title}
+//                     </h3>
+//                     <p style={{
+//                       fontSize: '15px',
+//                       color: '#64748B',
+//                       lineHeight: '1.6',
+//                       fontWeight: '500'
+//                     }}>
+//                       {highlight.desc}
+//                     </p>
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           </section>
+
+//           {/* Additional Info Grid */}
+//           <section style={{
+//             padding: '80px 20px',
+//             background: 'white'
+//           }}>
+//             <div style={{
+//               maxWidth: '1400px',
+//               margin: '0 auto'
+//             }}>
+//               <div style={{
+//                 display: 'grid',
+//                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+//                 gap: '32px'
+//               }}>
+//                 {/* Popular Programs */}
+//                 <div className="pro-card-elevated">
+//                   <h3 style={{
+//                     fontSize: '22px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '20px',
+//                     letterSpacing: '-0.3px'
+//                   }}>
+//                     Popular Programs
+//                   </h3>
+//                   <div style={{
+//                     display: 'flex',
+//                     flexDirection: 'column',
+//                     gap: '12px'
+//                   }}>
+//                     {country.popularPrograms.map((program, idx) => (
+//                       <div key={idx} style={{
+//                         padding: '12px',
+//                         background: '#F8FAFC',
+//                         border: '1px solid #E2E8F0',
+//                         fontSize: '14px',
+//                         fontWeight: '600',
+//                         color: '#475569'
+//                       }}>
+//                         {program}
+//                       </div>
+//                     ))}
+//                   </div>
+//                 </div>
+
+//                 {/* Top Cities */}
+//                 <div className="pro-card-elevated">
+//                   <h3 style={{
+//                     fontSize: '22px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '20px',
+//                     letterSpacing: '-0.3px'
+//                   }}>
+//                     Top Study Cities
+//                   </h3>
+//                   <div style={{
+//                     display: 'flex',
+//                     flexDirection: 'column',
+//                     gap: '12px'
+//                   }}>
+//                     {country.topCities.map((city, idx) => (
+//                       <div key={idx} style={{
+//                         padding: '12px',
+//                         background: '#F8FAFC',
+//                         border: '1px solid #E2E8F0',
+//                         fontSize: '14px',
+//                         fontWeight: '600',
+//                         color: '#475569'
+//                       }}>
+//                         {city}
+//                       </div>
+//                     ))}
+//                   </div>
+//                 </div>
+
+//                 {/* Cost Information */}
+//                 <div className="pro-card-elevated">
+//                   <h3 style={{
+//                     fontSize: '22px',
+//                     fontWeight: '800',
+//                     color: '#1E3A5F',
+//                     marginBottom: '20px',
+//                     letterSpacing: '-0.3px'
+//                   }}>
+//                     Cost Information
+//                   </h3>
+//                   <div style={{
+//                     display: 'flex',
+//                     flexDirection: 'column',
+//                     gap: '20px'
+//                   }}>
+//                     <div>
+//                       <div style={{
+//                         fontSize: '12px',
+//                         color: '#64748B',
+//                         fontWeight: '700',
+//                         letterSpacing: '1px',
+//                         marginBottom: '8px',
+//                         textTransform: 'uppercase'
+//                       }}>
+//                         Tuition Range
+//                       </div>
+//                       <div style={{
+//                         fontSize: '18px',
+//                         fontWeight: '800',
+//                         color: '#1E3A5F'
+//                       }}>
+//                         {country.tuitionRange}
+//                       </div>
+//                     </div>
+//                     <div>
+//                       <div style={{
+//                         fontSize: '12px',
+//                         color: '#64748B',
+//                         fontWeight: '700',
+//                         letterSpacing: '1px',
+//                         marginBottom: '8px',
+//                         textTransform: 'uppercase'
+//                       }}>
+//                         Living Cost
+//                       </div>
+//                       <div style={{
+//                         fontSize: '18px',
+//                         fontWeight: '800',
+//                         color: '#1E3A5F'
+//                       }}>
+//                         {country.livingCost}
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </section>
+//         </>
+//       )}
+
+//       {/* Universities Tab Content */}
+//       {activeTab === 'universities' && (
+//         <section style={{
+//           padding: '80px 20px',
+//           background: 'white'
+//         }}>
+//           <div style={{
+//             maxWidth: '1400px',
+//             margin: '0 auto'
+//           }}>
+//             <h2 style={{
+//               fontSize: 'clamp(32px, 6vw, 48px)',
+//               fontWeight: '800',
+//               color: '#1E3A5F',
+//               marginBottom: '16px',
+//               letterSpacing: '-1px'
+//             }}>
+//               Medical Universities in {country.name}
+//             </h2>
+//             <p style={{
+//               fontSize: '16px',
+//               color: '#64748B',
+//               marginBottom: '48px',
+//               fontWeight: '500'
+//             }}>
+//               Explore {universities.length > 0 ? universities.length : country.topUniversities.length} internationally recognized medical institutions
+//             </p>
+
+//             {universities.length > 0 ? (
+//               <div style={{
+//                 display: 'grid',
+//                 gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
+//                 gap: '24px'
+//               }}>
+//                 {universities.map((uni, idx) => (
+//                   <div key={uni.id || idx} className="university-card">
+//                     <div style={{
+//                       display: 'flex',
+//                       alignItems: 'flex-start',
+//                       gap: '16px',
+//                       marginBottom: '20px'
+//                     }}>
+//                       <div className="number-badge" style={{ 
+//                         minWidth: '48px', 
+//                         height: '48px', 
+//                         fontSize: '16px' 
+//                       }}>
+//                         {String(idx + 1).padStart(2, '0')}
+//                       </div>
+//                       <div style={{ flex: 1 }}>
+//                         <h3 style={{
+//                           fontSize: '19px',
+//                           fontWeight: '800',
+//                           color: '#1E3A5F',
+//                           marginBottom: '8px',
+//                           lineHeight: '1.3',
+//                           letterSpacing: '-0.3px'
+//                         }}>
+//                           {uni.name}
+//                         </h3>
+//                         <div style={{
+//                           fontSize: '13px',
+//                           color: '#64748B',
+//                           fontWeight: '600',
+//                           marginBottom: '12px'
+//                         }}>
+//                           {uni.city} • Established {uni.establishedYear}
+//                         </div>
+//                       </div>
+//                       {uni.nmcApproved && (
+//                         <div className="sharp-badge">
+//                           NMC
+//                         </div>
+//                       )}
+//                     </div>
+
+//                     <p style={{
+//                       fontSize: '14px',
+//                       color: '#475569',
+//                       lineHeight: '1.6',
+//                       marginBottom: '20px',
+//                       fontWeight: '500'
+//                     }}>
+//                       {uni.overview.substring(0, 180)}...
+//                     </p>
+
+//                     <div style={{
+//                       display: 'grid',
+//                       gridTemplateColumns: '1fr 1fr',
+//                       gap: '12px',
+//                       marginBottom: '20px'
+//                     }}>
+//                       <div style={{
+//                         padding: '16px',
+//                         background: '#F8FAFC',
+//                         border: '1px solid #E2E8F0'
+//                       }}>
+//                         <div style={{
+//                           fontSize: '11px',
+//                           color: '#64748B',
+//                           fontWeight: '700',
+//                           marginBottom: '6px',
+//                           letterSpacing: '0.5px',
+//                           textTransform: 'uppercase'
+//                         }}>
+//                           Tuition/Year
+//                         </div>
+//                         <div style={{
+//                           fontSize: '15px',
+//                           fontWeight: '800',
+//                           color: '#1E3A5F',
+//                           letterSpacing: '-0.3px'
+//                         }}>
+//                           {uni.fees.tuitionPerYear.split('(')[0].trim()}
+//                         </div>
+//                       </div>
+//                       <div style={{
+//                         padding: '16px',
+//                         background: '#F8FAFC',
+//                         border: '1px solid #E2E8F0'
+//                       }}>
+//                         <div style={{
+//                           fontSize: '11px',
+//                           color: '#64748B',
+//                           fontWeight: '700',
+//                           marginBottom: '6px',
+//                           letterSpacing: '0.5px',
+//                           textTransform: 'uppercase'
+//                         }}>
+//                           Duration
+//                         </div>
+//                         <div style={{
+//                           fontSize: '15px',
+//                           fontWeight: '800',
+//                           color: '#1E3A5F',
+//                           letterSpacing: '-0.3px'
+//                         }}>
+//                           {uni.programs[0]?.duration || 'N/A'}
+//                         </div>
+//                       </div>
+//                     </div>
+
+//                     <button 
+//                       onClick={() => setIsApplicationModalOpen(true)}
+//                       className="btn-curved" 
+//                       style={{ width: '100%', padding: '16px', fontSize: '14px' }}
+//                     >
+//                       Apply to This University →
+//                     </button>
+//                   </div>
+//                 ))}
+//               </div>
+//             ) : (
+//               <div className="curved-card" style={{
+//                 textAlign: 'center',
+//                 padding: '80px 40px',
+//                 maxWidth: '600px',
+//                 margin: '0 auto'
+//               }}>
+//                 <h3 style={{
+//                   fontSize: '24px',
+//                   fontWeight: '800',
+//                   color: '#1E3A5F',
+//                   marginBottom: '12px',
+//                   letterSpacing: '-0.5px'
+//                 }}>
+//                   Detailed University Information Coming Soon
+//                 </h3>
+//                 <p style={{
+//                   fontSize: '16px',
+//                   color: '#64748B',
+//                   fontWeight: '500',
+//                   lineHeight: '1.6'
+//                 }}>
+//                   We are compiling comprehensive details for all {country.topUniversities.length} universities in {country.name}.
+//                 </p>
+//               </div>
+//             )}
+//           </div>
+//         </section>
+//       )}
+
+//       {/* CTA Section */}
+//       <section style={{
+//         position: 'relative',
+//         padding: '120px 20px',
+//         overflow: 'hidden'
+//       }}>
+//         {/* Background Image */}
+//         <div style={{
+//           position: 'absolute',
+//           top: 0,
+//           left: 0,
+//           right: 0,
+//           bottom: 0,
+//           backgroundImage: `url(${country.galleryImages[0]})`,
+//           backgroundSize: 'cover',
+//           backgroundPosition: 'center'
+//         }} />
+        
+//         {/* Dark Overlay */}
+//         <div style={{
+//           position: 'absolute',
+//           top: 0,
+//           left: 0,
+//           right: 0,
+//           bottom: 0,
+//           background: 'linear-gradient(135deg, rgba(30,58,95,0.95) 0%, rgba(15,39,68,0.95) 100%)'
+//         }} />
+
+//         <div style={{
+//           position: 'relative',
+//           zIndex: 2,
+//           maxWidth: '800px',
+//           margin: '0 auto',
+//           textAlign: 'center'
+//         }}>
+//           <h2 style={{
+//             fontSize: 'clamp(32px, 6vw, 56px)',
+//             fontWeight: '800',
+//             color: 'white',
+//             marginBottom: '20px',
+//             letterSpacing: '-1.5px',
+//             lineHeight: '1.2'
+//           }}>
+//             Begin Your Medical Journey
+//           </h2>
+          
+//           <p style={{
+//             fontSize: '18px',
+//             color: 'rgba(255,255,255,0.9)',
+//             marginBottom: '48px',
+//             lineHeight: '1.7',
+//             fontWeight: '500',
+//             maxWidth: '600px',
+//             margin: '0 auto 48px'
+//           }}>
+//             Schedule a consultation with our expert counselors for personalized guidance on studying MBBS in {country.name}
+//           </p>
+
+//           <div style={{
+//             display: 'flex',
+//             flexDirection: 'column',
+//             gap: '16px',
+//             maxWidth: '500px',
+//             margin: '0 auto'
+//           }}>
+//             <button 
+//               onClick={() => setIsApplicationModalOpen(true)}
+//               className="btn-curved"
+//               style={{ justifyContent: 'center' }}
+//             >
+//               Apply Now →
+//             </button>
+
+//             <Link href="/destinations" style={{
+//               display: 'inline-flex',
+//               alignItems: 'center',
+//               justifyContent: 'center',
+//               gap: '12px',
+//               padding: '20px 40px',
+//               background: 'transparent',
+//               color: 'white',
+//               border: '1px solid rgba(255,255,255,0.3)',
+//               borderRadius: '50px',
+//               textDecoration: 'none',
+//               fontWeight: '700',
+//               fontSize: '16px',
+//               letterSpacing: '0.3px',
+//               transition: 'all 0.3s ease'
+//             }}
+//             onMouseEnter={(e) => {
+//               e.currentTarget.style.borderColor = 'white';
+//               e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+//             }}
+//             onMouseLeave={(e) => {
+//               e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
+//               e.currentTarget.style.background = 'transparent';
+//             }}>
+//               Explore Other Destinations
+//             </Link>
+//           </div>
+//         </div>
+//       </section>
+
+//       <Footer />
+//     </div>
+//   );
+// }
