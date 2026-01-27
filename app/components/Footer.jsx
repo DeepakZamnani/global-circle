@@ -12,9 +12,9 @@ export default function Footer() {
 
   const destinations = [
     { name: 'Canada', slug: 'canada' },
-    { name: 'Australia', slug: 'australia' },
-    { name: 'France', slug: 'france' },
-    { name: 'Spain', slug: 'spain' },
+    { name: 'China', slug: 'china' },
+    { name: 'Russia', slug: 'russia' },
+    { name: 'Uzbekistan', slug: 'uzbekistan' },
     { name: 'Germany', slug: 'germany' },
     { name: 'Ireland', slug: 'ireland' },
   ];

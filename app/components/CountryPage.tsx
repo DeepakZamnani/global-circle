@@ -1931,7 +1931,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
           }}>
             <div className="stat-box-curved">
               <div style={{ 
-                fontSize: 'clamp(32px, 5vw, 48px)', 
+                fontSize: 'clamp(24px, 3vw, 36px)', 
                 fontWeight: '800', 
                 color: '#1E3A5F', 
                 marginBottom: '8px',
@@ -1952,7 +1952,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
 
             <div className="stat-box-curved">
               <div style={{ 
-                fontSize: 'clamp(32px, 5vw, 48px)', 
+                fontSize: 'clamp(24px, 3vw, 36px)', 
                 fontWeight: '800', 
                 color: '#1E3A5F', 
                 marginBottom: '8px',
@@ -1973,7 +1973,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
 
             <div className="stat-box-curved">
               <div style={{ 
-                fontSize: 'clamp(32px, 5vw, 48px)', 
+                fontSize: 'clamp(18px, 2vw, 28px)', 
                 fontWeight: '800', 
                 color: '#1E3A5F', 
                 marginBottom: '8px',
@@ -1994,7 +1994,7 @@ export default function CountryPage({ countrySlug }: CountryPageProps) {
 
             <div className="stat-box-curved">
               <div style={{ 
-                fontSize: 'clamp(20px, 3vw, 28px)', 
+                fontSize: 'clamp(18px, 1vw, 24px)', 
                 fontWeight: '800', 
                 color: '#FF6B35', 
                 marginBottom: '8px',

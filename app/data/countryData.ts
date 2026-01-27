@@ -707,317 +707,7 @@ export const comprehensiveCountryData: Record<string, CountryDetailedInfo> = {
     other: "Canadian medical degrees are recognized in many countries worldwide. Specific licensing requirements vary by country. Canadian medical education meets international standards and graduates are eligible to apply for medical licensing in most countries after meeting local requirements."
   }
 }
-  // ============================================
-  // RUSSIA
-  // ============================================
-  // russia: {
-  //   id: 'russia',
-  //   name: 'Russia',
-  //   slug: 'russia',
-  //   flag: '🇷🇺',
-  //   heroImage: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=1920&q=80',
-  //   galleryImages: [
-  //     'https://images.unsplash.com/photo-1513326738677-b964603b136d?w=600&q=80',
-  //     'https://images.unsplash.com/photo-1520106212299-d99c443e4568?w=600&q=80',
-  //     'https://images.unsplash.com/photo-1512495039889-7d0c2c2e4b1a?w=600&q=80'
-  //   ],
-    
-  //   overview: {
-  //     title: 'Russia – Premier Destination for Affordable Quality MBBS',
-  //     description: 'Russia has been a trusted destination for Indian medical students for over 50 years, offering world-class medical education at affordable costs with complete English-medium programs.',
-  //     detailedDescription: [
-  //       'Russia is one of the oldest and most preferred destinations for MBBS abroad, especially for Indian students. With over 60 NMC-approved medical universities, Russia offers high-quality medical education that is recognized globally.',
-  //       'Russian medical universities have trained over 30,000 Indian doctors who are now successfully practicing in India and across the world. The medical degree from Russia is approved by NMC (National Medical Commission), WHO, UNESCO, and many other international bodies.',
-  //       'The country offers a perfect blend of quality education, affordable fees, modern infrastructure, and a multicultural environment. Students get extensive clinical exposure from the 3rd year onwards with hands-on training in university hospitals.',
-  //       'With no entrance exams, no capitation fees, and direct admission based on NEET scores, Russia continues to be the top choice for Indian students aspiring to become doctors.'
-  //     ]
-  //   },
-    
-  //   stats: {
-  //     totalUniversities: '60+',
-  //     nmcApproved: '60+',
-  //     indianStudents: '30,000+',
-  //     programDuration: '6 years',
-  //     mediumOfInstruction: 'English',
-  //     averageFees: '₹4-6 Lakhs/year'
-  //   },
-    
-  //   whyStudyHere: {
-  //     title: 'Advantages of Studying MBBS in Russia',
-  //     points: [
-  //       '50+ years of experience in training international medical students',
-  //       '60+ NMC/WHO approved medical universities',
-  //       'No donation or capitation fees – transparent admission process',
-  //       'Direct admission based on NEET qualification – no entrance exams',
-  //       'Complete English-medium MBBS programs',
-  //       'Affordable tuition fees starting from ₹3-6 Lakhs per year',
-  //       'Low cost of living (₹15,000-25,000 per month)',
-  //       'Modern infrastructure with advanced medical equipment',
-  //       'Highly qualified faculty with international exposure',
-  //       'Extensive clinical training from 3rd year onwards',
-  //       'Safe and student-friendly environment',
-  //       'Indian food and hostels available',
-  //       'Globally recognized medical degree',
-  //       'Eligibility to practice in India, USA, UK, Canada, Australia, and 180+ countries',
-  //       'High FMGE/NExT pass rate among graduates',
-  //       'Rich cultural experience and exposure to diverse nationalities'
-  //     ]
-  //   },
-    
-  //   topUniversities: [
-  //     {
-  //       rank: 1,
-  //       name: 'Kazan Federal University',
-  //       city: 'Kazan',
-  //       established: '1804',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 2,
-  //       name: 'Peoples Friendship University of Russia (RUDN)',
-  //       city: 'Moscow',
-  //       established: '1960',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 3,
-  //       name: 'First Moscow State Medical University (Sechenov)',
-  //       city: 'Moscow',
-  //       established: '1758',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 4,
-  //       name: 'Crimean Federal University',
-  //       city: 'Simferopol',
-  //       established: '1918',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 5,
-  //       name: 'Kursk State Medical University',
-  //       city: 'Kursk',
-  //       established: '1935',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 6,
-  //       name: 'Northern State Medical University',
-  //       city: 'Arkhangelsk',
-  //       established: '1932',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 7,
-  //       name: 'Volgograd State Medical University',
-  //       city: 'Volgograd',
-  //       established: '1935',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 8,
-  //       name: 'Bashkir State Medical University',
-  //       city: 'Ufa',
-  //       established: '1932',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 9,
-  //       name: 'Kabardino Balkarian State University',
-  //       city: 'Nalchik',
-  //       established: '1957',
-  //       nmcApproved: true
-  //     },
-  //     {
-  //       rank: 10,
-  //       name: 'Orel State University',
-  //       city: 'Orel',
-  //       established: '1931',
-  //       nmcApproved: true
-  //     }
-  //   ],
-    
-  //   programs: [
-  //     {
-  //       name: 'General Medicine (MBBS)',
-  //       duration: '6 years (5 years + 1 year internship)',
-  //       degree: 'Doctor of Medicine (MD)',
-  //       medium: 'English'
-  //     },
-  //     {
-  //       name: 'MD/MS Specializations',
-  //       duration: '2-3 years',
-  //       degree: 'Doctor of Medicine / Master of Surgery',
-  //       medium: 'English/Russian'
-  //     }
-  //   ],
-    
-  //   costs: {
-  //     tuitionFeeRange: '₹3,00,000 - ₹6,00,000 per year',
-  //     hostelFees: '₹50,000 - ₹1,00,000 per year',
-  //     foodExpenses: '₹10,000 - ₹15,000 per month',
-  //     otherExpenses: '₹20,000 - ₹30,000 per year',
-  //     totalFirstYear: '₹5,00,000 - ₹8,00,000',
-  //     totalCourse: '₹25,00,000 - ₹40,00,000 (6 years)'
-  //   },
-    
-  //   eligibility: {
-  //     neetRequirement: 'NEET Qualified (Mandatory from 2021)',
-  //     academicRequirement: 'Minimum 50% in Physics, Chemistry, Biology (40% for SC/ST/OBC)',
-  //     ageLimit: '17-25 years as of 31st December of admission year',
-  //     documents: [
-  //       '10th and 12th Mark sheets and Certificates',
-  //       'NEET Scorecard',
-  //       'Passport (valid for minimum 18 months)',
-  //       'Birth Certificate',
-  //       'Medical Fitness Certificate',
-  //       'HIV Test Report (Negative)',
-  //       'COVID-19 Vaccination Certificate',
-  //       'Passport size photographs (10-15 copies)',
-  //       'Migration Certificate',
-  //       'Character Certificate from School/College'
-  //     ]
-  //   },
-    
-  //   intakes: {
-  //     main: 'September/October',
-  //     secondary: 'February/March (Limited seats)',
-  //     applicationDeadline: 'July for September intake, December for February intake'
-  //   },
-    
-  //   visa: {
-  //     type: 'Student Visa (Education Visa)',
-  //     processingTime: '15-30 days',
-  //     validity: '1 year (renewable annually)',
-  //     requirements: [
-  //       'Invitation Letter from University',
-  //       'Valid Passport',
-  //       'Visa Application Form',
-  //       'Passport size photographs',
-  //       'HIV Test Report',
-  //       'Bank statements showing sufficient funds',
-  //       'Visa fees payment receipt'
-  //     ]
-  //   },
-    
-  //   accommodation: {
-  //     types: [
-  //       'University Hostels (Most common)',
-  //       'Shared Apartments',
-  //       'Private Rooms',
-  //       'Homestay'
-  //     ],
-  //     facilities: [
-  //       '24/7 Security',
-  //       'Central Heating',
-  //       'Hot Water Supply',
-  //       'Kitchen/Mess',
-  //       'Laundry',
-  //       'WiFi',
-  //       'Study Rooms',
-  //       'Recreation Areas',
-  //       'Indian Mess Available'
-  //     ],
-  //     averageCost: '₹50,000 - ₹1,00,000 per year'
-  //   },
-    
-  //   livingInfo: {
-  //     climate: 'Continental (Summer: 15-25°C, Winter: -10 to -30°C)',
-  //     language: 'Russian (English widely used in universities)',
-  //     currency: 'Russian Ruble (RUB)',
-  //     timeZone: 'UTC+3 (Moscow Time)',
-  //     indianCommunity: 'Large Indian student community in all major cities',
-  //     safetyRating: 'Excellent (9/10) – Very safe for international students',
-  //     foodAvailability: 'Indian restaurants, grocery stores, and Indian mess in hostels'
-  //   },
-    
-  //   workOpportunities: {
-  //     partTimeAllowed: false,
-  //     hoursPerWeek: 'Not allowed during studies',
-  //     averageWage: 'N/A',
-  //     postStudyWork: 'Must return to India, can apply for work visa separately'
-  //   },
-    
-  //   recognitions: [
-  //     'NMC (National Medical Commission), India',
-  //     'WHO (World Health Organization)',
-  //     'UNESCO',
-  //     'FAIMER',
-  //     'ECFMG (USA)',
-  //     'GMC (UK)',
-  //     'MCC (Canada)',
-  //     'AMC (Australia)'
-  //   ],
-    
-  //   careerProspects: {
-  //     description: 'Graduates with Russian medical degrees can practice medicine in India after clearing FMGE/NExT exam. They are also eligible to appear for USMLE (USA), PLAB (UK), and other international licensing examinations.',
-  //     examsToClear: [
-  //       'FMGE/NExT (India) – Mandatory',
-  //       'USMLE (USA) – Optional',
-  //       'PLAB (UK) – Optional',
-  //       'AMC (Australia) – Optional',
-  //       'LMCC (Canada) – Optional'
-  //     ],
-  //     averageSalary: '₹6,00,000 - ₹12,00,000 per year (India), Higher in foreign countries'
-  //   },
-    
-  //   highlights: [
-  //     {
-  //       title: 'Affordable Education',
-  //       description: 'Low tuition fees compared to private medical colleges in India, starting from ₹3-6 Lakhs per year with no donation'
-  //     },
-  //     {
-  //       title: 'Global Recognition',
-  //       description: 'Medical degree recognized by NMC, WHO, UNESCO, FAIMER, ECFMG, and medical councils of 180+ countries'
-  //     },
-  //     {
-  //       title: 'Quality Education',
-  //       description: 'World-class medical education with modern infrastructure, experienced faculty, and practical training'
-  //     },
-  //     {
-  //       title: 'No Entrance Exam',
-  //       description: 'Direct admission based on NEET qualification without any university entrance test'
-  //     },
-  //     {
-  //       title: 'English Medium',
-  //       description: 'Complete MBBS program taught in English language with Russian language support for patient interaction'
-  //     },
-  //     {
-  //       title: 'Safe Environment',
-  //       description: 'Student-friendly and safe environment with strong security measures in universities and cities'
-  //     }
-  //   ],
-    
-  //   advantages: [
-  //     'Over 50 years of trusted medical education for international students',
-  //     '30,000+ Indian students already studying/graduated from Russia',
-  //     'No capitation or donation fees – completely transparent admission',
-  //     'WHO and NMC approved medical universities',
-  //     'Low cost of education and living',
-  //     'English-medium programs – no language barrier',
-  //     'Advanced medical infrastructure and technology',
-  //     'Experienced and qualified faculty members',
-  //     'Practical clinical training from 3rd year',
-  //     'Indian food and accommodation available',
-  //     'Safe and welcoming environment for Indian students',
-  //     'Direct admission without entrance exams',
-  //     'Globally recognized medical degree',
-  //     'High pass rate in FMGE/NExT among Russian graduates',
-  //     'Opportunity to experience Russian culture and history'
-  //   ],
-    
-  //   medicalLicensing: {
-  //     india: 'Must clear FMGE/NExT exam conducted by NMC to practice in India',
-  //     usa: 'Eligible to appear for USMLE Steps 1, 2, and 3 for medical practice in USA',
-  //     uk: 'Eligible to appear for PLAB (Professional and Linguistic Assessments Board) test for UK practice',
-  //     other: 'Recognized in 180+ countries including Canada, Australia, New Zealand, Middle East, and European countries'
-  //   }
-  // },
-
-  // ============================================
-  // GEORGIA
-  // ============================================
-  ,
+,
   georgia: {
     id: 'georgia',
     name: 'Georgia',
@@ -3511,3 +3201,892 @@ philippines:{
   // Will continue with Kazakhstan, Kyrgyzstan, Nepal, and China in the same detailed format...
   
 };
+// import {
+//   CountryDetailedInfo,
+//   Region,
+//   CourseCategory,
+//   CourseLevel,
+//   MediumOfInstruction,
+//   DurationType,
+//   AccreditationType,
+//   IntakeSeason,
+//   CostRange,
+//   CourseDetail,
+// } from "../../types";
+
+// export const canadaEnhanced: CountryDetailedInfo = {
+//   id: "canada",
+//   name: "Canada",
+//   slug: "canada",
+//   flag: "https://flagcdn.com/w320/ca.png",
+//   heroImage: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=2000",
+//   galleryImages: [
+//     "https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=2000",
+//     "https://images.unsplash.com/photo-1519832979-6fa011b87667?q=80&w=2000",
+//     "https://images.unsplash.com/photo-1517408366226-c5e7a49f9c32?q=80&w=2000",
+//     "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=2000",
+//     "https://images.unsplash.com/photo-1519832979-6fa011b87667?q=80&w=2000",
+//     "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=2000",
+//   ],
+//   region: Region.NORTH_AMERICA,
+
+//   // INDEXING: Available Course Categories
+//   availableCourseCategories: [
+//     CourseCategory.MANAGEMENT,
+//     CourseCategory.ENGINEERING,
+//     CourseCategory.COMPUTER_SCIENCE,
+//     CourseCategory.MEDICAL,
+//     CourseCategory.NURSING,
+//     CourseCategory.PHARMACY,
+//     CourseCategory.DENTAL,
+//     CourseCategory.MASS_COMMUNICATION,
+//     CourseCategory.DESIGN,
+//     CourseCategory.AGRICULTURE,
+//     CourseCategory.ARTS,
+//     CourseCategory.HOSPITALITY,
+//     CourseCategory.FINANCE,
+//   ],
+
+//   availableCourseLevels: [
+//     CourseLevel.UNDERGRADUATE,
+//     CourseLevel.POSTGRADUATE,
+//     CourseLevel.DOCTORAL,
+//     CourseLevel.DIPLOMA,
+//     CourseLevel.CERTIFICATE,
+//   ],
+
+//   // Detailed Courses List
+//   courses: [
+//     {
+//       id: "global-business-management",
+//       name: "Global Business Management",
+//       category: CourseCategory.MANAGEMENT,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [AccreditationType.AACSB],
+//       description: "Comprehensive business management program with global focus",
+//       specializations: ["International Business", "Strategic Management", "Entrepreneurship"],
+//       costRange: CostRange.PREMIUM,
+//       averageAnnualFee: "CAD 25,000 - 35,000",
+//     },
+//     {
+//       id: "international-management-masters",
+//       name: "International Management",
+//       category: CourseCategory.MANAGEMENT,
+//       level: CourseLevel.POSTGRADUATE,
+//       duration: { value: 2, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [AccreditationType.AACSB],
+//       costRange: CostRange.PREMIUM,
+//       averageAnnualFee: "CAD 24,000 - 30,000",
+//     },
+//     {
+//       id: "engineering",
+//       name: "Engineering (Mechanical, Electrical & Civil)",
+//       category: CourseCategory.ENGINEERING,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [AccreditationType.ABET],
+//       specializations: ["Mechanical Engineering", "Electrical Engineering", "Civil Engineering"],
+//       costRange: CostRange.PREMIUM,
+//       averageAnnualFee: "CAD 30,000 - 40,000",
+//     },
+//     {
+//       id: "computer-science",
+//       name: "Computer Science & Web Development",
+//       category: CourseCategory.COMPUTER_SCIENCE,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [],
+//       specializations: ["Software Engineering", "Data Science", "Cybersecurity", "AI/ML"],
+//       costRange: CostRange.PREMIUM,
+//       averageAnnualFee: "CAD 28,000 - 38,000",
+//     },
+//     {
+//       id: "medical-healthcare",
+//       name: "Medical & Healthcare",
+//       category: CourseCategory.MEDICAL,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [AccreditationType.WHO],
+//       costRange: CostRange.LUXURY,
+//       averageAnnualFee: "CAD 35,000 - 55,000",
+//     },
+//     {
+//       id: "nursing",
+//       name: "Nursing",
+//       category: CourseCategory.NURSING,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [],
+//       costRange: CostRange.PREMIUM,
+//       averageAnnualFee: "CAD 25,000 - 35,000",
+//     },
+//     {
+//       id: "journalism-mass-media",
+//       name: "Journalism & Mass Media",
+//       category: CourseCategory.MASS_COMMUNICATION,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [],
+//       costRange: CostRange.MODERATE,
+//       averageAnnualFee: "CAD 20,000 - 30,000",
+//     },
+//     {
+//       id: "graphic-design",
+//       name: "Graphic Design",
+//       category: CourseCategory.DESIGN,
+//       level: CourseLevel.DIPLOMA,
+//       duration: { value: 2, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [],
+//       costRange: CostRange.MODERATE,
+//       averageAnnualFee: "CAD 18,000 - 28,000",
+//     },
+//     {
+//       id: "agriculture-science",
+//       name: "Agriculture Science",
+//       category: CourseCategory.AGRICULTURE,
+//       level: CourseLevel.UNDERGRADUATE,
+//       duration: { value: 4, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [],
+//       costRange: CostRange.MODERATE,
+//       averageAnnualFee: "CAD 22,000 - 32,000",
+//     },
+//     {
+//       id: "hospitality-management",
+//       name: "Hospitality Management",
+//       category: CourseCategory.HOSPITALITY,
+//       level: CourseLevel.DIPLOMA,
+//       duration: { value: 2, type: DurationType.YEARS },
+//       mediumOfInstruction: [MediumOfInstruction.ENGLISH],
+//       accreditations: [],
+//       costRange: CostRange.MODERATE,
+//       averageAnnualFee: "CAD 18,000 - 26,000",
+//     },
+//   ],
+
+//   // Overview Section
+//   overview: {
+//     title: "Study in Canada - A World-Class Education Destination",
+//     description:
+//       "Canada is the world's second-largest nation by area, a highly developed country with one of the most diverse and multicultural societies. Home to 155 recognized universities and over 200 public colleges, Canada offers world-class education at competitive costs with clear pathways to permanent residency.",
+//     detailedDescription: [
+//       "Canada is the world's second-largest nation, located in North America, covering over 9.98 million km² of total area with Ottawa as its capital. As the eighth-largest economy globally, Canada is highly developed with transparent governance, exceptional quality of life, and strong commitments to education, gender equality, and economic freedom.",
+//       "For Indian students seeking quality education abroad with work and settlement opportunities, Canada represents an outstanding choice. The country hosts 155 recognized universities as of 2025, offering approximately 1.6 million full-time and part-time student positions across diverse programs. Canadian degrees are globally recognized and highly valued by employers worldwide.",
+//       "The education system emphasizes practical, industry-oriented learning with mandatory education through ages 16-18. Most institutions are publicly funded, ensuring quality standards while keeping costs competitive compared to other major study destinations. The academic year typically runs from September to June, with multiple intake options throughout the year.",
+//       "Canada stands out for its robust scholarship programs, work opportunities during and after studies, and most importantly, clear pathways to permanent residency. International graduates benefit from the Post-Graduation Work Permit (PGWP) program, allowing up to three years of work experience that significantly strengthens applications for permanent residency through Express Entry and Provincial Nominee Programs.",
+//       "The country's commitment to international education is evident in its support systems, multicultural environment, and immigration-friendly policies. With a large Indian diaspora exceeding 1.6 million people, students find strong community support in major cities alongside world-class academic opportunities.",
+//       "However, prospective students should note that Canadian immigration policies have evolved in 2024-2025, with stricter regulations on study permits, PGWP eligibility tied to specific fields of study, and increased financial requirements. Despite these changes, Canada remains a premier destination for quality education with excellent long-term prospects for skilled graduates.",
+//     ],
+//   },
+
+//   // Quick Stats
+//   stats: {
+//     totalUniversities: "155",
+//     recognizedUniversities: "155 recognized universities",
+//     indianStudents: "137,600 (as of 2024, decreased from 233,500 in 2023)",
+//     popularPrograms: [
+//       "Business & Management",
+//       "Computer Science",
+//       "Engineering",
+//       "Healthcare",
+//       "Hospitality",
+//     ],
+//     mediumOfInstruction: "English, French",
+//     averageFees: "CAD 41,746 per year (undergraduate), CAD 24,028 per year (graduate)",
+//     costRange: CostRange.PREMIUM,
+//   },
+
+//   // Why Study Here
+//   whyStudyHere: {
+//     title: "Why Study in Canada?",
+//     points: [
+//       "World-class education system with 155 recognized universities offering globally respected degrees",
+//       "Three Canadian universities (Toronto, McGill, UBC) consistently rank in global top 50",
+//       "Industry-oriented, practical, skill-based teaching with strong co-op and internship opportunities",
+//       "More affordable than USA, UK, and Australia - average tuition CAD 41,746 for international undergraduates",
+//       "Part-time work allowed during studies (20 hours/week) and full-time during breaks",
+//       "Post-Graduation Work Permit (PGWP) - work up to 3 years after graduation in eligible programs",
+//       "Clear pathways to permanent residency through Express Entry and Provincial Nominee Programs",
+//       "Safe, multicultural society with strong Indian community (1.6+ million people)",
+//       "High quality of life, excellent healthcare, and strong social support systems",
+//       "Bilingual education options in English and French",
+//       "World-class research facilities and funding opportunities",
+//       "Scholarship opportunities for international students",
+//       "Study permit allows work on campus without separate work permit",
+//       "Spouse can apply for open work permit (specific conditions apply)",
+//       "Children can attend Canadian schools at domestic rates",
+//       "Four distinct seasons with diverse climate and natural beauty",
+//       "Excellent student support services at all major institutions",
+//       "Member of G7 and OECD with strong economic stability",
+//     ],
+//   },
+
+//   // Top Universities (Enhanced with 2025 Rankings)
+//   topUniversities: [
+//     {
+//       rank: 1,
+//       name: "University of Toronto",
+//       city: "Toronto",
+//       established: "1827",
+//       accreditations: [AccreditationType.AACSB],
+//       coursesOffered: [
+//         CourseCategory.MEDICAL,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.COMPUTER_SCIENCE,
+//         CourseCategory.MANAGEMENT,
+//         CourseCategory.LAW,
+//         CourseCategory.ARTS,
+//       ],
+//       ranking: {
+//         world: "#25 (QS 2025)",
+//         national: "#1",
+//       },
+//       website: "https://www.utoronto.ca",
+//     },
+//     {
+//       rank: 2,
+//       name: "McGill University",
+//       city: "Montreal",
+//       established: "1821",
+//       accreditations: [AccreditationType.AACSB],
+//       coursesOffered: [
+//         CourseCategory.MEDICAL,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.MANAGEMENT,
+//         CourseCategory.LAW,
+//       ],
+//       ranking: {
+//         world: "#29 (QS 2025)",
+//         national: "#2",
+//       },
+//       website: "https://www.mcgill.ca",
+//     },
+//     {
+//       rank: 3,
+//       name: "University of British Columbia",
+//       city: "Vancouver",
+//       established: "1908",
+//       accreditations: [AccreditationType.AACSB],
+//       coursesOffered: [
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.COMPUTER_SCIENCE,
+//         CourseCategory.MANAGEMENT,
+//         CourseCategory.MEDICAL,
+//       ],
+//       ranking: {
+//         world: "#38 (QS 2025)",
+//         national: "#3",
+//       },
+//       website: "https://www.ubc.ca",
+//     },
+//     {
+//       rank: 4,
+//       name: "University of Alberta",
+//       city: "Edmonton",
+//       established: "1908",
+//       accreditations: [],
+//       coursesOffered: [
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.MEDICAL,
+//         CourseCategory.MANAGEMENT,
+//       ],
+//       ranking: {
+//         world: "#96 (QS 2025)",
+//         national: "#4",
+//       },
+//       website: "https://www.ualberta.ca",
+//     },
+//     {
+//       rank: 5,
+//       name: "University of Waterloo",
+//       city: "Waterloo",
+//       established: "1957",
+//       accreditations: [],
+//       coursesOffered: [
+//         CourseCategory.COMPUTER_SCIENCE,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.MANAGEMENT,
+//       ],
+//       ranking: {
+//         world: "#115 (QS 2025)",
+//         national: "#5",
+//       },
+//       website: "https://uwaterloo.ca",
+//     },
+//     {
+//       rank: 6,
+//       name: "McMaster University",
+//       city: "Hamilton",
+//       established: "1887",
+//       accreditations: [],
+//       coursesOffered: [
+//         CourseCategory.MEDICAL,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.MANAGEMENT,
+//       ],
+//       ranking: {
+//         world: "#176 (QS 2025)",
+//         national: "#6",
+//       },
+//       website: "https://www.mcmaster.ca",
+//     },
+//     {
+//       rank: 7,
+//       name: "Western University",
+//       city: "London",
+//       established: "1878",
+//       accreditations: [AccreditationType.AACSB],
+//       coursesOffered: [
+//         CourseCategory.MEDICAL,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.MANAGEMENT,
+//       ],
+//       ranking: {
+//         world: "#120 (QS 2025)",
+//         national: "#7",
+//       },
+//       website: "https://www.uwo.ca",
+//     },
+//     {
+//       rank: 8,
+//       name: "Université de Montréal",
+//       city: "Montreal",
+//       established: "1878",
+//       accreditations: [],
+//       coursesOffered: [
+//         CourseCategory.MEDICAL,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.ARTS,
+//       ],
+//       ranking: {
+//         world: "#159 (QS 2025)",
+//         national: "#8",
+//       },
+//       website: "https://www.umontreal.ca",
+//     },
+//     {
+//       rank: 9,
+//       name: "University of Ottawa",
+//       city: "Ottawa",
+//       established: "1848",
+//       accreditations: [],
+//       coursesOffered: [
+//         CourseCategory.MANAGEMENT,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.LAW,
+//       ],
+//       ranking: {
+//         world: "#189 (QS 2025)",
+//         national: "#9",
+//       },
+//       website: "https://www.uottawa.ca",
+//     },
+//     {
+//       rank: 10,
+//       name: "Queen's University",
+//       city: "Kingston",
+//       established: "1841",
+//       accreditations: [AccreditationType.AACSB],
+//       coursesOffered: [
+//         CourseCategory.MANAGEMENT,
+//         CourseCategory.ENGINEERING,
+//         CourseCategory.LAW,
+//       ],
+//       ranking: {
+//         world: "#193 (QS 2025)",
+//         national: "#10",
+//       },
+//       website: "https://www.queensu.ca",
+//     },
+//   ],
+
+//   // Programs Offered
+//   programs: [
+//     {
+//       name: "Global Business Management",
+//       duration: "3-4 Years",
+//       degree: "Bachelor's / Master's",
+//       medium: "English",
+//       category: CourseCategory.MANAGEMENT,
+//     },
+//     {
+//       name: "International Management",
+//       duration: "1-2 Years",
+//       degree: "Master's",
+//       medium: "English",
+//       category: CourseCategory.MANAGEMENT,
+//     },
+//     {
+//       name: "Engineering (Mechanical, Electrical & Civil)",
+//       duration: "4 Years",
+//       degree: "Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.ENGINEERING,
+//     },
+//     {
+//       name: "Web Development & Computer Science",
+//       duration: "3-4 Years",
+//       degree: "Bachelor's / Diploma",
+//       medium: "English",
+//       category: CourseCategory.COMPUTER_SCIENCE,
+//     },
+//     {
+//       name: "Bioscience",
+//       duration: "3-4 Years",
+//       degree: "Bachelor's / Master's",
+//       medium: "English",
+//       category: CourseCategory.SCIENCE,
+//     },
+//     {
+//       name: "Marketing",
+//       duration: "2-4 Years",
+//       degree: "Diploma / Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.FINANCE,
+//     },
+//     {
+//       name: "Journalism & Mass Media",
+//       duration: "3-4 Years",
+//       degree: "Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.MASS_COMMUNICATION,
+//     },
+//     {
+//       name: "Graphic Designing",
+//       duration: "2-3 Years",
+//       degree: "Diploma / Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.DESIGN,
+//     },
+//     {
+//       name: "Agriculture Science",
+//       duration: "4 Years",
+//       degree: "Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.AGRICULTURE,
+//     },
+//     {
+//       name: "Arts, Psychology & Human Resources",
+//       duration: "3-4 Years",
+//       degree: "Bachelor's / Master's",
+//       medium: "English",
+//       category: CourseCategory.ARTS,
+//     },
+//     {
+//       name: "Hospitality Management",
+//       duration: "2-4 Years",
+//       degree: "Diploma / Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.HOSPITALITY,
+//     },
+//     {
+//       name: "Medical & Healthcare",
+//       duration: "4-6 Years",
+//       degree: "Bachelor's / Master's",
+//       medium: "English",
+//       category: CourseCategory.MEDICAL,
+//     },
+//     {
+//       name: "Nursing",
+//       duration: "4 Years",
+//       degree: "Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.NURSING,
+//     },
+//     {
+//       name: "Pharmacy",
+//       duration: "4 Years",
+//       degree: "Bachelor's",
+//       medium: "English",
+//       category: CourseCategory.PHARMACY,
+//     },
+//     {
+//       name: "Dental Sciences",
+//       duration: "4 Years",
+//       degree: "Bachelor's / Doctor of Dental Surgery",
+//       medium: "English",
+//       category: CourseCategory.DENTAL,
+//     },
+//   ],
+
+//   // Cost Breakdown (Updated for 2025-2026)
+//   costs: {
+//     tuitionFeeRange: "CAD 18,000 - 55,000 per year (varies by program and institution)",
+//     hostelFees: "CAD 8,000 - 15,000 per year",
+//     foodExpenses: "CAD 3,600 - 6,000 per year",
+//     otherExpenses: "CAD 2,000 - 5,000 per year",
+//     totalFirstYear: "CAD 31,600 - 81,000",
+//     totalCourse: "CAD 126,400 - 324,000 (4-year undergraduate program)",
+//     scholarshipAvailability: true,
+//     scholarshipDetails: [
+//       "Vanier Canada Graduate Scholarships (CAD 50,000 per year for PhDs)",
+//       "Canada Graduate Scholarships - Master's Program (CAD 17,500)",
+//       "University-specific scholarships (CAD 1,000 - 10,000)",
+//       "Government of Canada International Scholarship Program",
+//       "Provincial scholarships and bursaries",
+//     ],
+//   },
+
+//   // Admission Requirements (Updated for 2025)
+//   eligibility: {
+//     entranceExam: "Not required for most programs",
+//     academicRequirement:
+//       "Minimum 60% in 10+2 or equivalent. Some programs require 70-80%. English language proficiency mandatory (IELTS/TOEFL/PTE/Duolingo)",
+//     ageLimit: "No specific age limit for most programs",
+//     languageProficiency:
+//       "IELTS 6.5 overall (no band < 6.0) OR TOEFL iBT 86+ OR PTE 60+ OR Duolingo 120+. Higher scores required for PGWP (CLB 7 for degrees, CLB 5 for diplomas)",
+//     documents: [
+//       "Valid passport (minimum 6 months validity)",
+//       "Academic transcripts (10th, 12th, Bachelor's if applicable) - officially translated",
+//       "English language proficiency test scores (IELTS/TOEFL/PTE/Duolingo)",
+//       "Statement of Purpose (SOP) - detailed, program-specific",
+//       "Letters of Recommendation (2-3 LORs from professors/employers)",
+//       "Resume/CV with all academic and professional details",
+//       "Proof of financial support (CAD 22,895 living expenses + first year tuition + travel)",
+//       "Study permit application with Provincial Attestation Letter (PAL)",
+//       "Medical examination certificate from panel physician",
+//       "Police clearance certificate (if required)",
+//       "Portfolio (for creative programs)",
+//       "Work experience letters (if applicable)",
+//       "Valid bank statements showing funds availability",
+//     ],
+//   },
+
+//   // Intakes (Enhanced with Details)
+//   intakes: {
+//     seasons: [IntakeSeason.SEPTEMBER, IntakeSeason.JANUARY, IntakeSeason.MAY],
+//     main: "September/Fall (largest intake)",
+//     secondary: "January/Winter, May/Summer",
+//     applicationDeadline:
+//       "Fall: January-March, Winter: September-October, Summer: January-February. Apply 8-12 months in advance recommended",
+//     intakeDetails: [
+//       {
+//         season: IntakeSeason.SEPTEMBER,
+//         startMonth: "September",
+//         deadline: "January - March (previous year)",
+//       },
+//       {
+//         season: IntakeSeason.JANUARY,
+//         startMonth: "January",
+//         deadline: "September - October (previous year)",
+//       },
+//       {
+//         season: IntakeSeason.MAY,
+//         startMonth: "May",
+//         deadline: "January - February (same year)",
+//       },
+//     ],
+//   },
+
+//   // Visa Information (Updated for 2025)
+//   visa: {
+//     type: "Study Permit",
+//     processingTime:
+//       "3-5 weeks for online applications (can extend to 12 weeks during peak season)",
+//     validity: "Duration of study program + 90 days",
+//     requirements: [
+//       "Letter of acceptance from Designated Learning Institution (DLI)",
+//       "Provincial Attestation Letter (PAL) - mandatory as of 2024",
+//       "Proof of financial support: CAD 22,895 for living expenses (increased Sep 2025) + first year tuition + travel costs",
+//       "Valid passport (6+ months validity)",
+//       "Two recent passport-sized photographs",
+//       "Statement of Purpose explaining study plans and post-graduation goals",
+//       "Medical examination from panel physician (if required)",
+//       "Police clearance certificate (if required based on country)",
+//       "Proof of payment of CAD 150 study permit fee + CAD 85 biometrics fee",
+//       "Biometrics (fingerprints and photo) - valid for 10 years",
+//       "English language proficiency scores (IELTS/TOEFL/PTE/Duolingo)",
+//       "Academic documents and transcripts",
+//       "GIC (Guaranteed Investment Certificate) - CAD 20,635 (some cases)",
+//       "Letter explaining educational gap (if applicable)",
+//     ],
+//     studentVisaFee: "CAD 150 + CAD 85 biometrics fee",
+//   },
+
+//   // Accommodation
+//   accommodation: {
+//     types: [
+//       "On-campus residence/dormitories",
+//       "Off-campus apartments",
+//       "Homestay with Canadian families",
+//       "Shared apartments with roommates",
+//       "Private rental apartments/condos",
+//       "Purpose-built student accommodation (PBSA)",
+//     ],
+//     facilities: [
+//       "Furnished or unfurnished options",
+//       "High-speed Wi-Fi connectivity",
+//       "Common study areas and lounges",
+//       "Laundry facilities",
+//       "Meal plans (in some residences)",
+//       "24/7 security and emergency response",
+//       "Recreational facilities (gym, sports)",
+//       "Kitchen facilities (shared or private)",
+//       "Utilities included (varies by accommodation)",
+//       "Bike storage and parking",
+//     ],
+//     averageCost: "CAD 8,000 - 15,000 per year (on-campus), CAD 600 - 1,500 per month (off-campus)",
+//     availability:
+//       "High demand, apply early. On-campus residence fills quickly. Off-campus options widely available in major cities",
+//   },
+
+//   // Living in Country (Updated for 2025)
+//   livingInfo: {
+//     climate:
+//       "Varied climate across regions. Winters can be very cold (-30°C to 0°C) in most areas, summers mild to warm (15-30°C). Coastal areas milder. Four distinct seasons",
+//     language: "English and French (official languages). English predominant in most provinces",
+//     currency: "Canadian Dollar (CAD). 1 CAD ≈ ₹62-65 INR (exchange rate fluctuates)",
+//     timeZone: "Six time zones: UTC-3.5 (Newfoundland) to UTC-8 (Pacific)",
+//     indianCommunity:
+//       "Large, well-established Indian diaspora of 1.6+ million people. Strong communities in Toronto, Vancouver, Calgary, Montreal, and other major cities with Indian restaurants, grocery stores, temples, and cultural centers",
+//     safetyRating:
+//       "Very high safety rating. Canada consistently ranks among the world's safest countries. Low crime rates, strong rule of law, and excellent emergency services",
+//     foodAvailability:
+//       "Excellent availability of Indian food, groceries, and restaurants in all major cities. Vegetarian and vegan options widely available. Halal food easily accessible. International cuisine from all cultures",
+//     transportationCost: "CAD 100-180 monthly (public transit pass). Students often get discounts",
+//     internetSpeed: "Excellent high-speed internet infrastructure. Average 100+ Mbps widely available",
+//   },
+
+//   // Work Opportunities (Updated with 2025 PGWP Changes)
+//   workOpportunities: {
+//     duringStudy: {
+//       allowed: true,
+//       hoursPerWeek: "20 hours per week during academic sessions, unlimited during scheduled breaks",
+//       averageWage: "CAD 14-20 per hour (varies by province and job type)",
+//       restrictions: [
+//         "Must be full-time student at Designated Learning Institution",
+//         "Must have valid study permit with work authorization",
+//         "Cannot work before studies begin",
+//         "Cannot exceed 20 hours during academic sessions",
+//       ],
+//     },
+//     afterStudy: {
+//       allowed: true,
+//       duration:
+//         "Post-Graduation Work Permit (PGWP) - up to 3 years depending on program length. 8+ months study = up to 3 years PGWP",
+//       requirements: [
+//         "Graduate from PGWP-eligible program at DLI",
+//         "Program minimum 8 months (900 hours for Quebec)",
+//         "Full-time enrollment throughout program (except final semester)",
+//         "Apply within 180 days of program completion",
+//         "Meet field of study requirements (for non-degree programs)",
+//         "Language proficiency: CLB 7 for degrees, CLB 5 for diplomas/certificates",
+//         "Study permit must be valid during 180-day application window",
+//       ],
+//     },
+//   },
+
+//   // Recognition & Accreditation (Updated)
+//   recognitions: [
+//     "155 universities with recognized legal status in Canada (as of Sep 2025)",
+//     "Universities regulated by provincial governments ensuring quality standards",
+//     "Quality assurance through provincial quality assurance agencies",
+//     "Member institutions of Universities Canada (formerly AUCC)",
+//     "Multiple universities ranked in global top 200 (QS, THE, Shanghai rankings)",
+//     "Canadian degrees recognized worldwide by employers and educational institutions",
+//     "Part of Bologna Process equivalency framework",
+//     "OECD member country with internationally respected education standards",
+//     "Canadian Quality Assurance mechanisms ensuring program quality",
+//     "Professional programs accredited by discipline-specific bodies",
+//   ],
+  
+//   accreditationBodies: [
+//     AccreditationType.AACSB,
+//     AccreditationType.ABET,
+//     AccreditationType.WHO,
+//   ],
+
+//   // Job Prospects (Updated for 2025 Reality)
+//   careerProspects: {
+//     description:
+//       "Canada offers strong job prospects for international graduates, particularly in fields experiencing labor shortages like healthcare, technology, engineering, and skilled trades. The PGWP program allows eligible graduates to work for up to 3 years, gaining valuable Canadian work experience. However, 2025 has seen stricter PGWP eligibility criteria tied to specific fields of study aligned with labor market needs. Permanent residency pathways remain available through Express Entry (especially Canadian Experience Class), Provincial Nominee Programs, and other immigration streams. Graduates should focus on in-demand occupations and gaining quality Canadian work experience.",
+//     examsToClear: [
+//       "Provincial licensing exams for regulated professions (engineering, accounting, healthcare)",
+//       "Professional certification exams specific to field",
+//       "Language proficiency tests (if upgrading from CLB 5 to CLB 7+)",
+//       "Industry-specific certifications (PMP, CFA, IT certifications, etc.)",
+//     ],
+//     practiceInIndia: {
+//       allowed: true,
+//       requirements: [
+//         "Degree recognition by relevant Indian regulatory bodies",
+//         "Professional licensing exams in India (varies by profession)",
+//         "Work experience requirements (profession-specific)",
+//         "Registration with professional councils in India",
+//       ],
+//     },
+//     averageSalary:
+//       "CAD 50,000 - 85,000 per year (entry-level for graduates). Varies significantly by field, experience, and location. Tech/Engineering: CAD 60,000-100,000+. Healthcare: CAD 55,000-90,000+. Business: CAD 45,000-75,000",
+//     topRecruiters: [
+//       "Technology: Amazon, Microsoft, Google, Shopify, IBM Canada",
+//       "Banking/Finance: RBC, TD Bank, BMO, Scotiabank, Deloitte, PwC",
+//       "Healthcare: Major hospital networks, pharmaceutical companies",
+//       "Engineering: SNC-Lavalin, Aecon, Bombardier",
+//       "Retail/Hospitality: Loblaws, Tim Hortons, Marriott",
+//       "Government: Federal and provincial public services",
+//     ],
+//   },
+
+//   // Key Highlights (Updated)
+//   highlights: [
+//     {
+//       title: "University System",
+//       description:
+//         "Canada has 155 recognized universities offering diverse programs from bachelor's to doctoral levels. Universities are research-intensive, publicly funded institutions known for academic excellence and innovation. Three Canadian universities consistently rank in global top 50.",
+//     },
+//     {
+//       title: "College System",
+//       description:
+//         "Over 200 public colleges and institutes offer practical, career-focused programs including diplomas, certificates, and applied degrees. Colleges provide hands-on training with strong industry connections and co-op opportunities. Popular for international students seeking faster entry to workforce.",
+//     },
+//     {
+//       title: "Post-Graduation Work Permit (PGWP)",
+//       description:
+//         "PGWP allows eligible graduates to work in Canada for up to 3 years after completing studies. As of 2025, stricter eligibility applies: language requirements (CLB 7 for degrees, CLB 5 for diplomas) and field of study alignment with labor market needs for non-degree programs. 920 fields of study currently eligible.",
+//     },
+//     {
+//       title: "Pathways to Permanent Residency",
+//       description:
+//         "Canada offers clear PR pathways through Express Entry (especially Canadian Experience Class), Provincial Nominee Programs (PNPs), and other streams. Canadian education and work experience provide significant advantage in PR applications. Many graduates successfully transition to permanent residency within 2-3 years.",
+//     },
+//     {
+//       title: "Cost-Effectiveness",
+//       description:
+//         "Despite recent increases, Canada remains more affordable than USA, UK, and Australia. Average international undergraduate tuition: CAD 41,746 (2025-26). Graduate programs: CAD 24,028. Significant variations by province - Newfoundland most affordable, Ontario most expensive. Living costs: CAD 15,000-20,000 annually.",
+//     },
+//     {
+//       title: "Work While Studying",
+//       description:
+//         "International students can work part-time (20 hours/week) during studies and full-time during breaks. On-campus work available without separate permit. Co-op programs provide paid industry experience as part of curriculum. Average student wage: CAD 14-20/hour.",
+//     },
+//     {
+//       title: "Recent Policy Changes (2024-2025)",
+//       description:
+//         "Canada has implemented significant changes: study permit cap reduced to 437,000 for 2025 (from 485,000 in 2024); Provincial Attestation Letters (PAL) now mandatory; financial requirements increased to CAD 22,895 for living expenses; PGWP eligibility tied to specific fields of study; stricter language requirements for PGWP applicants.",
+//     },
+//     {
+//       title: "Indian Student Trends",
+//       description:
+//         "Indian student numbers declined from 233,500 (2023) to 137,600 (2024) due to policy changes, increased costs, and diplomatic issues. Despite decline, India remains largest source country for international students in Canada. Strong Indian community support continues in major cities.",
+//     },
+//     {
+//       title: "Quality of Education",
+//       description:
+//         "Canadian education emphasizes critical thinking, research, and practical application. Small class sizes, modern facilities, and industry partnerships. Faculty includes internationally recognized researchers. Programs regularly updated to reflect industry needs and technological advances.",
+//     },
+//     {
+//       title: "Multicultural Environment",
+//       description:
+//         "Canada is one of the world's most multicultural nations, welcoming people from all backgrounds. International students make up significant percentage of campus populations. Support services specifically for international students including orientation, academic advising, and cultural adjustment assistance.",
+//     },
+//   ],
+
+//   // Advantages (Comprehensive List)
+//   advantages: [
+//     "World-class education system with 155 recognized universities and 200+ colleges",
+//     "Three universities in global top 50, multiple in top 200 (QS Rankings 2025)",
+//     "More affordable than USA, UK, and Australia while maintaining quality",
+//     "Post-Graduation Work Permit allowing up to 3 years work experience",
+//     "Clear pathways to permanent residency through multiple immigration programs",
+//     "Large, supportive Indian diaspora community (1.6+ million people)",
+//     "Safe, stable, and politically secure country with low crime rates",
+//     "High quality of life with excellent healthcare and social services",
+//     "Multicultural, welcoming society embracing diversity",
+//     "Part-time work allowed during studies (20 hours/week)",
+//     "Full-time work during scheduled breaks without restrictions",
+//     "Spouse work permit eligibility (specific conditions apply)",
+//     "Children education at domestic rates while parents study",
+//     "Industry-oriented curriculum with co-op and internship opportunities",
+//     "Strong research infrastructure and funding",
+//     "Modern facilities and cutting-edge technology access",
+//     "Small class sizes promoting student-faculty interaction",
+//     "Comprehensive student support services",
+//     "Scholarship opportunities from government and institutions",
+//     "Bilingual education options (English and French)",
+//     "Beautiful natural environment with diverse geography",
+//     "Four distinct seasons offering varied experiences",
+//     "Excellent public transportation in major cities",
+//     "Strong rule of law and transparent governance",
+//     "Gender equality and inclusive policies",
+//     "OECD and G7 member with stable economy",
+//     "Global degree recognition by employers worldwide",
+//     "Access to North American job market",
+//     "Strong technology and innovation ecosystem",
+//     "Universal healthcare system (varies by province)",
+//     "High environmental standards and sustainability focus",
+//   ],
+
+//   // International Recognition (Updated)
+//   internationalRecognition: {
+//     india:
+//       "Canadian degrees recognized by UGC, AICTE, and other Indian regulatory bodies. Graduates must verify specific degree equivalency with relevant councils for regulated professions. NMC (formerly MCI) recognition required for medical degrees to practice in India - additional screening test mandatory.",
+//     usa: "Canadian degrees widely recognized in USA. Strong cross-border educational cooperation. Graduates can pursue USMLE for medical licensing, various professional certifications. Canadian education highly valued by US employers.",
+//     uk: "Canadian degrees recognized under Bologna Process equivalency. UK NARIC provides comparability statements. Professional bodies may require additional assessments. Canadian credentials respected by UK employers.",
+//     europe:
+//       "Strong recognition across European countries through international frameworks. Canadian qualifications generally meet European standards. Additional requirements may apply for regulated professions. Growing acceptance of Canadian credentials.",
+//     canada:
+//       "Degrees from recognized Canadian institutions fully valid nationwide. Provincial licensing required for regulated professions. Quality assurance by provincial agencies ensures standards. Interprovincial mobility agreements facilitate professional practice across provinces.",
+//     australia:
+//       "Canadian degrees recognized through bilateral agreements. Professional bodies assess qualifications individually. Canadian education credentials respected. Graduates may need additional assessments for specific professions.",
+//     other:
+//       "Canadian degrees generally recognized globally due to high education standards and international accreditation memberships. Specific recognition varies by country and profession. Graduates should verify requirements with destination country regulatory bodies. Canadian education reputation continues strengthening worldwide.",
+//   },
+
+//   // SEO & Metadata
+//   metadata: {
+//     metaTitle: "Study in Canada 2025-26 | Top Universities, Courses, Costs & PR Pathways",
+//     metaDescription:
+//       "Comprehensive guide to studying in Canada: 155 universities, affordable tuition (CAD 41,746 avg), PGWP work permits, PR pathways. Complete admission, visa & scholarship information for 2025-26.",
+//     keywords: [
+//       "study in Canada",
+//       "Canada universities",
+//       "Canada student visa",
+//       "PGWP Canada",
+//       "Canada PR for students",
+//       "Canada tuition fees 2025",
+//       "University of Toronto",
+//       "McGill University",
+//       "study permit Canada",
+//       "Canada scholarships",
+//       "international students Canada",
+//       "Canada education system",
+//       "Canadian degree recognition",
+//       "Express Entry Canada",
+//       "Canada living costs students",
+//     ],
+//     popularSearchTerms: [
+//       "how much does it cost to study in Canada",
+//       "Canada student visa requirements 2025",
+//       "PGWP eligibility requirements",
+//       "best universities in Canada for international students",
+//       "Canada PR process for students",
+//       "part time work Canada international students",
+//       "Canada vs USA for study",
+//       "Canada vs UK for international students",
+//       "Indian students in Canada",
+//       "Canada study permit processing time",
+//       "scholarships for Indian students in Canada",
+//       "co-op programs Canada",
+//       "Provincial Nomination Program Canada",
+//       "cheapest universities in Canada",
+//       "Canada education consultants",
+//     ],
+//   },
+
+//   // Featured Status
+//   isFeatured: true,
+//   featuredOrder: 2,
+
+//   // Last Updated
+//   lastUpdated: "2025-01-27",
+//   updatedBy: "Global Circle Edu Research Team",
+// };
