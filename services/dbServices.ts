@@ -1,3 +1,302 @@
+// import { 
+//   collection, 
+//   addDoc, 
+//   doc, 
+//   setDoc, 
+//   getDoc, 
+//   getDocs,
+//   query,
+//   where,
+//   deleteDoc,
+//   updateDoc 
+// } from 'firebase/firestore';
+// import { db } from '@/lib/firebase';
+// import type { ContactFormData, ApplicationFormData, PartnerFormData } from '../types';
+// import type { CountryDetailedInfo } from '../app/data/countryData';;
+
+// /**
+//  * Submit a contact form to Firestore
+//  * @param formData - Contact form data
+//  * @returns Promise<void>
+//  */
+// export const submitContactForm = async (formData: ContactFormData): Promise<void> => {
+//   try {
+//     await addDoc(collection(db, 'applications'), {
+//       ...formData,
+//       submittedAt: new Date().toISOString()
+//     });
+//   } catch (error) {
+//     console.error('Error submitting contact form:', error);
+//     throw new Error('Failed to submit contact form');
+//   }
+// };
+
+// /**
+//  * Submit an application form to Firestore
+//  * @param formData - Application form data
+//  * @returns Promise<void>
+//  */
+// export const submitApplicationForm = async (formData: ApplicationFormData): Promise<void> => {
+//   try {
+//     await addDoc(collection(db, 'applications'), {
+//       ...formData,
+//       submittedAt: new Date().toISOString()
+//     });
+//   } catch (error) {
+//     console.error('Error submitting application form:', error);
+//     throw new Error('Failed to submit application form');
+//   }
+// };
+
+// /**
+//  * Generic function to submit any form data to a specified collection
+//  * @param collectionName - Firestore collection name
+//  * @param formData - Form data object
+//  * @returns Promise<string> - Document ID
+//  */
+// export const submitFormData = async (
+//   collectionName: string, 
+//   formData: Record<string, any>
+// ): Promise<string> => {
+//   try {
+//     const docRef = await addDoc(collection(db, collectionName), {
+//       ...formData,
+//       submittedAt: new Date().toISOString()
+//     });
+//     return docRef.id;
+//   } catch (error) {
+//     console.error(`Error submitting to ${collectionName}:`, error);
+//     throw new Error(`Failed to submit to ${collectionName}`);
+//   }
+// };
+
+// /**
+//  * Submit application with custom document ID (applicationId as document ID)
+//  * This allows using the applicationId as the primary key in Firestore
+//  * 
+//  * Firestore structure:
+//  * applications/
+//  *   └── {applicationId}/
+//  *       ├── applicationId: string
+//  *       ├── countryCode: string
+//  *       ├── countryName: string
+//  *       ├── fullName: string
+//  *       ├── email: string
+//  *       ├── phoneNumber: string
+//  *       ├── age: string
+//  *       ├── country: string
+//  *       ├── city: string
+//  *       ├── submittedAt: string
+//  *       ├── status: string
+//  *       └── source: string
+//  * 
+//  * @param formData - Application form data with applicationId
+//  * @returns Promise<string> - Document ID (applicationId)
+//  */
+// export const submitApplicationWithCustomId = async (
+//   formData: Record<string, any>
+// ): Promise<string> => {
+//   try {
+//     const applicationId = formData.applicationId;
+    
+//     if (!applicationId) {
+//       throw new Error('Application ID is required');
+//     }
+
+//     // Use setDoc with the applicationId as the document ID
+//     const docRef = doc(db, 'applications', applicationId);
+//     await setDoc(docRef, {
+//       ...formData,
+//       submittedAt: formData.submittedAt || new Date().toISOString()
+//     });
+    
+//     return applicationId;
+//   } catch (error) {
+//     console.error('Error submitting application:', error);
+//     throw new Error('Failed to submit application');
+//   }
+// };
+
+
+// export const submitPartnerForm = async (formData: PartnerFormData): Promise<string> => {
+//   try {
+//     const docRef = await addDoc(collection(db, 'partners'), {
+//       ...formData,
+//       submittedAt: new Date().toISOString(),
+//       status: 'pending' // For admin tracking
+//     });
+//     return docRef.id;
+//   } catch (error) {
+//     console.error('Error submitting partner form:', error);
+//     throw new Error('Failed to submit partnership request');
+//   }
+// };
+
+
+// // ============================================
+// // COUNTRY MANAGEMENT FUNCTIONS
+// // ============================================
+
+// /**
+//  * Firestore structure for countries:
+//  * countries/
+//  *   └── {slug}/
+//  *       ├── id: string
+//  *       ├── name: string
+//  *       ├── slug: string (used as document ID)
+//  *       ├── flag: string
+//  *       ├── heroImage: string
+//  *       ├── galleryImages: string[]
+//  *       ├── availableCourses: string[]
+//  *       ├── overview: object
+//  *       ├── stats: object
+//  *       ├── whyStudyHere: object
+//  *       ├── topUniversities: array
+//  *       ├── programs: array
+//  *       ├── costs: object
+//  *       ├── eligibility: object
+//  *       ├── intakes: object
+//  *       ├── visa: object
+//  *       ├── accommodation: object
+//  *       ├── livingInfo: object
+//  *       ├── workOpportunities: object
+//  *       ├── recognitions: string[]
+//  *       ├── careerProspects: object
+//  *       ├── highlights: array
+//  *       ├── advantages: string[]
+//  *       └── medicalLicensing: object
+//  */
+
+// /**
+//  * Get a single country by slug
+//  * @param slug - Country slug (e.g., 'georgia', 'philippines')
+//  * @returns Promise<CountryDetailedInfo | null>
+//  */
+// export const getCountryBySlug = async (slug: string): Promise<CountryDetailedInfo | null> => {
+//   try {
+//     const docRef = doc(db, 'countries', slug);
+//     const docSnap = await getDoc(docRef);
+    
+//     if (docSnap.exists()) {
+//       return docSnap.data() as CountryDetailedInfo;
+//     }
+    
+//     return null;
+//   } catch (error) {
+//     console.error('Error fetching country:', error);
+//     throw new Error('Failed to fetch country data');
+//   }
+// };
+
+// /**
+//  * Get all countries
+//  * @returns Promise<CountryDetailedInfo[]>
+//  */
+// export const getAllCountries = async (): Promise<CountryDetailedInfo[]> => {
+//   try {
+//     const querySnapshot = await getDocs(collection(db, 'screens'));
+//     const countries: CountryDetailedInfo[] = [];
+    
+//     querySnapshot.forEach((doc) => {
+//       countries.push(doc.data() as CountryDetailedInfo);
+//     });
+    
+//     return countries;
+//   } catch (error) {
+//     console.error('Error fetching countries:', error);
+//     throw new Error('Failed to fetch countries');
+//   }
+// };
+
+// /**
+//  * Add or update a country (uses slug as document ID)
+//  * @param countryData - Complete country information
+//  * @returns Promise<string> - Document ID (slug)
+//  */
+// export const addOrUpdateCountry = async (countryData: CountryDetailedInfo): Promise<string> => {
+//   try {
+//     const slug = countryData.slug;
+    
+//     if (!slug) {
+//       throw new Error('Country slug is required');
+//     }
+
+//     // Use setDoc with slug as document ID
+//     const docRef = doc(db, 'countries', slug);
+//     await setDoc(docRef, countryData);
+    
+//     return slug;
+//   } catch (error) {
+//     console.error('Error adding/updating country:', error);
+//     throw new Error('Failed to add/update country');
+//   }
+// };
+
+// /**
+//  * Update specific fields of a country
+//  * @param slug - Country slug
+//  * @param updates - Partial country data to update
+//  * @returns Promise<void>
+//  */
+// export const updateCountry = async (
+//   slug: string, 
+//   updates: Partial<CountryDetailedInfo>
+// ): Promise<void> => {
+//   try {
+//     const docRef = doc(db, 'countries', slug);
+//     await updateDoc(docRef, updates as any);
+//   } catch (error) {
+//     console.error('Error updating country:', error);
+//     throw new Error('Failed to update country');
+//   }
+// };
+
+// /**
+//  * Delete a country
+//  * @param slug - Country slug
+//  * @returns Promise<void>
+//  */
+// export const deleteCountry = async (slug: string): Promise<void> => {
+//   try {
+//     const docRef = doc(db, 'countries', slug);
+//     await deleteDoc(docRef);
+//   } catch (error) {
+//     console.error('Error deleting country:', error);
+//     throw new Error('Failed to delete country');
+//   }
+// };
+
+// /**
+//  * Check if a country exists
+//  * @param slug - Country slug
+//  * @returns Promise<boolean>
+//  */
+// export const countryExists = async (slug: string): Promise<boolean> => {
+//   try {
+//     const docRef = doc(db, 'countries', slug);
+//     const docSnap = await getDoc(docRef);
+//     return docSnap.exists();
+//   } catch (error) {
+//     console.error('Error checking country existence:', error);
+//     return false;
+//   }
+// };
+
+// /**
+//  * Get featured countries (for homepage)
+//  * You can add a 'featured' field to country data to filter
+//  * @returns Promise<CountryDetailedInfo[]>
+//  */
+// export const getFeaturedCountries = async (): Promise<CountryDetailedInfo[]> => {
+//   try {
+//     // For now, returns all countries
+//     // In future, you can add a 'featured: boolean' field and query by it
+//     return await getAllCountries();
+//   } catch (error) {
+//     console.error('Error fetching featured countries:', error);
+//     throw new Error('Failed to fetch featured countries');
+//   }
+// };
 import { 
   collection, 
   addDoc, 
@@ -6,12 +305,15 @@ import {
   getDoc, 
   getDocs,
   query,
-  where 
+  where,
+  deleteDoc,
+  updateDoc 
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import type { ContactFormData, ApplicationFormData ,PartnerFormData} from '../types';
-
-
+import type { ContactFormData, ApplicationFormData, PartnerFormData } from '../types';
+import type { CountryDetailedInfo } from '../app/data/countryData';
+import { cleanCountryImages ,cleanUniversityImages,cleanImageUrl,cleanImageUrls} from '@/imageUtils';
+import type { University } from '@/app/data/universityData';
 /**
  * Submit a contact form to Firestore
  * @param formData - Contact form data
@@ -115,271 +417,6 @@ export const submitApplicationWithCustomId = async (
   }
 };
 
-// ============================================
-// COUNTRY DATA SERVICES
-// ============================================
-
-export interface CountryInfo {
-  id?: string;
-  name: string;
-  slug: string;
-  flag: string;
-  heroImage: string;
-  galleryImages: string[];
-  tagline: string;
-  description: string;
-  color: string;
-  stats: {
-    universities: string;
-    programs: string;
-    intlStudents: string;
-    globalRank: string;
-  };
-  highlights: { title: string; desc: string }[];
-  popularPrograms: string[];
-  topUniversities: string[];
-  topCities: string[];
-  requirements: string[];
-  intakes: string[];
-  tuitionRange: string;
-  livingCost: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-/**
- * Fetch all countries from Firestore
- * 
- * Firestore structure:
- * countries/
- *   └── {countrySlug}/
- *       ├── name: string
- *       ├── slug: string
- *       ├── flag: string
- *       ├── heroImage: string
- *       ├── galleryImages: string[]
- *       ├── tagline: string
- *       ├── description: string
- *       ├── color: string
- *       ├── stats: object
- *       ├── highlights: array
- *       ├── popularPrograms: string[]
- *       ├── topUniversities: string[]
- *       ├── topCities: string[]
- *       ├── requirements: string[]
- *       ├── intakes: string[]
- *       ├── tuitionRange: string
- *       ├── livingCost: string
- *       ├── createdAt: string
- *       └── updatedAt: string
- * 
- * @returns Promise<Record<string, CountryInfo>> - Object with country slugs as keys
- */
-export const getAllCountries = async (): Promise<Record<string, CountryInfo>> => {
-  try {
-    const countriesRef = collection(db, 'countries');
-    const querySnapshot = await getDocs(countriesRef);
-    
-    const countries: Record<string, CountryInfo> = {};
-    
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as CountryInfo;
-      countries[doc.id] = {
-        ...data,
-        id: doc.id
-      };
-    });
-    
-    return countries;
-  } catch (error) {
-    console.error('Error fetching countries:', error);
-    throw new Error('Failed to fetch countries');
-  }
-};
-
-/**
- * Fetch a single country by slug from Firestore
- * @param slug - Country slug (e.g., 'canada', 'australia')
- * @returns Promise<CountryInfo | null> - Country data or null if not found
- */
-export const getCountryBySlug = async (slug: string): Promise<CountryInfo | null> => {
-  try {
-    const countryRef = doc(db, 'countries', slug);
-    const countryDoc = await getDoc(countryRef);
-    
-    if (countryDoc.exists()) {
-      return {
-        ...countryDoc.data() as CountryInfo,
-        id: countryDoc.id
-      };
-    }
-    
-    return null;
-  } catch (error) {
-    console.error(`Error fetching country ${slug}:`, error);
-    throw new Error(`Failed to fetch country ${slug}`);
-  }
-};
-
-/**
- * Add or update a country in Firestore
- * @param slug - Country slug (used as document ID)
- * @param countryData - Country information
- * @returns Promise<void>
- */
-export const saveCountry = async (
-  slug: string, 
-  countryData: Omit<CountryInfo, 'id' | 'createdAt' | 'updatedAt'>
-): Promise<void> => {
-  try {
-    const countryRef = doc(db, 'countries', slug);
-    const existingDoc = await getDoc(countryRef);
-    
-    const timestamp = new Date().toISOString();
-    
-    await setDoc(countryRef, {
-      ...countryData,
-      updatedAt: timestamp,
-      ...(existingDoc.exists() ? {} : { createdAt: timestamp })
-    });
-  } catch (error) {
-    console.error(`Error saving country ${slug}:`, error);
-    throw new Error(`Failed to save country ${slug}`);
-  }
-};
-
-// ============================================
-// UNIVERSITY DATA SERVICES
-// ============================================
-
-export interface UniversityInfo {
-  id?: string;
-  name: string;
-  slug: string;
-  countrySlug: string;
-  city: string;
-  establishedYear: number;
-  nmcApproved: boolean;
-  overview: string;
-  fees: {
-    tuitionPerYear: string;
-    hostelPerYear?: string;
-    totalFirstYear?: string;
-  };
-  programs: {
-    name: string;
-    duration: string;
-    degree: string;
-  }[];
-  admissionRequirements?: string[];
-  highlights?: string[];
-  campusLife?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-/**
- * Fetch all universities from Firestore
- * @returns Promise<UniversityInfo[]> - Array of all universities
- */
-export const getAllUniversities = async (): Promise<UniversityInfo[]> => {
-  try {
-    const universitiesRef = collection(db, 'universities');
-    const querySnapshot = await getDocs(universitiesRef);
-    
-    const universities: UniversityInfo[] = [];
-    
-    querySnapshot.forEach((doc) => {
-      universities.push({
-        ...doc.data() as UniversityInfo,
-        id: doc.id
-      });
-    });
-    
-    return universities;
-  } catch (error) {
-    console.error('Error fetching universities:', error);
-    throw new Error('Failed to fetch universities');
-  }
-};
-
-/**
- * Fetch universities by country slug
- * @param countrySlug - Country slug (e.g., 'russia', 'georgia')
- * @returns Promise<UniversityInfo[]> - Array of universities in that country
- */
-export const getUniversitiesByCountry = async (countrySlug: string): Promise<UniversityInfo[]> => {
-  try {
-    const universitiesRef = collection(db, 'universities');
-    const q = query(universitiesRef, where('countrySlug', '==', countrySlug));
-    const querySnapshot = await getDocs(q);
-    
-    const universities: UniversityInfo[] = [];
-    
-    querySnapshot.forEach((doc) => {
-      universities.push({
-        ...doc.data() as UniversityInfo,
-        id: doc.id
-      });
-    });
-    
-    return universities;
-  } catch (error) {
-    console.error(`Error fetching universities for ${countrySlug}:`, error);
-    throw new Error(`Failed to fetch universities for ${countrySlug}`);
-  }
-};
-
-/**
- * Fetch a single university by slug
- * @param slug - University slug
- * @returns Promise<UniversityInfo | null> - University data or null if not found
- */
-export const getUniversityBySlug = async (slug: string): Promise<UniversityInfo | null> => {
-  try {
-    const universityRef = doc(db, 'universities', slug);
-    const universityDoc = await getDoc(universityRef);
-    
-    if (universityDoc.exists()) {
-      return {
-        ...universityDoc.data() as UniversityInfo,
-        id: universityDoc.id
-      };
-    }
-    
-    return null;
-  } catch (error) {
-    console.error(`Error fetching university ${slug}:`, error);
-    throw new Error(`Failed to fetch university ${slug}`);
-  }
-};
-
-/**
- * Add or update a university in Firestore
- * @param slug - University slug (used as document ID)
- * @param universityData - University information
- * @returns Promise<void>
- */
-export const saveUniversity = async (
-  slug: string,
-  universityData: Omit<UniversityInfo, 'id' | 'createdAt' | 'updatedAt'>
-): Promise<void> => {
-  try {
-    const universityRef = doc(db, 'universities', slug);
-    const existingDoc = await getDoc(universityRef);
-    
-    const timestamp = new Date().toISOString();
-    
-    await setDoc(universityRef, {
-      ...universityData,
-      updatedAt: timestamp,
-      ...(existingDoc.exists() ? {} : { createdAt: timestamp })
-    });
-  } catch (error) {
-    console.error(`Error saving university ${slug}:`, error);
-    throw new Error(`Failed to save university ${slug}`);
-  }
-};
 
 export const submitPartnerForm = async (formData: PartnerFormData): Promise<string> => {
   try {
@@ -394,3 +431,338 @@ export const submitPartnerForm = async (formData: PartnerFormData): Promise<stri
     throw new Error('Failed to submit partnership request');
   }
 };
+
+
+// ============================================
+// SCREEN/COUNTRY MANAGEMENT FUNCTIONS
+// COLLECTION: screens (not countries!)
+// ============================================
+
+/**
+ * Firestore structure for screens:
+ * screens/
+ *   └── {slug}/               ← Document ID is the slug
+ *       ├── id: string         (same as slug)
+ *       ├── name: string
+ *       ├── slug: string
+ *       ├── flag: string
+ *       ├── heroImage: string
+ *       ├── galleryImages: string[]
+ *       ├── availableCourses: string[]
+ *       ├── overview: object
+ *       ├── stats: object
+ *       ├── whyStudyHere: object
+ *       ├── topUniversities: array
+ *       ├── programs: array
+ *       ├── costs: object
+ *       ├── eligibility: object
+ *       ├── intakes: object
+ *       ├── visa: object
+ *       ├── accommodation: object
+ *       ├── livingInfo: object
+ *       ├── workOpportunities: object
+ *       ├── recognitions: string[]
+ *       ├── careerProspects: object
+ *       ├── highlights: array
+ *       ├── advantages: string[]
+ *       └── medicalLicensing: object
+ */
+
+/**
+ * Get a single country/screen by slug
+ * @param slug - Country slug (e.g., 'georgia', 'philippines')
+ * @returns Promise<CountryDetailedInfo | null>
+ */
+export const getCountryBySlug = async (slug: string): Promise<CountryDetailedInfo | null> => {
+  try {
+    // FIXED: Fetch from 'screens' collection, not 'countries'
+    const docRef = doc(db, 'screens', slug);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      const data = docSnap.data() as CountryDetailedInfo;
+      // Ensure id and slug are set
+      return {
+        ...data,
+        id: docSnap.id,
+        slug: docSnap.id
+      };
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Error fetching country:', error);
+    throw new Error('Failed to fetch country data');
+  }
+};
+
+/**
+ * Get all countries/screens
+ * @returns Promise<CountryDetailedInfo[]>
+ */
+export const getAllCountries = async (): Promise<CountryDetailedInfo[]> => {
+  try {
+    // FIXED: Removed typo 'screenss' -> 'screens'
+    const querySnapshot = await getDocs(collection(db, 'screens'));
+    const countries: CountryDetailedInfo[] = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as CountryDetailedInfo;
+      countries.push({
+        ...data,
+        id: doc.id,
+        slug: doc.id
+      });
+    });
+    
+    return countries;
+  } catch (error) {
+    console.error('Error fetching countries:', error);
+    throw new Error('Failed to fetch countries');
+  }
+};
+
+/**
+ * Get all country slugs (for static generation)
+ * @returns Promise<string[]>
+ */
+export const getAllCountrySlugs = async (): Promise<string[]> => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'screens'));
+    return querySnapshot.docs.map(doc => doc.id);
+  } catch (error) {
+    console.error('Error fetching country slugs:', error);
+    return [];
+  }
+};
+
+/**
+ * Add or update a country/screen (uses slug as document ID)
+ * @param countryData - Complete country information
+ * @returns Promise<string> - Document ID (slug)
+ */
+export const addOrUpdateCountry = async (countryData: CountryDetailedInfo): Promise<string> => {
+  try {
+    const slug = countryData.slug;
+    
+    if (!slug) {
+      throw new Error('Country slug is required');
+    }
+
+    // FIXED: Save to 'screens' collection, not 'countries'
+    // Use setDoc with slug as document ID
+    const docRef = doc(db, 'screens', slug);
+    
+    // Remove 'id' from data since document ID is the slug
+    const { id, ...dataToSave } = countryData;
+    
+    await setDoc(docRef, dataToSave);
+    
+    return slug;
+  } catch (error) {
+    console.error('Error adding/updating country:', error);
+    throw new Error('Failed to add/update country');
+  }
+};
+
+/**
+ * Update specific fields of a country/screen
+ * @param slug - Country slug
+ * @param updates - Partial country data to update
+ * @returns Promise<void>
+ */
+export const updateCountry = async (
+  slug: string, 
+  updates: Partial<CountryDetailedInfo>
+): Promise<void> => {
+  try {
+    // FIXED: Update in 'screens' collection
+    const docRef = doc(db, 'screens', slug);
+    await updateDoc(docRef, updates as any);
+  } catch (error) {
+    console.error('Error updating country:', error);
+    throw new Error('Failed to update country');
+  }
+};
+
+/**
+ * Delete a country/screen
+ * @param slug - Country slug
+ * @returns Promise<void>
+ */
+export const deleteCountry = async (slug: string): Promise<void> => {
+  try {
+    // FIXED: Delete from 'screens' collection
+    const docRef = doc(db, 'screens', slug);
+    await deleteDoc(docRef);
+  } catch (error) {
+    console.error('Error deleting country:', error);
+    throw new Error('Failed to delete country');
+  }
+};
+
+/**
+ * Check if a country/screen exists
+ * @param slug - Country slug
+ * @returns Promise<boolean>
+ */
+export const countryExists = async (slug: string): Promise<boolean> => {
+  try {
+    // FIXED: Check in 'screens' collection
+    const docRef = doc(db, 'screens', slug);
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists();
+  } catch (error) {
+    console.error('Error checking country existence:', error);
+    return false;
+  }
+};
+
+/**
+ * Get featured countries (for homepage)
+ * You can add a 'featured' field to country data to filter
+ * @returns Promise<CountryDetailedInfo[]>
+ */
+export const getFeaturedCountries = async (): Promise<CountryDetailedInfo[]> => {
+  try {
+    // For now, returns all countries
+    // In future, you can add a 'featured: boolean' field and query by it
+    return await getAllCountries();
+  } catch (error) {
+    console.error('Error fetching featured countries:', error);
+    throw new Error('Failed to fetch featured countries');
+  }
+};
+// ============================================
+// DATABASE SERVICES
+// File: services/dbServices.ts
+// Firestore operations for Countries & Universities
+// ============================================
+
+
+
+// ============================================
+// COUNTRY SERVICES
+// ============================================
+
+/**
+ * Get country data by slug from Firestore
+ * Collection: screens -> Document: country-{slug}
+ */
+
+
+// ============================================
+// UNIVERSITY SERVICES
+// ============================================
+
+/**
+ * Get university data by slug from Firestore
+ * Collection: universities -> Document: {slug}
+ * Example: universities/kazan-federal-university
+ */
+export async function getUniversityBySlug(slug: string): Promise<University | null> {
+  try {
+    const docRef = doc(db, 'universities', slug);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      const data = { ...docSnap.data(), id: docSnap.id } as University;
+      // Clean image URLs to remove trailing spaces and control characters
+      return cleanUniversityImages(data);
+    }
+    return null;
+  } catch (error) {
+    console.error(`Error fetching university ${slug}:`, error);
+    return null;
+  }
+}
+
+/**
+ * Get all university slugs for static generation
+ */
+export async function getAllUniversitySlugs(): Promise<string[]> {
+  try {
+    const universitiesRef = collection(db, 'universities');
+    const querySnapshot = await getDocs(universitiesRef);
+    
+    const slugs: string[] = [];
+    querySnapshot.forEach((doc) => {
+      slugs.push(doc.id); // Document ID is the slug
+    });
+    
+    return slugs;
+  } catch (error) {
+    console.error('Error fetching university slugs:', error);
+    return [];
+  }
+}
+
+/**
+ * Get all universities data
+ */
+export async function getAllUniversities(): Promise<University[]> {
+  try {
+    const universitiesRef = collection(db, 'universities');
+    const querySnapshot = await getDocs(universitiesRef);
+    
+    const universities: University[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = { ...doc.data(), id: doc.id } as University;
+      // Clean image URLs
+      universities.push(cleanUniversityImages(data));
+    });
+    
+    return universities;
+  } catch (error) {
+    console.error('Error fetching all universities:', error);
+    return [];
+  }
+}
+
+/**
+ * Get universities by country slug
+ */
+export async function getUniversitiesByCountry(countrySlug: string): Promise<University[]> {
+  try {
+    const universitiesRef = collection(db, 'universities');
+    const q = query(universitiesRef, where('countrySlug', '==', countrySlug));
+    const querySnapshot = await getDocs(q);
+    
+    const universities: University[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = { ...doc.data(), id: doc.id } as University;
+      // Clean image URLs
+      universities.push(cleanUniversityImages(data));
+    });
+    
+    return universities;
+  } catch (error) {
+    console.error(`Error fetching universities for ${countrySlug}:`, error);
+    return [];
+  }
+}
+
+/**
+ * Get universities by program category
+ */
+export async function getUniversitiesByCategory(category: string): Promise<University[]> {
+  try {
+    const universitiesRef = collection(db, 'universities');
+    const querySnapshot = await getDocs(universitiesRef);
+    
+    const universities: University[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as University;
+      // Check if any program matches the category
+      const hasCategory = data.programs?.some(p => p.category === category);
+      if (hasCategory) {
+        universities.push({ ...data, id: doc.id });
+      }
+    });
+    
+    return universities;
+  } catch (error) {
+    console.error(`Error fetching universities for category ${category}:`, error);
+    return [];
+  }
+}

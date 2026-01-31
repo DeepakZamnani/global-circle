@@ -45,6 +45,7 @@ import { notFound } from 'next/navigation';
 import CountryPage from './CountryPage';           // adjust path as needed
 import * as countryData from '../data/countryData'; // adjust path as needed
 
+import { getCountryBySlug, getAllCountrySlugs } from '@/services/dbServices';
 // ============================================
 // DYNAMIC COUNTRY PAGE ROUTE
 // /destinations/[country]
@@ -80,14 +81,19 @@ export async function generateMetadata({ params }: { params: { country: string }
 }
 
 // Page Component
-export default function DestinationPage({ params }: { params: { country: string } }) {
-  const countrySlug = params.country.toLowerCase();
-  const country = countryData.comprehensiveCountryData[countrySlug];
-
-  if (!country) {
+export default async function DestinationPage({ 
+  params 
+}: { 
+  params: Promise<{ country: string }> 
+}) {
+  const { country } = await params;
+  
+  // FIXED: Fetch from Firestore instead of static data
+  const countryData = await getCountryBySlug(country);
+  
+  if (!countryData) {
     notFound();
   }
 
-  // Pass the country slug to the CountryPage component
-  return <CountryPage countrySlug={countrySlug} />;
+  return <CountryPage countrySlug={country} countryData={countryData} />;
 }
