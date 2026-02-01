@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/contact/page.jsx"  ],
+, "app/contact/page.jsx", "app/components/Hero.jsx", "app/components/FilteredCountries.jsx", "app/components/Hero.jsx"  ],
   "exclude": ["node_modules"]
 }

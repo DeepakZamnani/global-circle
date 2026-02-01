@@ -2,7 +2,6 @@ import CountryPage from '../../components/CountryPage';
 import { getCountryBySlug, getAllCountrySlugs } from '@/services/dbServices';
 import { notFound } from 'next/navigation';
 
-import { comprehensiveCountryData } from '@/app/data/countryData';
 // ============================================
 // DYNAMIC COUNTRY PAGE ROUTE
 // File: app/destinations/[country]/page.tsx

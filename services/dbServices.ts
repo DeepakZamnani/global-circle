@@ -766,3 +766,34 @@ export async function getUniversitiesByCategory(category: string): Promise<Unive
     return [];
   }
 }
+// Additions to dbServices.ts (add these functions at the end)
+
+// Get unique available courses across all countries
+export async function getUniqueCourses(): Promise<string[]> {
+  try {
+    const countries = await getAllCountries();
+    const courseSet = new Set<string>();
+    countries.forEach((country) => {
+      country.availableCourses?.forEach((course) => {
+        courseSet.add(course.trim());
+      });
+    });
+    return Array.from(courseSet).sort();
+  } catch (error) {
+    console.error('Error fetching unique courses:', error);
+    return [];
+  }
+}
+
+// Get countries that offer a specific course
+export async function getCountriesByCourse(course: string): Promise<CountryDetailedInfo[]> {
+  try {
+    const countries = await getAllCountries();
+    return countries.filter((country) => 
+      country.availableCourses?.some((c) => c.trim() === course.trim())
+    );
+  } catch (error) {
+    console.error('Error fetching countries by course:', error);
+    return [];
+  }
+}
