@@ -3578,7 +3578,7 @@ useEffect(() => {
               letterSpacing: '1.5px',
               textTransform: 'uppercase'
             }}>
-              Study MBBS in {country.name}
+              Study  in {country.name}
             </span>
           </div>
 
@@ -3947,7 +3947,7 @@ Copy
           </section>
 
           {/* Key Advantages - Mix of CURVED and SHARP */}
-          countryData.whyStudyHere.title != null ? <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
+           <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
             <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
               <div className="section-label">
                 <div className="section-label-line" />
@@ -4625,7 +4625,6 @@ Copy
       )}
 
       {/* UNIVERSITIES TAB CONTENT */}
-      // ============================================
 
 
 {activeTab === 'universities' && (
@@ -5047,7 +5046,7 @@ Copy
             maxWidth: '600px',
             margin: '0 auto 48px'
           }}>
-            Schedule a consultation with our expert counselors for personalized guidance on studying MBBS in {country.name}
+            Schedule a consultation with our expert counselors for personalized guidance on studying in {country.name}
           </p>
 
           <div style={{
