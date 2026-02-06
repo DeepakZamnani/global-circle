@@ -1721,6 +1721,7 @@ import Link from 'next/link';
 import { submitPartnerForm } from '@/services/dbServices';
 import type { PartnerFormData, Message } from '@/types';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 // ============================================
 // PARTNER WITH US PAGE
@@ -3281,6 +3282,7 @@ export default function PartnerPage() {
           }
         }
       `}</style>
+      <Footer/>
     </>
   );
 }

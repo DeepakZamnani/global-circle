@@ -164,6 +164,9 @@ export default function Home() {
                 countries={filteredCountries}
                 selectedCourse={selectedCourse}
               />
+              <ProgramsSection />
+          <DestinationsSection />
+          <Footer />
             </>
           )}
         </>

@@ -560,6 +560,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 // ============================================
 // CONTACT PAGE - Compact with Location Box
@@ -1227,6 +1228,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

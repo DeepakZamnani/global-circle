@@ -799,3 +799,249 @@ export async function getCountriesByCourse(course: string): Promise<CountryDetai
 }
 
 
+
+// Add these functions to your existing dbServices.ts file
+
+// ============================================
+// REGION-BASED COUNTRY FUNCTIONS
+// ============================================
+
+import {  RegionConfig } from '@/app/data/countryData';
+
+/**
+ * Get countries organized by their regions
+ * Returns a Map with region name as key and array of countries as value
+ * @returns Promise<Map<string, CountryDetailedInfo[]>>
+ */
+export async function getCountriesByRegions(): Promise<Map<string, CountryDetailedInfo[]>> {
+  try {
+    const allCountries = await getAllCountries();
+    const regionMap = new Map<string, CountryDetailedInfo[]>();
+    
+    // Group countries by region
+    allCountries.forEach((country) => {
+      const regionName = country.region || 'Other Destinations';
+      
+      if (!regionMap.has(regionName)) {
+        regionMap.set(regionName, []);
+      }
+      
+      regionMap.get(regionName)!.push(country);
+    });
+    
+    // Sort countries within each region by displayOrder (if available)
+    regionMap.forEach((countries, region) => {
+      countries.sort((a, b) => {
+        const orderA = a.regionDisplayOrder ?? 999;
+        const orderB = b.regionDisplayOrder ?? 999;
+        return orderA - orderB;
+      });
+    });
+    
+    return regionMap;
+  } catch (error) {
+    console.error('Error fetching countries by regions:', error);
+    throw new Error('Failed to fetch countries by regions');
+  }
+}
+
+/**
+ * Get countries for a specific region
+ * @param regionName - Name of the region
+ * @returns Promise<CountryDetailedInfo[]>
+ */
+export async function getCountriesByRegion(regionName: string): Promise<CountryDetailedInfo[]> {
+  try {
+    const allCountries = await getAllCountries();
+    
+    // Filter countries by region
+    const regionCountries = allCountries.filter(
+      (country) => country.region === regionName
+    );
+    
+    // Sort by display order
+    regionCountries.sort((a, b) => {
+      const orderA = a.regionDisplayOrder ?? 999;
+      const orderB = b.regionDisplayOrder ?? 999;
+      return orderA - orderB;
+    });
+    
+    return regionCountries;
+  } catch (error) {
+    console.error(`Error fetching countries for region ${regionName}:`, error);
+    throw new Error('Failed to fetch countries for region');
+  }
+}
+
+/**
+ * Get organized region data for destinations page
+ * Returns data in format ready for the destinations page
+ * @returns Promise<Record<string, RegionData>>
+ */
+export interface RegionData {
+  description: string;
+  color: string;
+  countries: CountryCard[];
+}
+
+export interface CountryCard {
+  name: string;
+  slug: string;
+  flag: string;
+  universities: string;
+  image: string;
+}
+
+export async function getOrganizedDestinations(): Promise<Record<string, RegionData>> {
+  try {
+    // Get all countries grouped by region
+    const regionMap = await getCountriesByRegions();
+    
+    // Get region configurations (you can optionally fetch from Firebase)
+    const regionConfigs = getDefaultRegionConfigs();
+    
+    const organizedData: Record<string, RegionData> = {};
+    
+    // Organize data for each region
+    regionMap.forEach((countries, regionName) => {
+      const config = regionConfigs[regionName] || {
+        description: 'Explore education opportunities in this region',
+        color: '#64748B'
+      };
+      
+      organizedData[regionName] = {
+        description: config.description,
+        color: config.color,
+        countries: countries.map((country) => ({
+          name: country.name,
+          slug: country.slug,
+          flag: country.flag,
+          universities: country.stats.totalUniversities,
+          image: country.heroImage
+        }))
+      };
+    });
+    
+    return organizedData;
+  } catch (error) {
+    console.error('Error organizing destinations:', error);
+    throw new Error('Failed to organize destinations');
+  }
+}
+
+/**
+ * Default region configurations
+ * Can be moved to Firebase collection 'regions' for dynamic management
+ */
+function getDefaultRegionConfigs(): Record<string, { description: string; color: string }> {
+  return {
+    'Popular Destinations': {
+      description: 'Most preferred affordable & NMC-approved destinations for Indian students in 2025-2026',
+      color: '#FF6B35'
+    },
+    'South Asia & Nearby': {
+      description: 'Proximate options with cultural similarity, direct NMC recognition & affordable fees',
+      color: '#2EC4B6'
+    },
+    'Eastern & Central Europe': {
+      description: 'European-standard MBBS with good clinical exposure & growing popularity',
+      color: '#8B5CF6'
+    },
+    'Western Europe': {
+      description: 'Premium education with world-class infrastructure and research opportunities',
+      color: '#3B82F6'
+    },
+    'North America': {
+      description: 'Top-tier universities with global recognition and diverse opportunities',
+      color: '#10B981'
+    },
+    'Other Destinations': {
+      description: 'Emerging & specialized options with NMC recognition & varied benefits',
+      color: '#64748B'
+    }
+  };
+}
+
+// ============================================
+// OPTIONAL: FIREBASE REGION CONFIG MANAGEMENT
+// If you want to store region configs in Firebase
+// ============================================
+
+/**
+ * Get region configurations from Firebase
+ * Collection: regions
+ * @returns Promise<Record<string, RegionConfig>>
+ */
+export async function getRegionConfigs(): Promise<Record<string, { description: string; color: string; displayOrder: number }>> {
+  try {
+    const regionsRef = collection(db, 'regions');
+    const querySnapshot = await getDocs(regionsRef);
+    
+    const configs: Record<string, { description: string; color: string; displayOrder: number }> = {};
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      configs[doc.id] = {
+        description: data.description || '',
+        color: data.color || '#64748B',
+        displayOrder: data.displayOrder || 999
+      };
+    });
+    
+    // If no configs in Firebase, return defaults
+    if (Object.keys(configs).length === 0) {
+      const defaults = getDefaultRegionConfigs();
+      return Object.keys(defaults).reduce((acc, key, index) => {
+        acc[key] = { ...defaults[key], displayOrder: index };
+        return acc;
+      }, {} as Record<string, { description: string; color: string; displayOrder: number }>);
+    }
+    
+    return configs;
+  } catch (error) {
+    console.error('Error fetching region configs:', error);
+    return getDefaultRegionConfigs() as Record<string, { description: string; color: string; displayOrder: number }>;
+  }
+}
+
+/**
+ * Add or update region configuration
+ * @param regionName - Name of the region
+ * @param config - Region configuration
+ * @returns Promise<string>
+ */
+export async function addOrUpdateRegionConfig(
+  regionName: string,
+  config: { description: string; color: string; displayOrder: number }
+): Promise<string> {
+  try {
+    const docRef = doc(db, 'regions', regionName);
+    await setDoc(docRef, config);
+    return regionName;
+  } catch (error) {
+    console.error('Error adding/updating region config:', error);
+    throw new Error('Failed to add/update region config');
+  }
+}
+
+/**
+ * Get available regions from all countries
+ * @returns Promise<string[]>
+ */
+export async function getAvailableRegions(): Promise<string[]> {
+  try {
+    const allCountries = await getAllCountries();
+    const regionsSet = new Set<string>();
+    
+    allCountries.forEach((country) => {
+      if (country.region) {
+        regionsSet.add(country.region);
+      }
+    });
+    
+    return Array.from(regionsSet).sort();
+  } catch (error) {
+    console.error('Error fetching available regions:', error);
+    return [];
+  }
+}

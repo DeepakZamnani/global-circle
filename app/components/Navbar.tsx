@@ -205,16 +205,14 @@ export default function Navbar() {
           {/* Nav Links - Desktop */}
           <div className="nav-links" style={{ display: 'flex', gap: '40px', alignItems: 'center' }}>
             <Link href="/destinations" className="nav-link">Destinations</Link>
-            {/* <Link href="#" className="nav-link">Programs</Link> */}
-            <Link href="#" className="nav-link">Jobs</Link>
-            <Link href="#" className="nav-link">Forex</Link>
-            <div className="nav-dropdown">
+        
+            {/* <div className="nav-dropdown">
               <span className="nav-link" style={{ cursor: 'pointer' }}>Contact</span>
-              <div className="nav-dropdown-content">
+              <div className="nav-dropdown-content"> */}
                 <Link href="/contact" className="nav-dropdown-item">Contact</Link>
                 <Link href="/partner-with-us" className="nav-dropdown-item">Partner with Us</Link>
-              </div>
-            </div>
+              {/* </div>
+            </div> */}
           </div>
 
           {/* Right Side */}
