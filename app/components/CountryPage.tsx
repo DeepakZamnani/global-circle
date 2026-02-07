@@ -4687,7 +4687,7 @@ Copy
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
-          gap: '24px',
+          gap: '28px',
           marginTop: '48px'
         }}>
           {universities.map((uni, idx) => (
@@ -4701,295 +4701,420 @@ Copy
               }}
             >
               <div 
-                className="curved-card"
                 style={{
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
+                  background: 'white',
+                  borderRadius: '24px 24px 0 0',
+                  overflow: 'hidden',
+                  border: '1px solid #E2E8F0',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  position: 'relative'
                 }}
                 onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)';
+                  e.currentTarget.style.boxShadow = '0 24px 48px rgba(30, 58, 95, 0.12), 0 12px 24px rgba(255, 107, 53, 0.08)';
                   e.currentTarget.style.borderColor = '#FF6B35';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.12)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#E2E8F0';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.borderColor = '#E2E8F0';
                 }}
               >
-                {/* University Header */}
+                {/* Top Accent Bar - Sharp Edge */}
                 <div style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '16px',
-                  marginBottom: '20px'
-                }}>
-                  {/* Logo */}
-                  {uni.logo && (
-                    <div style={{
-                      width: '64px',
-                      height: '64px',
-                      borderRadius: '12px',
-                      overflow: 'hidden',
-                      flexShrink: 0,
-                      border: '2px solid #E2E8F0'
-                    }}>
-                      <img 
-                        src={uni.logo}
-                        alt={uni.name}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain',
-                          background: 'white'
-                        }}
-                      />
-                    </div>
-                  )}
-                  
-                  {/* Name & Type */}
-                  <div style={{ flex: 1 }}>
-                    <h3 style={{
-                      fontSize: '20px',
-                      fontWeight: '800',
-                      color: '#1E3A5F',
-                      marginBottom: '8px',
-                      letterSpacing: '-0.5px',
-                      lineHeight: '1.3'
-                    }}>
-                      {uni.name}
-                    </h3>
-                    <div style={{
-                      display: 'flex',
-                      gap: '8px',
-                      flexWrap: 'wrap'
-                    }}>
-                      <span style={{
-                        fontSize: '12px',
-                        color: '#64748B',
-                        fontWeight: '600',
-                        background: '#F1F5F9',
-                        padding: '4px 10px',
-                        borderRadius: '6px'
+                  height: '6px',
+                  background: 'linear-gradient(90deg, #1E3A5F 0%, #FF6B35 100%)',
+                  width: '100%'
+                }} />
+
+                {/* Card Content */}
+                <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  {/* University Header */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '16px',
+                    marginBottom: '24px'
+                  }}>
+                    {/* Logo with Mixed Edges */}
+                    {uni.logo && (
+                      <div style={{
+                        width: '72px',
+                        height: '72px',
+                        borderRadius: '16px 16px 0 16px',
+                        overflow: 'hidden',
+                        flexShrink: 0,
+                        border: '2px solid #E2E8F0',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
+                        background: 'white'
                       }}>
-                        {uni.universityType}
-                      </span>
-                      {uni.establishedYear && (
+                        <img 
+                          src={uni.logo}
+                          alt={uni.name}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            padding: '8px'
+                          }}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Name & Type */}
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{
+                        fontSize: '20px',
+                        fontWeight: '800',
+                        color: '#1E3A5F',
+                        marginBottom: '10px',
+                        letterSpacing: '-0.5px',
+                        lineHeight: '1.3'
+                      }}>
+                        {uni.name}
+                      </h3>
+                      <div style={{
+                        display: 'flex',
+                        gap: '8px',
+                        flexWrap: 'wrap'
+                      }}>
                         <span style={{
-                          fontSize: '12px',
-                          color: '#64748B',
-                          fontWeight: '600',
-                          background: '#F1F5F9',
-                          padding: '4px 10px',
-                          borderRadius: '6px'
+                          fontSize: '11px',
+                          color: '#1E3A5F',
+                          fontWeight: '700',
+                          background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+                          padding: '6px 12px',
+                          borderRadius: '6px 0 6px 0',
+                          letterSpacing: '0.3px',
+                          textTransform: 'uppercase',
+                          border: '1px solid #BFDBFE'
                         }}>
-                          Est. {uni.establishedYear}
+                          {uni.universityType}
                         </span>
-                      )}
+                        {uni.establishedYear && (
+                          <span style={{
+                            fontSize: '11px',
+                            color: '#92400E',
+                            fontWeight: '700',
+                            background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+                            padding: '6px 12px',
+                            borderRadius: '0 6px 0 6px',
+                            letterSpacing: '0.3px',
+                            border: '1px solid #FCD34D'
+                          }}>
+                            EST. {uni.establishedYear}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Tagline */}
-                <p style={{
-                  fontSize: '14px',
-                  color: '#475569',
-                  lineHeight: '1.6',
-                  marginBottom: '20px',
-                  fontWeight: '500'
-                }}>
-                  {uni.tagline}
-                </p>
+                  {/* Decorative Divider */}
+                  <div style={{
+                    height: '1px',
+                    background: 'linear-gradient(90deg, transparent 0%, #E2E8F0 20%, #E2E8F0 80%, transparent 100%)',
+                    marginBottom: '20px'
+                  }} />
 
-                {/* Stats Grid */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '12px',
-                  marginBottom: '20px'
-                }}>
-                  <div style={{ 
-                    background: '#F8FAFC',
-                    padding: '16px',
-                    borderRadius: '12px',
-                    border: '1px solid #E2E8F0'
-                  }}>
-                    <div style={{
-                      fontSize: '11px',
-                      color: '#64748B',
-                      fontWeight: '700',
-                      marginBottom: '6px',
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase'
-                    }}>
-                      Tuition/Year
-                    </div>
-                    <div style={{
-                      fontSize: '15px',
-                      fontWeight: '800',
-                      color: '#1E3A5F',
-                      letterSpacing: '-0.3px'
-                    }}>
-                      {uni.fees?.currency} {uni.fees?.tuitionPerYear?.toLocaleString()}
-                    </div>
-                  </div>
-                  
-                  <div style={{ 
-                    background: '#F8FAFC',
-                    padding: '16px',
-                    borderRadius: '12px',
-                    border: '1px solid #E2E8F0'
-                  }}>
-                    <div style={{
-                      fontSize: '11px',
-                      color: '#64748B',
-                      fontWeight: '700',
-                      marginBottom: '6px',
-                      letterSpacing: '0.5px',
-                      textTransform: 'uppercase'
-                    }}>
-                      {uni.programs && uni.programs[0]?.duration ? 'Duration' : 'Students'}
-                    </div>
-                    <div style={{
-                      fontSize: '15px',
-                      fontWeight: '800',
-                      color: '#1E3A5F',
-                      letterSpacing: '-0.3px'
-                    }}>
-                      {uni.programs && uni.programs[0]?.duration || uni.stats?.totalStudents?.toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Quick Stats Badges */}
-                <div style={{
-                  display: 'flex',
-                  gap: '8px',
-                  marginBottom: '20px',
-                  flexWrap: 'wrap'
-                }}>
-                  {uni.stats?.passRate && (
-                    <div style={{
-                      fontSize: '11px',
-                      color: '#10B981',
-                      fontWeight: '700',
-                      background: '#D1FAE5',
-                      padding: '6px 12px',
-                      borderRadius: '8px'
-                    }}>
-                      ✓ {uni.stats.passRate} Pass Rate
-                    </div>
-                  )}
-                  {uni.ranking?.globalRank && (
-                    <div style={{
-                      fontSize: '11px',
-                      color: '#FF6B35',
-                      fontWeight: '700',
-                      background: '#FEF3C7',
-                      padding: '6px 12px',
-                      borderRadius: '8px'
-                    }}>
-                      🏆 Top {uni.ranking.globalRank}
-                    </div>
-                  )}
-                  {uni.stats?.facultyRatio && (
-                    <div style={{
-                      fontSize: '11px',
-                      color: '#1E3A5F',
-                      fontWeight: '700',
-                      background: '#E0E7FF',
-                      padding: '6px 12px',
-                      borderRadius: '8px'
-                    }}>
-                      👥 {uni.stats.facultyRatio}
-                    </div>
-                  )}
-                </div>
-
-                {/* View Details Button */}
-                <div 
-                  style={{ 
-                    width: '100%', 
-                    padding: '16px', 
+                  {/* Tagline */}
+                  <p style={{
                     fontSize: '14px',
-                    background: '#1E3A5F',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '12px',
-                    fontWeight: '700',
-                    textAlign: 'center',
-                    transition: 'all 0.3s ease',
-                    marginTop: 'auto'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#2A4A6F';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#1E3A5F';
-                  }}
-                >
-                  View University Details →
+                    color: '#475569',
+                    lineHeight: '1.7',
+                    marginBottom: '24px',
+                    fontWeight: '500',
+                    minHeight: '42px'
+                  }}>
+                    {uni.tagline}
+                  </p>
+
+                  {/* Stats Grid - Mixed Edges */}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '12px',
+                    marginBottom: '20px'
+                  }}>
+                    <div style={{ 
+                      background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
+                      padding: '18px',
+                      borderRadius: '12px 0 12px 0',
+                      border: '1px solid #E2E8F0',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}>
+                      {/* Subtle Pattern Overlay */}
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        right: 0,
+                        width: '40px',
+                        height: '40px',
+                        background: 'linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, transparent 100%)',
+                        borderRadius: '0 0 0 40px'
+                      }} />
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#64748B',
+                        fontWeight: '700',
+                        marginBottom: '8px',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        position: 'relative'
+                      }}>
+                        Tuition/Year
+                      </div>
+                      <div style={{
+                        fontSize: '17px',
+                        fontWeight: '800',
+                        color: '#1E3A5F',
+                        letterSpacing: '-0.5px',
+                        position: 'relative'
+                      }}>
+                        {uni.fees?.currency} {uni.fees?.tuitionPerYear?.toLocaleString()}
+                      </div>
+                    </div>
+                    
+                    <div style={{ 
+                      background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+                      padding: '18px',
+                      borderRadius: '0 12px 0 12px',
+                      border: '1px solid #FCD34D',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}>
+                      <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '40px',
+                        height: '40px',
+                        background: 'linear-gradient(135deg, rgba(30, 58, 95, 0.05) 0%, transparent 100%)',
+                        borderRadius: '0 0 40px 0'
+                      }} />
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#92400E',
+                        fontWeight: '700',
+                        marginBottom: '8px',
+                        letterSpacing: '0.5px',
+                        textTransform: 'uppercase',
+                        position: 'relative'
+                      }}>
+                        {uni.programs && uni.programs[0]?.duration ? 'Duration' : 'Students'}
+                      </div>
+                      <div style={{
+                        fontSize: '17px',
+                        fontWeight: '800',
+                        color: '#92400E',
+                        letterSpacing: '-0.5px',
+                        position: 'relative'
+                      }}>
+                        {uni.programs && uni.programs[0]?.duration || uni.stats?.totalStudents?.toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Stats Badges - Mixed Edges */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    marginBottom: '24px',
+                    flexWrap: 'wrap'
+                  }}>
+                    {uni.stats?.passRate && (
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#047857',
+                        fontWeight: '700',
+                        background: 'linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)',
+                        padding: '8px 14px',
+                        borderRadius: '8px 0 8px 0',
+                        border: '1px solid #6EE7B7',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <span style={{ fontSize: '13px' }}>✓</span>
+                        <span>{uni.stats.passRate} Pass Rate</span>
+                      </div>
+                    )}
+                    {uni.ranking?.globalRank && (
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#C2410C',
+                        fontWeight: '700',
+                        background: 'linear-gradient(135deg, #FFEDD5 0%, #FED7AA 100%)',
+                        padding: '8px 14px',
+                        borderRadius: '0 8px 0 8px',
+                        border: '1px solid #FDBA74',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <span style={{ fontSize: '13px' }}>🏆</span>
+                        <span>Top {uni.ranking.globalRank}</span>
+                      </div>
+                    )}
+                    {uni.stats?.facultyRatio && (
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#1E40AF',
+                        fontWeight: '700',
+                        background: 'linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)',
+                        padding: '8px 14px',
+                        borderRadius: '8px 0 8px 0',
+                        border: '1px solid #93C5FD',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <span style={{ fontSize: '13px' }}>👥</span>
+                        <span>{uni.stats.facultyRatio}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* View Details Button - Sharp Bottom */}
+                  <div 
+                    style={{ 
+                      width: '100%', 
+                      padding: '18px', 
+                      fontSize: '14px',
+                      background: 'linear-gradient(135deg, #1E3A5F 0%, #2A4A6F 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '12px 12px 0 0',
+                      fontWeight: '700',
+                      textAlign: 'center',
+                      transition: 'all 0.3s ease',
+                      marginTop: 'auto',
+                      letterSpacing: '0.3px',
+                      textTransform: 'uppercase',
+                      boxShadow: '0 -4px 12px rgba(30, 58, 95, 0.1)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'linear-gradient(135deg, #FF6B35 0%, #FF8555 100%)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'linear-gradient(135deg, #1E3A5F 0%, #2A4A6F 100%)';
+                    }}
+                  >
+                    View University Details →
+                  </div>
                 </div>
               </div>
             </Link>
           ))}
         </div>
       ) : (
-        /* Empty State */
-        <div className="curved-card" style={{
+        // Empty State - Production Ready
+        <div style={{
           textAlign: 'center',
-          padding: '80px 40px',
-          maxWidth: '600px',
-          margin: '48px auto 0'
+          padding: '100px 40px',
+          maxWidth: '700px',
+          margin: '48px auto 0',
+          background: 'white',
+          borderRadius: '24px',
+          border: '1px solid #E2E8F0',
+          position: 'relative',
+          overflow: 'hidden'
         }}>
+          {/* Background Pattern */}
           <div style={{
-            fontSize: '48px',
-            marginBottom: '20px'
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '6px',
+            background: 'linear-gradient(90deg, #1E3A5F 0%, #FF6B35 100%)'
+          }} />
+          
+          <div style={{
+            width: '120px',
+            height: '120px',
+            margin: '0 auto 32px',
+            borderRadius: '60px 60px 0 60px',
+            background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '2px solid #BFDBFE',
+            fontSize: '56px'
           }}>
             🏛️
           </div>
+          
           <h3 style={{
-            fontSize: '24px',
+            fontSize: 'clamp(24px, 4vw, 32px)',
             fontWeight: '800',
             color: '#1E3A5F',
-            marginBottom: '12px',
-            letterSpacing: '-0.5px'
+            marginBottom: '16px',
+            letterSpacing: '-1px'
           }}>
-            University Information Coming Soon
+            Universities Coming Soon
           </h3>
+          
           <p style={{
             fontSize: '16px',
             color: '#64748B',
             fontWeight: '500',
-            lineHeight: '1.6'
+            lineHeight: '1.7',
+            marginBottom: '32px'
           }}>
-            We are compiling comprehensive details for all {country.topUniversities?.length || 0} universities in {country.name}.
+            We're currently compiling comprehensive information for {country.topUniversities?.length || 'all'} universities in {country.name}. Check back soon for detailed profiles, programs, and admission requirements.
           </p>
-          
-          {/* Debug Info (remove in production) */}
+
+          {/* Decorative Elements */}
           <div style={{
-            marginTop: '24px',
-            padding: '16px',
-            background: '#FEF3C7',
-            borderRadius: '12px',
-            fontSize: '14px',
-            color: '#92400E',
-            textAlign: 'left'
+            display: 'flex',
+            gap: '12px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
           }}>
-            <strong>Debug Info:</strong><br />
-            Country Slug: {countrySlug}<br />
-            Universities Found: {universities.length}<br />
-            Try adding universities to Firebase with countrySlug: "{countrySlug}"
+            <div style={{
+              padding: '10px 20px',
+              background: 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)',
+              borderRadius: '8px 0 8px 0',
+              fontSize: '13px',
+              color: '#475569',
+              fontWeight: '600',
+              border: '1px solid #CBD5E1'
+            }}>
+              📚 University Profiles
+            </div>
+            <div style={{
+              padding: '10px 20px',
+              background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
+              borderRadius: '0 8px 0 8px',
+              fontSize: '13px',
+              color: '#92400E',
+              fontWeight: '600',
+              border: '1px solid #FCD34D'
+            }}>
+              🎓 Program Details
+            </div>
+            <div style={{
+              padding: '10px 20px',
+              background: 'linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)',
+              borderRadius: '8px 0 8px 0',
+              fontSize: '13px',
+              color: '#1E40AF',
+              fontWeight: '600',
+              border: '1px solid #93C5FD'
+            }}>
+              📝 Admission Info
+            </div>
           </div>
         </div>
       )}
     </div>
   </section>
 )}
-
 
       {/* CTA Section - Backdrop with CURVED buttons */}
       <section style={{

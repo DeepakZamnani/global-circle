@@ -1,7 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  images: {
+    output: 'export',
+
+   images: {
     remotePatterns: [
       {
         protocol: 'https',
@@ -25,6 +27,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'c8.alamy.com',
         port: '',
         pathname: '/**',
       },

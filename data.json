@@ -1,0 +1,887 @@
+{
+"id": "nanjing-medical-university",
+"name": "Nanjing Medical University",
+"shortName": "NMU",
+"country": "China",
+"countrySlug": "china",
+"city": "Nanjing",
+"state": "Jiangsu",
+"flag": "🇨🇳",
+"establishedYear": 1934,
+"universityType": "Public",
+"logo": "https://studypage.org/wp-content/uploads/2021/01/nanjing-medical-university-main.png",
+"website": "http://www.njmu.edu.cn/",
+"heroImage": "https://c8.alamy.com/comp/TDA87E/campus-scenery-of-nanjing-medical-university-for-larger-size-or-more-photos-you-can-contact-qq-553611308-TDA87E.jpg",
+"galleryImages": [
+"https://softamo.org/wp-content/uploads/2021/02/Nanjing-Medical-University-1.jpg"
+],
+"tagline": "Among the top Chinese medical universities offering international programs",
+"ranking": {
+"globalRank": 1082,
+"countryRank": 108
+},
+"accreditations": [
+"NMC",
+"WHO",
+"MOE China"
+],
+"stats": {
+"totalStudents": 17000,
+"internationalStudents": 500,
+"indianStudents": 300,
+"facultyCount": 1470,
+"facultyRatio": "1:12",
+"campusSize": "95 hectares",
+"passRate": "36.94%"
+},
+"programs": [
+{
+"name": "MBBS",
+"category": "Medical",
+"duration": "6 years",
+"degree": "MBBS",
+"intakes": [
+"September"
+]
+}
+],
+"fees": {
+"tuitionPerYear": 4533.33,
+"hostelPerYear": 800,
+"totalFirstYear": 8333.33,
+"totalCourse": 36200,
+"currency": "USD"
+},
+"eligibility": {
+"exam": "NEET",
+"minScore": "passed",
+"minPercentage": "50%",
+"ageLimit": "17-25 years",
+"requiredDocs": [
+"Passport",
+"Marksheets",
+"NEET Scorecard",
+"12th Passing Certificate",
+"Police Clearance Certificate"
+]
+},
+"keyFeatures": [
+{
+"icon": "check",
+"label": "NMC Approved"
+},
+{
+"icon": "globe",
+"label": "International exchange programs"
+},
+{
+"icon": "hospital",
+"label": "24 affiliated hospitals"
+}
+],
+"facilities": [
+"Library",
+"Labs",
+"Hospitals",
+"Research Centers",
+"WiFi Campus"
+],
+"infrastructure": {
+"libraries": 1,
+"labs": null,
+"hospitals": 24,
+"researchCenters": null,
+"hostels": null,
+"bookCollection": null
+},
+"trainingPartners": [
+{
+"type": "Hospitals",
+"count": 74,
+"notable": [
+"Affiliated hospitals in Jiangsu",
+"Zhejiang",
+"Shandong"
+]
+}
+],
+"accommodation": {
+"available": true,
+"capacity": null,
+"costPerYear": 800,
+"features": [
+"AC Rooms",
+"Mess",
+"Laundry",
+"WiFi"
+]
+},
+"location": {
+"address": "Nanjing, Jiangsu, China",
+"nearestAirport": "Nanjing Lukou International Airport",
+"distanceKm": 42,
+"climate": "Moderate"
+},
+"whyChoose": [
+"Top medical university",
+"English-taught MBBS",
+"International partnerships with WHO",
+"High FMGE pass rate"
+],
+"highlights": [
+{
+"icon": "rank",
+"stat": "108",
+"label": "Country Rank"
+},
+{
+"icon": "students",
+"stat": "500+",
+"label": "International Students"
+},
+{
+"icon": "pass",
+"stat": "36.94%",
+"label": "FMGE Pass Rate"
+}
+],
+"placements": {
+"rate": "36.94%"
+},
+"studentLife": {
+"clubs": 20,
+"sportsAvailable": [
+"Football",
+"Basketball",
+"Cricket"
+],
+"culturalEvents": 10,
+"indianAssociation": true
+},
+"safetyRating": {
+"overall": "Excellent",
+"campusSecurity": true,
+"support247": true
+},
+"mediumOfInstruction": "English",
+"eligibleFor": [
+"FMGE",
+"USMLE",
+"PLAB"
+],
+"admissionSteps": [
+"Obtain Passport",
+"Pass NEET Exam",
+"Scan and submit documents",
+"Apostille documents",
+"Pay registration fee",
+"Apply for admission"
+]
+}
+{
+"id": "fujian-medical-university",
+"name": "Fujian Medical University",
+"shortName": "FMU",
+"country": "China",
+"countrySlug": "china",
+"city": "Fuzhou",
+"state": "Fujian",
+"flag": "🇨🇳",
+"establishedYear": 1937,
+"universityType": "Public",
+"logo": "https://studypage.org/wp-content/uploads/2020/12/fujian-medical-university-main.png",
+"website": "http://www.fjmu.edu.cn/",
+"heroImage": "https://eaziline.com/wp-content/uploads/2021/09/Fujian-1.jpg",
+"galleryImages": [
+"https://i.ytimg.com/vi/77ntBXCVPf0/maxresdefault.jpg"
+],
+"tagline": "A key provincial university with strong medical programs",
+"ranking": {
+"globalRank": null,
+"countryRank": null
+},
+"accreditations": [
+"NMC",
+"WHO"
+],
+"stats": {
+"totalStudents": 16000,
+"internationalStudents": null,
+"indianStudents": 100,
+"facultyCount": 736,
+"facultyRatio": "1:22",
+"campusSize": "876710 square meters",
+"passRate": "39.29%"
+},
+"programs": [
+{
+"name": "MBBS",
+"category": "Medical",
+"duration": "6 years",
+"degree": "MBBS",
+"intakes": [
+"September"
+]
+}
+],
+"fees": {
+"tuitionPerYear": 4666.67,
+"hostelPerYear": 533.33,
+"totalFirstYear": 8200,
+"totalCourse": 35733.35,
+"currency": "USD"
+},
+"eligibility": {
+"exam": "NEET",
+"minScore": "passed",
+"minPercentage": "50%",
+"ageLimit": "17-25 years",
+"requiredDocs": [
+"Passport",
+"Marksheets",
+"NEET Scorecard",
+"12th Passing Certificate",
+"Police Clearance Certificate"
+]
+},
+"keyFeatures": [
+{
+"icon": "check",
+"label": "NMC Approved"
+},
+{
+"icon": "hospital",
+"label": "10 affiliated hospitals"
+},
+{
+"icon": "book",
+"label": "Large library collection"
+}
+],
+"facilities": [
+"Library",
+"Labs",
+"Hospitals",
+"Sports Complex"
+],
+"infrastructure": {
+"libraries": 1,
+"labs": null,
+"hospitals": 10,
+"researchCenters": null,
+"hostels": null,
+"bookCollection": "1430000 volumes"
+},
+"trainingPartners": [
+{
+"type": "Hospitals",
+"count": 42,
+"notable": [
+"Affiliated hospitals",
+"Teaching hospitals"
+]
+}
+],
+"accommodation": {
+"available": true,
+"capacity": null,
+"costPerYear": 533.33,
+"features": [
+"AC Rooms",
+"Mess",
+"Laundry",
+"WiFi"
+]
+},
+"location": {
+"address": "Fuzhou, Fujian, China",
+"nearestAirport": "Fuzhou Changle International Airport",
+"distanceKm": 48,
+"climate": "Tropical"
+},
+"whyChoose": [
+"Key provincial university",
+"Strong in medical education",
+"International student recruitment"
+],
+"highlights": [
+{
+"icon": "students",
+"stat": "16000+",
+"label": "Total Students"
+},
+{
+"icon": "pass",
+"stat": "39.29%",
+"label": "FMGE Pass Rate"
+}
+],
+"placements": {
+"rate": "39.29%"
+},
+"studentLife": {
+"clubs": null,
+"sportsAvailable": [
+"Football",
+"Basketball",
+"Cricket"
+],
+"culturalEvents": null,
+"indianAssociation": true
+},
+"safetyRating": {
+"overall": "Excellent",
+"campusSecurity": true,
+"support247": true
+},
+"mediumOfInstruction": "English",
+"eligibleFor": [
+"FMGE",
+"USMLE",
+"PLAB"
+],
+"admissionSteps": [
+"Obtain Passport",
+"Pass NEET Exam",
+"Scan and submit documents",
+"Apostille documents",
+"Pay registration fee",
+"Apply for admission"
+]
+}
+{
+"id": "xian-jiaotong-university",
+"name": "Xi'an Jiaotong University",
+"shortName": "XJTU",
+"country": "China",
+"countrySlug": "china",
+"city": "Xi'an",
+"state": "Shaanxi",
+"flag": "🇨🇳",
+"establishedYear": 1896,
+"universityType": "Public",
+"logo": "https://studypage.org/wp-content/uploads/2020/12/xian-jiaotong-university-main.png",
+"website": "http://en.xjtu.edu.cn/",
+"heroImage": "https://i.ytimg.com/vi/_8LdxTbgS04/maxresdefault.jpg",
+"galleryImages": [
+"https://i.ytimg.com/vi/emXljcndlec/maxresdefault.jpg"
+],
+"tagline": "Elite C9 League university with strong research focus",
+"ranking": {
+"globalRank": 92,
+"countryRank": 10
+},
+"accreditations": [
+"NMC",
+"WHO",
+"Project 211",
+"Project 985"
+],
+"stats": {
+"totalStudents": 32000,
+"internationalStudents": null,
+"indianStudents": 600,
+"facultyCount": 6538,
+"facultyRatio": "1:5",
+"campusSize": "250 hectares",
+"passRate": "32.31%"
+},
+"programs": [
+{
+"name": "MBBS",
+"category": "Medical",
+"duration": "6 years",
+"degree": "MBBS",
+"intakes": [
+"September"
+]
+}
+],
+"fees": {
+"tuitionPerYear": 5333.33,
+"hostelPerYear": 1160,
+"totalFirstYear": 9493.33,
+"totalCourse": 43426.68,
+"currency": "USD"
+},
+"eligibility": {
+"exam": "NEET",
+"minScore": "passed",
+"minPercentage": "50%",
+"ageLimit": "17-25 years",
+"requiredDocs": [
+"Passport",
+"Marksheets",
+"NEET Scorecard",
+"12th Passing Certificate",
+"Police Clearance Certificate"
+]
+},
+"keyFeatures": [
+{
+"icon": "check",
+"label": "NMC Approved"
+},
+{
+"icon": "rank",
+"label": "C9 League Member"
+},
+{
+"icon": "lab",
+"label": "State key laboratories"
+}
+],
+"facilities": [
+"Library",
+"Labs",
+"Hospitals",
+"Research Centers",
+"Sports Complex",
+"WiFi Campus"
+],
+"infrastructure": {
+"libraries": 1,
+"labs": 9,
+"hospitals": 8,
+"researchCenters": null,
+"hostels": null,
+"bookCollection": "5000000+"
+},
+"trainingPartners": [
+{
+"type": "Hospitals",
+"count": 8,
+"notable": [
+"Top 100 hospitals in China"
+]
+}
+],
+"accommodation": {
+"available": true,
+"capacity": null,
+"costPerYear": 1160,
+"features": [
+"AC Rooms",
+"Mess",
+"Laundry",
+"WiFi"
+]
+},
+"location": {
+"address": "Xi'an, Shaanxi, China",
+"nearestAirport": "Xi'an Xianyang International Airport",
+"distanceKm": 42,
+"climate": "Moderate"
+},
+"whyChoose": [
+"World-class university",
+"Part of major government projects",
+"High rankings",
+"Strong in research"
+],
+"highlights": [
+{
+"icon": "rank",
+"stat": "92",
+"label": "Global Rank"
+},
+{
+"icon": "students",
+"stat": "32000+",
+"label": "Total Students"
+},
+{
+"icon": "pass",
+"stat": "32.31%",
+"label": "FMGE Pass Rate"
+}
+],
+"placements": {
+"rate": "32.31%"
+},
+"studentLife": {
+"clubs": null,
+"sportsAvailable": [
+"Football",
+"Basketball",
+"Cricket"
+],
+"culturalEvents": null,
+"indianAssociation": true
+},
+"safetyRating": {
+"overall": "Excellent",
+"campusSecurity": true,
+"support247": true
+},
+"mediumOfInstruction": "English",
+"eligibleFor": [
+"FMGE",
+"USMLE",
+"PLAB"
+],
+"admissionSteps": [
+"Obtain Passport",
+"Pass NEET Exam",
+"Scan and submit documents",
+"Apostille documents",
+"Pay registration fee",
+"Apply for admission"
+]
+}
+{
+"id": "jilin-university",
+"name": "Jilin University",
+"shortName": "JLU",
+"country": "China",
+"countrySlug": "china",
+"city": "Changchun",
+"state": "Jilin",
+"flag": "🇨🇳",
+"establishedYear": 1946,
+"universityType": "Public",
+"logo": "https://www.vhv.rs/dpng/d/577-5772990_jilin-university-seal-in-light-blue-jilin-university.png",
+"website": "http://www.jlu.edu.cn/",
+"heroImage": "https://c8.alamy.com/comp/3CM75H1/changchun-jilin-china-jilin-university-3CM75H1.jpg",
+"galleryImages": [
+"https://uknow.uky.edu/sites/default/files/styles/uknow_story_image/public/Jilin_University_logo_0.png"
+],
+"tagline": "Comprehensive national key university with high research output",
+"ranking": {
+"globalRank": 473,
+"countryRank": 15
+},
+"accreditations": [
+"NMC",
+"WHO",
+"Project 211",
+"Project 985"
+],
+"stats": {
+"totalStudents": 76619,
+"internationalStudents": null,
+"indianStudents": 150,
+"facultyCount": 6624,
+"facultyRatio": "1:12",
+"campusSize": "611 hectares",
+"passRate": "14.58%"
+},
+"programs": [
+{
+"name": "MBBS",
+"category": "Medical",
+"duration": "6 years",
+"degree": "MBBS",
+"intakes": [
+"September"
+]
+}
+],
+"fees": {
+"tuitionPerYear": 4400,
+"hostelPerYear": 800,
+"totalFirstYear": 8200,
+"totalCourse": 35733.35,
+"currency": "USD"
+},
+"eligibility": {
+"exam": "NEET",
+"minScore": "passed",
+"minPercentage": "50%",
+"ageLimit": "17-25 years",
+"requiredDocs": [
+"Passport",
+"Marksheets",
+"NEET Scorecard",
+"12th Passing Certificate",
+"Police Clearance Certificate"
+]
+},
+"keyFeatures": [
+{
+"icon": "check",
+"label": "NMC Approved"
+},
+{
+"icon": "rank",
+"label": "Double First-Class"
+},
+{
+"icon": "hospital",
+"label": "Multiple affiliated hospitals"
+}
+],
+"facilities": [
+"Library",
+"Labs",
+"Hospitals",
+"Research Centers",
+"Sports Complex",
+"WiFi Campus"
+],
+"infrastructure": {
+"libraries": null,
+"labs": null,
+"hospitals": 4,
+"researchCenters": null,
+"hostels": null,
+"bookCollection": null
+},
+"trainingPartners": [
+{
+"type": "Hospitals",
+"count": 4,
+"notable": [
+"The First Bethune Hospital",
+"The Second Hospital",
+"China-Japan Union Hospital",
+"Hospital of Stomatology"
+]
+}
+],
+"accommodation": {
+"available": true,
+"capacity": null,
+"costPerYear": 800,
+"features": [
+"AC Rooms",
+"Mess",
+"Laundry",
+"WiFi"
+]
+},
+"location": {
+"address": "Changchun, Jilin, China",
+"nearestAirport": "Changchun Longjia International Airport",
+"distanceKm": 85,
+"climate": "Moderate"
+},
+"whyChoose": [
+"Comprehensive university",
+"High research output",
+"Notable alumni",
+"Project 985 affiliation"
+],
+"highlights": [
+{
+"icon": "rank",
+"stat": "473",
+"label": "Global Rank"
+},
+{
+"icon": "students",
+"stat": "76619",
+"label": "Total Students"
+},
+{
+"icon": "pass",
+"stat": "14.58%",
+"label": "FMGE Pass Rate"
+}
+],
+"placements": {
+"rate": "14.58%"
+},
+"studentLife": {
+"clubs": null,
+"sportsAvailable": [
+"Football",
+"Basketball",
+"Cricket"
+],
+"culturalEvents": null,
+"indianAssociation": true
+},
+"safetyRating": {
+"overall": "Excellent",
+"campusSecurity": true,
+"support247": true
+},
+"mediumOfInstruction": "English",
+"eligibleFor": [
+"FMGE",
+"USMLE",
+"PLAB"
+],
+"admissionSteps": [
+"Obtain Passport",
+"Pass NEET Exam",
+"Scan and submit documents",
+"Apostille documents",
+"Pay registration fee",
+"Apply for admission"
+]
+}
+{
+"id": "jiangsu-university",
+"name": "Jiangsu University",
+"shortName": "JSU",
+"country": "China",
+"countrySlug": "china",
+"city": "Zhenjiang",
+"state": "Jiangsu",
+"flag": "🇨🇳",
+"establishedYear": 2001,
+"universityType": "Public",
+"logo": "https://studypage.org/wp-content/uploads/2020/12/jiangsu-university-of-technology-main.png",
+"website": "https://eng.ujs.edu.cn/",
+"heroImage": "https://www.sangenbd.com/images/china/jiangsu-university-of-technology/overview.jpg",
+"galleryImages": [
+"https://c8.alamy.com/comp/3BHKRG0/front-gate-of-the-renowned-nanjing-university-nanjing-jiangsu-province-china-3BHKRG0.jpg",
+"https://softamo.org/wp-content/uploads/2023/04/Jiangsu-University.jpg"
+],
+"tagline": "Multi-disciplinary university with diverse programs",
+"ranking": {
+"globalRank": null,
+"countryRank": null
+},
+"accreditations": [
+"NMC",
+"WHO",
+"MOE China"
+],
+"stats": {
+"totalStudents": 34100,
+"internationalStudents": 842,
+"indianStudents": 150,
+"facultyCount": 2475,
+"facultyRatio": "1:14",
+"campusSize": "Urban area",
+"passRate": "42.59%"
+},
+"programs": [
+{
+"name": "MBBS",
+"category": "Medical",
+"duration": "6 years",
+"degree": "MBBS",
+"intakes": [
+"September"
+]
+}
+],
+"fees": {
+"tuitionPerYear": 4533.33,
+"hostelPerYear": 640,
+"totalFirstYear": 8173.33,
+"totalCourse": 35240,
+"currency": "USD"
+},
+"eligibility": {
+"exam": "NEET",
+"minScore": "passed",
+"minPercentage": "50%",
+"ageLimit": "17-25 years",
+"requiredDocs": [
+"Passport",
+"Marksheets",
+"NEET Scorecard",
+"12th Passing Certificate",
+"Police Clearance Certificate"
+]
+},
+"keyFeatures": [
+{
+"icon": "check",
+"label": "NMC Approved"
+},
+{
+"icon": "book",
+"label": "88 undergraduate programs"
+},
+{
+"icon": "hospital",
+"label": "Affiliated Hospital"
+}
+],
+"facilities": [
+"Library",
+"Labs",
+"Hospitals",
+"Sports Complex",
+"WiFi Campus"
+],
+"infrastructure": {
+"libraries": null,
+"labs": null,
+"hospitals": 1,
+"researchCenters": 13,
+"hostels": null,
+"bookCollection": null
+},
+"trainingPartners": [
+{
+"type": "Hospitals",
+"count": 1,
+"notable": [
+"Affiliated Hospital"
+]
+}
+],
+"accommodation": {
+"available": true,
+"capacity": null,
+"costPerYear": 640,
+"features": [
+"AC Rooms",
+"Mess",
+"Laundry",
+"WiFi"
+]
+},
+"location": {
+"address": "Zhenjiang, Jiangsu, China",
+"nearestAirport": "Nanjing Lukou International Airport",
+"distanceKm": 80,
+"climate": "Moderate"
+},
+"whyChoose": [
+"Wide range of programs",
+"Post-doctoral research stations",
+"International focus"
+],
+"highlights": [
+{
+"icon": "students",
+"stat": "34100+",
+"label": "Total Students"
+},
+{
+"icon": "pass",
+"stat": "42.59%",
+"label": "FMGE Pass Rate"
+}
+],
+"placements": {
+"rate": "42.59%"
+},
+"studentLife": {
+"clubs": null,
+"sportsAvailable": [
+"Football",
+"Basketball",
+"Cricket"
+],
+"culturalEvents": null,
+"indianAssociation": true
+},
+"safetyRating": {
+"overall": "Excellent",
+"campusSecurity": true,
+"support247": true
+},
+"mediumOfInstruction": "English",
+"eligibleFor": [
+"FMGE",
+"USMLE",
+"PLAB"
+],
+"admissionSteps": [
+"Obtain Passport",
+"Pass NEET Exam",
+"Scan and submit documents",
+"Apostille documents",
+"Pay registration fee",
+"Apply for admission"
+]
+}

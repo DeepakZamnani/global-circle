@@ -269,8 +269,7 @@ export default function Navbar() {
       <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
         <Link href="/destinations" onClick={() => setMobileMenuOpen(false)}>Destinations</Link>
         {/* <Link href="/programs" onClick={() => setMobileMenuOpen(false)}>Programs</Link> */}
-        <Link href="/jobs" onClick={() => setMobileMenuOpen(false)}>Jobs</Link>
-        <Link href="/forex" onClick={() => setMobileMenuOpen(false)}>Forex</Link>
+      
         <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
         <Link href="/partner-with-us" onClick={() => setMobileMenuOpen(false)}>Partner with Us</Link>
       </div>
