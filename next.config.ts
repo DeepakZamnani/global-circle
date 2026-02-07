@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-    output: 'export',
 
    images: {
     remotePatterns: [
@@ -33,6 +32,12 @@ const nextConfig: NextConfig = {
        {
         protocol: 'https',
         hostname: 'c8.alamy.com',
+        port: '',
+        pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'ciu.edu.ge',
         port: '',
         pathname: '/**',
       },
