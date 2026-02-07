@@ -41,6 +41,36 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+         {
+        protocol: 'https',
+        hostname: 'bsmi.uz',
+        port: '',
+        pathname: '/**',
+      },
+          {
+        protocol: 'https',
+        hostname: 'camuf.uz',
+        port: '',
+        pathname: '/**',
+      },
+          {
+        protocol: 'https',
+        hostname: 'farabi.university',
+        port: '',
+        pathname: '/**',
+      },
+   {
+        protocol: 'https',
+        hostname: 'kaznmu.edu.kz',
+        port: '',
+        pathname: '/**',
+      },
+        {
+        protocol: 'https',
+        hostname: 'www.astanamedicaluniversity.com',
+        port: '',
+        pathname: '/**',
+      },
       // Add any other image CDNs you might use
     ],
   },
