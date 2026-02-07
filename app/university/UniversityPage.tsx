@@ -794,6 +794,7 @@ import {
 } from 'lucide-react';
 import { University } from '../data/universityData';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 // ============================================
 // UNIVERSITY PAGE - PROFESSIONAL SHARP DESIGN
@@ -1433,6 +1434,7 @@ export default function UniversityPage({ universitySlug, universityData }: Unive
       )}
 
     </main>
+    <Footer/>
     </>
   );
 }
