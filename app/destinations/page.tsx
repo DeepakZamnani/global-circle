@@ -1487,9 +1487,7 @@
 // //     </div>
 // //   );
 // // }
-"use client";
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
@@ -1497,76 +1495,27 @@ import { getOrganizedDestinations, RegionData } from '../../services/dbServices'
 
 // ============================================
 // DESTINATIONS PAGE - Firebase-Powered with Dynamic Regions
-// Fetches countries from Firestore organized by their assigned regions
+// FIXED: Now fetches data on EVERY request (no caching)
 // ============================================
+
+// 🔥 CRITICAL: Force dynamic rendering
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 interface Regions {
   [key: string]: RegionData;
 }
 
-export default function DestinationsListPage() {
-  const [regions, setRegions] = useState<Regions>({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export default async function DestinationsListPage() {
+  // Fetch data on the SERVER on EVERY request
+  let regions: Regions = {};
+  let error: string | null = null;
 
-  useEffect(() => {
-    const fetchDestinations = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Fetch countries organized by regions from Firebase
-        const organizedData = await getOrganizedDestinations();
-        setRegions(organizedData);
-
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching destinations:', err);
-        setError('Failed to load destinations. Please try again.');
-        setLoading(false);
-      }
-    };
-
-    fetchDestinations();
-  }, []);
-
-  // Loading state
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#FFFFFF',
-        fontFamily: '"Plus Jakarta Sans", sans-serif'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            border: '4px solid #E2E8F0',
-            borderTop: '4px solid #FF6B35',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }} />
-          <p style={{
-            fontSize: '16px',
-            color: '#64748B',
-            fontWeight: '600'
-          }}>
-            Loading destinations...
-          </p>
-        </div>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
+  try {
+    regions = await getOrganizedDestinations();
+  } catch (err) {
+    console.error('Error fetching destinations:', err);
+    error = 'Failed to load destinations. Please try again.';
   }
 
   // Error state
@@ -1601,9 +1550,10 @@ export default function DestinationsListPage() {
           }}>
             {error}
           </p>
-          <button
-            onClick={() => window.location.reload()}
+          <a
+            href="/destinations"
             style={{
+              display: 'inline-block',
               padding: '16px 32px',
               background: '#FF6B35',
               color: 'white',
@@ -1611,11 +1561,11 @@ export default function DestinationsListPage() {
               borderRadius: '50px',
               fontWeight: '700',
               fontSize: '16px',
-              cursor: 'pointer'
+              textDecoration: 'none'
             }}
           >
             Try Again
-          </button>
+          </a>
         </div>
       </div>
     );
@@ -1752,199 +1702,119 @@ export default function DestinationsListPage() {
           justify-content: center;
           font-size: 28px;
           flex-shrink: 0;
-          transition: all 0.3s ease;
         }
 
-        .country-card-compact:hover .flag-circle {
-          transform: rotate(10deg) scale(1.1);
-        }
-
-        /* Region Header Badge - Sharp */
-        .region-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          padding: 8px 0;
-          margin-bottom: 12px;
-        }
-
-        .region-dot {
-          width: 12px;
-          height: 12px;
-          flex-shrink: 0;
-        }
-
-        /* Section Styling */
-        .region-section {
-          padding: 80px 48px;
-          border-bottom: 1px solid #E2E8F0;
-        }
-
-        .region-section:last-child {
-          border-bottom: none;
-        }
-
-        .region-section:nth-child(even) {
-          background: #FAFBFC;
-        }
-
-        /* Responsive */
+        /* Grid Responsive */
         @media (max-width: 1024px) {
-          .featured-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-
-          .countries-grid-compact {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
+          .featured-grid { grid-template-columns: repeat(3, 1fr) !important; }
+          .countries-grid-compact { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         @media (max-width: 768px) {
-          .hero-section-wrapper {
-            padding: 140px 20px 80px !important;
-          }
+          .featured-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .countries-grid-compact { grid-template-columns: 1fr !important; }
+        }
 
-          .hero-title {
-            font-size: 36px !important;
-          }
+        @media (max-width: 480px) {
+          .featured-grid { grid-template-columns: 1fr !important; }
+        }
 
-          .region-section {
-            padding: 60px 20px !important;
-          }
+        .region-section {
+          padding: 100px 40px;
+          border-bottom: 1px solid #E2E8F0;
+        }
 
-          .featured-grid {
-            grid-template-columns: 1fr !important;
-          }
+        .region-section:last-of-type {
+          border-bottom: none;
+        }
 
-          .countries-grid-compact {
-            grid-template-columns: 1fr !important;
-          }
+        .region-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          background: #F1F5F9;
+          padding: 10px 20px;
+          border-radius: 50px;
+          margin-bottom: 20px;
+        }
 
-          .region-buttons {
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-          }
-
-          .stats-row {
-            flex-direction: column !important;
-            gap: 16px !important;
-          }
+        .region-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
         }
       `}</style>
 
       {/* Hero Section */}
       <section style={{
+        background: 'linear-gradient(135deg, #1E3A5F 0%, #2A4A6F 100%)',
+        padding: '120px 40px 80px',
+        textAlign: 'center',
         position: 'relative',
-        padding: '180px 48px 120px',
-        overflow: 'hidden',
-        minHeight: '500px'
+        overflow: 'hidden'
       }}>
-        {/* Background Image */}
+        {/* Decorative Background */}
         <div style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1600&q=80)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          opacity: 0.1,
+          backgroundImage: `
+            radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
+            radial-gradient(circle at 80% 80%, white 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px'
         }} />
-        
-        {/* Overlay */}
+
         <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%)'
-        }} />
-        
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          maxWidth: '1200px',
+          maxWidth: '900px',
           margin: '0 auto',
-          textAlign: 'center'
+          position: 'relative',
+          zIndex: 1
         }}>
-          {/* Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
+          <h1 style={{
+            fontSize: 'clamp(36px, 6vw, 56px)',
+            fontWeight: '800',
+            color: 'white',
+            lineHeight: '1.2',
+            letterSpacing: '-2px',
             marginBottom: '24px'
           }}>
-            <div style={{
-              width: '40px',
-              height: '3px',
-              background: '#FF6B35',
-              borderRadius: '2px'
-            }} />
-            <span style={{
-              fontSize: '14px',
-              fontWeight: '700',
-              color: 'rgba(255,255,255,0.8)',
-              letterSpacing: '2px',
-              textTransform: 'uppercase'
-            }}>
-              Study Destinations
-            </span>
-            <div style={{
-              width: '40px',
-              height: '3px',
-              background: '#FF6B35',
-              borderRadius: '2px'
-            }} />
-          </div>
-
-          {/* Title */}
-          <h1 
-            className="hero-title"
-            style={{
-              fontSize: '56px',
-              fontWeight: '800',
-              color: 'white',
-              letterSpacing: '-2px',
-              marginBottom: '20px',
-              lineHeight: '1.1'
-            }}
-          >
-            Your Gateway to<br />
-            <span style={{ color: '#FF6B35' }}>Global Education</span>
+            Explore Your Study Abroad Destination
           </h1>
 
-          {/* Subtitle */}
           <p style={{
-            fontSize: '18px',
-            color: 'rgba(255,255,255,0.8)',
-            maxWidth: '600px',
-            margin: '0 auto 40px',
-            lineHeight: '1.7'
+            fontSize: 'clamp(16px, 2vw, 20px)',
+            color: 'rgba(255,255,255,0.9)',
+            lineHeight: '1.6',
+            marginBottom: '48px',
+            maxWidth: '700px',
+            margin: '0 auto 48px'
           }}>
-            Explore world-class education opportunities across {totalCountries} countries with 500+ partner universities
+            From affordable MBBS programs to world-class engineering degrees,
+            discover the perfect country for your international education journey.
           </p>
 
-          {/* Stats */}
-          <div 
-            className="stats-row"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: '24px'
-            }}
-          >
+          {/* Stats Pills */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '16px',
+            flexWrap: 'wrap'
+          }}>
             <div className="stat-badge-pill">
-              <span style={{ fontSize: '28px', fontWeight: '800', color: 'white' }}>{totalCountries}</span>
-              <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>Countries</span>
+              <span style={{ fontSize: '24px', fontWeight: '800', color: 'white' }}>{totalCountries}+</span>
+              <span style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>Countries</span>
             </div>
             <div className="stat-badge-pill">
-              <span style={{ fontSize: '28px', fontWeight: '800', color: 'white' }}>500+</span>
-              <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>Universities</span>
+              <span style={{ fontSize: '24px', fontWeight: '800', color: 'white' }}>500+</span>
+              <span style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>Universities</span>
             </div>
             <div className="stat-badge-pill">
-              <span style={{ fontSize: '28px', fontWeight: '800', color: 'white' }}>50+</span>
-              <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.8)' }}>Programs</span>
+              <span style={{ fontSize: '24px', fontWeight: '800', color: 'white' }}>50+</span>
+              <span style={{ fontSize: '14px', fontWeight: '600', color: 'rgba(255,255,255,0.9)' }}>Programs</span>
             </div>
           </div>
 
@@ -2049,14 +1919,6 @@ export default function DestinationsListPage() {
                   textDecoration: 'none',
                   transition: 'all 0.3s ease',
                   boxShadow: `0 8px 16px ${regionData.color}33`
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = `0 12px 24px ${regionData.color}55`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = `0 8px 16px ${regionData.color}33`;
                 }}
               >
                 Get Guidance →
