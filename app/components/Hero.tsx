@@ -1,10 +1,11 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUniqueCourses } from '@/services/dbServices';
+import { getAllCountries } from '@/services/dbServices';
+import type { CountryDetailedInfo } from '@/app/data/countryData';
 import Navbar from './Navbar';
+import CourseDropdown from './CourseDropdown';
 
 interface HeroProps {
   onCourseSelect: (course: string) => void;
@@ -13,28 +14,33 @@ interface HeroProps {
 
 export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
   const router = useRouter();
-  const [courses, setCourses] = useState<string[]>([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [floatingCountries, setFloatingCountries] = useState<CountryDetailedInfo[]>([]);
 
+  // Fetch countries for floating badges
   useEffect(() => {
-    const fetchCourses = async () => {
-      const uniqueCourses = await getUniqueCourses();
-      setCourses(uniqueCourses);
+    const fetchCountries = async () => {
+      try {
+        const countries = await getAllCountries();
+        const topCountries = countries.slice(0, 4);
+        setFloatingCountries(topCountries);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
     };
-    fetchCourses();
+    fetchCountries();
   }, []);
 
-  const navigateToCountry = (countryName: string) => {
-    router.push(`/destinations/${countryName.toLowerCase()}`);
+  const navigateToCountry = (countrySlug: string) => {
+    router.push(`/destinations/${countrySlug}`);
   };
 
   return (
     <div style={{
-      minHeight: '100vh',
+      // REMOVED: minHeight: '100vh' - This was causing scroll issues!
       background: '#FFFFFF',
       fontFamily: '"Plus Jakarta Sans", sans-serif',
-      overflow: 'hidden',
-      position: 'relative'
+      position: 'relative',
+      paddingBottom: '80px' // Space for angled divider
     }}>
       
       {/* Google Fonts Import */}
@@ -45,81 +51,6 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
           box-sizing: border-box;
           margin: 0;
           padding: 0;
-        }
-
-        /* Course Selection Dropdown */
-        .course-selector {
-          position: relative;
-          width: 100%;
-          max-width: 500px;
-        }
-
-        .course-button {
-          width: 100%;
-          background: white;
-          border: 2px solid #1E3A5F;
-          padding: 18px 24px;
-          border-radius: 16px;
-          font-weight: 700;
-          font-size: 16px;
-          color: #1E3A5F;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          box-shadow: 0 4px 20px rgba(30, 58, 95, 0.1);
-        }
-
-        .course-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(30, 58, 95, 0.15);
-          border-color: #FF6B35;
-        }
-
-        .course-dropdown {
-          position: absolute;
-          top: calc(100% + 8px);
-          left: 0;
-          right: 0;
-          background: white;
-          border: 2px solid #E2E8F0;
-          border-radius: 16px;
-          box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-          max-height: 400px;
-          overflow-y: auto;
-          z-index: 100;
-          animation: dropdownSlide 0.3s ease;
-        }
-
-        @keyframes dropdownSlide {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .course-option {
-          padding: 16px 24px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          border-bottom: 1px solid #F1F5F9;
-          font-weight: 600;
-          color: #1E3A5F;
-        }
-
-        .course-option:last-child {
-          border-bottom: none;
-        }
-
-        .course-option:hover {
-          background: #FFF7ED;
-          color: #FF6B35;
-          padding-left: 32px;
         }
 
         /* Stats Card */
@@ -157,6 +88,7 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
           cursor: pointer;
           transition: all 0.3s ease;
           outline: none;
+          border: none;
         }
 
         .country-badge-btn:hover {
@@ -199,6 +131,10 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
           animation-delay: 1.5s;
         }
 
+        .floating-delay-4 {
+          animation-delay: 2s;
+        }
+
         /* Tablet Responsive */
         @media (max-width: 1024px) {
           .hero-grid {
@@ -212,11 +148,6 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
           }
           
           .hero-subtext {
-            margin-left: auto;
-            margin-right: auto;
-          }
-          
-          .course-selector {
             margin-left: auto;
             margin-right: auto;
           }
@@ -250,6 +181,10 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
             width: 50px !important;
             height: 50px !important;
           }
+
+          .floating-badge {
+            display: none !important;
+          }
         }
 
         /* Mobile Responsive */
@@ -267,23 +202,17 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
             font-size: 16px !important;
           }
           
-          .course-selector {
-            max-width: 100%;
-          }
-          
           .hero-stats-row {
             flex-direction: column !important;
             gap: 12px !important;
-            align-items: center !important;
           }
           
           .stat-card {
-            width: 100% !important;
-            max-width: 280px;
+            width: 100%;
           }
           
           .hero-image-container {
-            height: 380px !important;
+            height: 400px !important;
           }
           
           .main-circle {
@@ -292,13 +221,13 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
           }
           
           .student-image {
-            width: 240px !important;
-            height: 320px !important;
+            width: 250px !important;
+            height: 340px !important;
           }
 
           .teal-circle {
-            width: 70px !important;
-            height: 70px !important;
+            width: 80px !important;
+            height: 80px !important;
           }
 
           .navy-circle {
@@ -306,168 +235,67 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
             height: 40px !important;
           }
 
-          /* Spread badges far apart - frame the image */
-          .badge-canada {
-            top: 5% !important;
-            left: -8% !important;
+          .badge {
+            padding: 8px 14px !important;
+            font-size: 11px !important;
           }
 
-          /* China Badge - Right */
-          .badge-australia {
-            top: 40% !important;
-            right: -10% !important;
-          }
-
-          .badge-success {
-            bottom: 10% !important;
-            right: -8% !important;
-          }
-
-          .badge-countries {
-            bottom: 2% !important;
-            left: -5% !important;
-          }
-        }
-
-        /* Extra Small Mobile */
-        @media (max-width: 480px) {
-          .hero-headline {
-            font-size: 32px !important;
-          }
-
-          .hero-image-container {
-            height: 380px !important;
-          }
-
-          .main-circle {
-            width: 240px !important;
-            height: 240px !important;
-          }
-
-          .student-image {
-            width: 200px !important;
-            height: 280px !important;
-          }
-
-          .teal-circle {
-            width: 50px !important;
-            height: 50px !important;
-          }
-
-          .navy-circle {
-            width: 30px !important;
-            height: 30px !important;
-          }
-
-          /* Spread badges even further apart on small screens */
-          .badge-canada {
-            top: 3% !important;
-            left: -10% !important;
-          }
-
-          /* China Badge */
-          .badge-australia {
-            top: 38% !important;
-            right: -12% !important;
-          }
-
-          .badge-australia span {
-            display: none;
-          }
-
-          .badge-success {
-            bottom: 8% !important;
-            right: -10% !important;
-          }
-
-          .badge-countries {
-            bottom: 0% !important;
-            left: -8% !important;
+          .floating-badge {
+            display: none !important;
           }
         }
       `}</style>
-      
-      <Navbar/>
-      
+
+      {/* Navbar */}
+      <Navbar />
+
       {/* Hero Section */}
-      <section className="hero-section" style={{
-        padding: '140px 40px 80px',
-        maxWidth: '1400px',
-        margin: '0 auto'
+      <section className="hero-section" style={{ 
+        padding: '140px 40px 80px', 
+        position: 'relative'
       }}>
         <div className="hero-grid" style={{
           display: 'grid',
-          gridTemplateColumns: '1.1fr 0.9fr',
-          gap: '80px',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '60px',
+          maxWidth: '1400px',
+          margin: '0 auto',
           alignItems: 'center'
         }}>
           
           {/* Left Content */}
           <div>
-            {/* Headline */}
             <h1 className="hero-headline" style={{
-              fontSize: 'clamp(48px, 6vw, 72px)',
+              fontSize: '64px',
               fontWeight: '800',
               color: '#1E3A5F',
               lineHeight: '1.1',
               letterSpacing: '-2px',
               marginBottom: '24px'
             }}>
-              Find Your Perfect
-              <span style={{
-                background: 'linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                display: 'block'
-              }}>Study Destination</span>
+              Your Gateway to<br />
+              <span style={{ color: '#FF6B35' }}>Global Education</span>
             </h1>
 
-            {/* Subtext */}
             <p className="hero-subtext" style={{
               fontSize: '18px',
               color: '#64748B',
-              lineHeight: '1.7',
-              maxWidth: '520px',
+              lineHeight: '1.6',
               marginBottom: '40px',
+              maxWidth: '500px',
               fontWeight: '500'
             }}>
-              Choose your course and explore countries offering world-class education opportunities tailored to your dreams.
+              Discover world-class universities offering MBBS, Engineering, MBA and more across 20+ programs in multiple countries
             </p>
 
-            {/* Course Selection Dropdown */}
-            <div className="course-selector" style={{ marginBottom: '32px' }}>
-              <button 
-                className="course-button"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <span>{selectedCourse || 'Select a Course'}</span>
-                <span style={{ 
-                  fontSize: '20px',
-                  transform: isDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.3s ease'
-                }}>▼</span>
-              </button>
-
-              {isDropdownOpen && (
-                <div className="course-dropdown">
-                  {courses.map((course) => (
-                    <div
-                      key={course}
-                      className="course-option"
-                      onClick={() => {
-                        onCourseSelect(course);
-                        setIsDropdownOpen(false);
-                      }}
-                    >
-                      {course}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* Course Dropdown */}
+            <CourseDropdown 
+              selectedCourse={selectedCourse}
+              onCourseSelect={onCourseSelect}
+            />
 
             {/* Stats Row */}
-            <div className="hero-stats-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+            <div className="hero-stats-row" style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '40px' }}>
               <div className="stat-card">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{
@@ -541,7 +369,7 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 width: '450px',
-                height: '450px',
+                height: '550px',
                 borderRadius: '50%',
                 background: '#FF6B35',
                 zIndex: 1
@@ -587,12 +415,12 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 zIndex: 2,
-                width: '400px',
+                width: '500px',
                 height: '500px'
               }}
             >
               <img 
-                src="/student3.png"
+                src="/edited.gif"
                 alt="Student"
                 style={{
                   width: '100%',
@@ -604,63 +432,78 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
               />
             </div>
 
-            {/* Floating Badge - Canada Button */}
-            <button 
-              onClick={() => navigateToCountry('canada')}
-              className="badge floating-badge country-badge-btn floating floating-delay-1 badge-canada"
-              style={{
-                position: 'absolute',
-                top: '15%',
-                left: '0%',
-                zIndex: 3
-              }}
-              aria-label="Study in Canada"
-            >
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: '#1E3A5F',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '16px',
-                fontWeight: '700'
-              }}>CA</div>
-              <span>Study in Canada</span>
-            </button>
+            {/* DYNAMIC FLOATING BADGES FROM FIREBASE */}
+            {floatingCountries.length >= 1 && (
+              <button 
+                onClick={() => navigateToCountry(floatingCountries[0].slug)}
+                className="badge floating-badge country-badge-btn floating floating-delay-1"
+                style={{
+                  position: 'absolute',
+                  top: '15%',
+                  left: '0%',
+                  zIndex: 3,
+                  background: '#1E3A5F',
+                  color: 'white'
+                }}
+                aria-label={`Study in ${floatingCountries[0].name}`}
+              >
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '20px',
+                  fontWeight: '700'
+                }}>{floatingCountries[0].flag}</div>
+                <div>
+                  <div style={{ fontWeight: '700', fontSize: '13px' }}>{floatingCountries[0].name}</div>
+                  <div style={{ fontSize: '11px', opacity: '0.8' }}>
+                    {floatingCountries[0].stats?.totalUniversities || '10'}+ Unis
+                  </div>
+                </div>
+              </button>
+            )}
 
-            {/* Floating Badge - China Button */}
-            <button 
-              onClick={() => navigateToCountry('china')}
-              className="badge floating-badge country-badge-btn floating floating-delay-2 badge-australia"
-              style={{
-                position: 'absolute',
-                top: '35%',
-                right: '-5%',
-                zIndex: 3
-              }}
-              aria-label="Study in China"
-            >
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: '#FF6B35',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '16px',
-                fontWeight: '700'
-              }}>CN</div>
-              <span>China</span>
-            </button>
+            {floatingCountries.length >= 2 && (
+              <button 
+                onClick={() => navigateToCountry(floatingCountries[1].slug)}
+                className="badge floating-badge country-badge-btn floating floating-delay-2"
+                style={{
+                  position: 'absolute',
+                  top: '35%',
+                  right: '-5%',
+                  zIndex: 3,
+                  background: '#1E3A5F',
+                  color: 'white'
+                }}
+                aria-label={`Study in ${floatingCountries[1].name}`}
+              >
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '8px',
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '20px',
+                  fontWeight: '700'
+                }}>{floatingCountries[1].flag}</div>
+                <div>
+                  <div style={{ fontWeight: '700', fontSize: '13px' }}>{floatingCountries[1].name}</div>
+                  <div style={{ fontSize: '11px', opacity: '0.8' }}>
+                    {floatingCountries[1].stats?.totalUniversities || '10'}+ Unis
+                  </div>
+                </div>
+              </button>
+            )}
 
             {/* Floating Badge - Success Rate (Non-clickable) */}
             <div 
-              className="badge floating-badge floating floating-delay-3 badge-success"
+              className="badge floating-badge floating floating-delay-3"
               style={{
                 position: 'absolute',
                 bottom: '20%',
@@ -685,32 +528,38 @@ export default function Hero({ onCourseSelect, selectedCourse }: HeroProps) {
               </div>
             </div>
 
-            {/* Floating Badge - Countries Button */}
-            <button 
-              onClick={() => router.push('/destinations/')}
-              className="badge floating-badge country-badge-btn floating-slow badge-countries"
-              style={{
-                position: 'absolute',
-                bottom: '8%',
-                left: '10%',
-                zIndex: 3,
-                background: '#1E3A5F',
-                color: 'white'
-              }}
-              aria-label="View all destinations"
-            >
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                background: 'rgba(255,255,255,0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '18px'
-              }}>+</div>
-              <span style={{ fontWeight: '600', fontSize: '13px' }}>20+ Countries</span>
-            </button>
+            {floatingCountries.length >= 3 && (
+              <button 
+                onClick={() => navigateToCountry(floatingCountries[2].slug)}
+                className="badge floating-badge country-badge-btn floating-slow floating-delay-4"
+                style={{
+                  position: 'absolute',
+                  bottom: '8%',
+                  left: '10%',
+                  zIndex: 3,
+                  background: '#1E3A5F',
+                  color: 'white'
+                }}
+                aria-label={`Study in ${floatingCountries[2].name}`}
+              >
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '20px'
+                }}>{floatingCountries[2].flag}</div>
+                <div>
+                  <div style={{ fontWeight: '700', fontSize: '13px' }}>{floatingCountries[2].name}</div>
+                  <div style={{ fontSize: '11px', opacity: '0.8' }}>
+                    {floatingCountries[2].stats?.totalUniversities || '10'}+ Unis
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
         </div>
       </section>

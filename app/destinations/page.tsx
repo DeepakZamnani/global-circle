@@ -1748,24 +1748,22 @@ export default async function DestinationsListPage() {
       {/* Hero Section */}
       <section style={{
         background: 'linear-gradient(135deg, #1E3A5F 0%, #2A4A6F 100%)',
-        padding: '120px 40px 80px',
+        padding: '300px 40px 80px',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden'
       }}>
         {/* Decorative Background */}
-        <div style={{
+       <div style={{
           position: 'absolute',
+          paddingTop:100,
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.1,
-          backgroundImage: `
-            radial-gradient(circle at 20% 50%, white 1px, transparent 1px),
-            radial-gradient(circle at 80% 80%, white 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px'
+          backgroundImage: 'url(https://images.unsplash.com/photo-1562774053-701939374585?w=1600&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
         }} />
 
         <div style={{

@@ -20,7 +20,7 @@ export default function DestinationsSection() {
       highlights: ['Post-Grad Work Permit', 'Multicultural', 'High Quality of Life'],
       image: 'https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=400&q=80',
       flag: '🇷🇺',
-      universities: '60+'
+      universities: '20+'
     },
     {
       id: 1,
@@ -30,7 +30,7 @@ export default function DestinationsSection() {
       highlights: ['Top Universities', 'Work Rights', 'Amazing Lifestyle'],
       image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=400&q=80',
       flag: '🇨🇳',
-      universities: '45+'
+      universities: '25+'
     },
    {
       id: 2,
@@ -40,7 +40,7 @@ export default function DestinationsSection() {
       highlights: ['Post-Grad Work Permit', 'Multicultural', 'High Quality of Life'],
       image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?w=800&q=80',
       flag: '🇨🇦',
-      universities: '96+'
+      universities: '26+'
     },
     {
       id: 3,
@@ -50,7 +50,7 @@ export default function DestinationsSection() {
       highlights: ['Historic Unis', 'Low Cost', 'Great Weather'],
        image: 'https://images.unsplash.com/photo-1563413613822-2e335ab72e74?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGdlb3JnaWF8ZW58MHx8MHx8fDA%3D',
        flag: '🇬🇪',
-      universities: '84+'
+      universities: '14+'
     }
   ];
 
@@ -222,8 +222,16 @@ export default function DestinationsSection() {
             gap: 24px !important;
           }
 
+          .dest-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+          }
+
           .dest-title {
             font-size: 36px !important;
+            text-align: center !important;
           }
 
           .stats-badges {
@@ -244,7 +252,7 @@ export default function DestinationsSection() {
             marginBottom: '60px'
           }}
         >
-          <div>
+          <div className="dest-title-wrapper">
             {/* Tagline */}
             <div style={{
               display: 'inline-flex',
