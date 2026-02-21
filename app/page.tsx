@@ -1,192 +1,165 @@
-// import NavbarHero from './components/Hero'
-// import ProgramsSection from './components/ProgramsSection';
-// import StudyDestinationsSection from './components/StudyDestinations';
-// import DestinationsSection from './components/DestinationsSection';
-// import Footer from './components/Footer'
-// export default function Home() {
-//   return (
-//     <>
-//       <NavbarHero />
-//       <ProgramsSection/>
-      
-//       <DestinationsSection/>
-//       {/* <StudyDestinationsSection/> */}
-//       <Footer/>
-//     </>
-//   );
-// }
-
 "use client";
 
-import { useState, useEffect } from 'react';
-import NavbarHero from './components/Hero';
-import ProgramsSection from './components/ProgramsSection';
+import { useState, useEffect, useCallback } from 'react';
+import Hero from './components/Hero';
 import DestinationsSection from './components/DestinationsSection';
-import FilteredCountriesSection from './components/FilteredConutries';
+import FilteredUniversitiesSection from './components/FilteredUnvierstiesSection';
 import Footer from './components/Footer';
-import { getCountriesByCourse } from '@/services/dbServices';
-import type { CountryDetailedInfo } from './data/countryData';
-import AdSlot from './components/AdSlot';
-import { db } from '@/lib/firebase';
+import {
+  getUniversitiesByCourse,
+  getAllCountries,
+} from '@/services/dbServices';
+import type { University } from '@/app/data/universityData';
+import type { CountryDetailedInfo } from '@/app/data/countryData';
+import type { MatcherFilters } from './components/Hero';
+import ProgramsSection from './components/ProgramsSection';
+import BudgetPlannerSection from './components/BudgetPlannerSection';
+import CountryCompareSection from './components/CountryCompareScreen';
 
+// ─── Budget label → annual USD range ──────────────────────────────────────────
+function budgetToRange(label: string): { min: number; max: number } {
+  switch (label) {
+    case 'Under $5,000 / year':       return { min: 0,     max: 5000       };
+    case '$5,000 – $10,000 / year':   return { min: 5000,  max: 10000      };
+    case '$10,000 – $20,000 / year':  return { min: 10000, max: 20000      };
+    case '$20,000+ / year':           return { min: 20000, max: Infinity   };
+    default:                          return { min: 0,     max: Infinity   };
+  }
+}
+
+// ─── Language → medium of instruction match ────────────────────────────────────
+function matchesLanguage(uni: University, lang: string): boolean {
+  if (!lang) return true;
+  const m = (uni.mediumOfInstruction || '').toLowerCase();
+  if (lang === 'English Only') return m === 'english';
+  // 'English + Local' and 'Local Language OK' — accept all
+  return true;
+}
+
+// ─── Region → country.region match via pre-built map ──────────────────────────
+function matchesRegion(
+  uni: University,
+  region: string,
+  countryRegionMap: Map<string, string>
+): boolean {
+  if (!region) return true;
+  return countryRegionMap.get(uni.countrySlug) === region;
+}
+
+// ─── Page ──────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const [selectedCourse, setSelectedCourse] = useState<string>('');
-  const [filteredCountries, setFilteredCountries] = useState<CountryDetailedInfo[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<MatcherFilters | null>(null);
+  const [universities,  setUniversities]  = useState<University[]>([]);
+  const [isLoading,     setIsLoading]     = useState(false);
 
-  // Fetch countries when course is selected
+  // Pre-build countrySlug → region map once on mount
+  // (uses country.region field from CountryDetailedInfo / 'screens' Firestore collection)
+  const [countryRegionMap, setCountryRegionMap] = useState<Map<string, string>>(new Map());
+
   useEffect(() => {
-    const fetchFilteredCountries = async () => {
-      if (selectedCourse) {
-        setIsLoading(true);
-        try {
-          const countries = await getCountriesByCourse(selectedCourse);
-          setFilteredCountries(countries);
-        } catch (error) {
-          console.error('Error fetching filtered countries:', error);
-          setFilteredCountries([]);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setFilteredCountries([]);
-      }
-    };
+    getAllCountries()
+      .then((countries: CountryDetailedInfo[]) => {
+        const map = new Map<string, string>();
+        countries.forEach(c => {
+          if (c.region) map.set(c.slug, c.region);
+        });
+        setCountryRegionMap(map);
+      })
+      .catch(err => console.error('Page: error loading country regions:', err));
+  }, []);
 
-    fetchFilteredCountries();
-  }, [selectedCourse]);
+  // ── Search handler — only fires when "Find Matches" button is clicked ──────
+  const handleSearch = useCallback(async (filters: MatcherFilters) => {
+    setActiveFilters(filters);
+    setIsLoading(true);
+    setUniversities([]);
 
-  const handleCourseSelect = (course: string) => {
-    setSelectedCourse(course);
-  };
+    try {
+      // 1. Fetch from 'universities' Firestore collection — filtered by program.name
+      //    Uses getUniversitiesByCourse() from dbServices which checks university.programs[].name
+      const allForCourse: University[] = await getUniversitiesByCourse(filters.course);
 
-  const handleClearFilter = () => {
-    setSelectedCourse('');
-    setFilteredCountries([]);
+      // 2. Client-side filter by budget (fees.tuitionPerYear), region, language
+      const { min, max } = budgetToRange(filters.budget);
+
+      const matched = allForCourse.filter(uni => {
+        // Budget: compare against fees.tuitionPerYear (number in University interface)
+        const tuition = uni.fees?.tuitionPerYear ?? 0;
+        if (tuition < min || tuition > max) return false;
+
+        // Region: match via countrySlug → country.region map
+        if (!matchesRegion(uni, filters.region, countryRegionMap)) return false;
+
+        // Language: match against mediumOfInstruction
+        if (!matchesLanguage(uni, filters.language)) return false;
+
+        return true;
+      });
+
+      setUniversities(matched);
+    } catch (err) {
+      console.error('Page: error fetching universities:', err);
+      setUniversities([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [countryRegionMap]);
+
+  // ── Clear: resets to homepage state ────────────────────────────────────────
+  const handleClear = () => {
+    setActiveFilters(null);
+    setUniversities([]);
   };
 
   return (
     <>
-      {/* Hero Section - Always Visible */}
-       
-      <NavbarHero 
-        onCourseSelect={handleCourseSelect}
-        selectedCourse={selectedCourse}
-      />
+      {/* Hero always renders — contains the Matcher */}
+      <Hero onSearch={handleSearch} />
 
-      {/* Conditional Content Based on Filter State */}
-      {selectedCourse ? (
-        <>
-          {/* Filtered Results Section */}
-          {isLoading ? (
-            <div style={{
-              padding: '100px 20px',
-              textAlign: 'center',
-              fontFamily: '"Plus Jakarta Sans", sans-serif',
-              background: '#F8FAFC'
-            }}>
-              <div style={{
-                width: '60px',
-                height: '60px',
-                border: '4px solid #E2E8F0',
-                borderTop: '4px solid #FF6B35',
-                borderRadius: '50%',
-                margin: '0 auto 24px',
-                animation: 'spin 1s linear infinite'
-              }} />
-              <p style={{
-                fontSize: '18px',
-                color: '#64748B',
-                fontWeight: '600'
-              }}>
-                Loading destinations for {selectedCourse}...
-              </p>
-              <style>{`
-                @keyframes spin {
-                  0% { transform: rotate(0deg); }
-                  100% { transform: rotate(360deg); }
-                }
-              `}</style>
-            </div>
-          ) : (
-            <>
-              {/* Clear Filter Bar */}
-              <div style={{
-                background: '#1E3A5F',
-                padding: '20px',
-                fontFamily: '"Plus Jakarta Sans", sans-serif',
-              }}>
-                <div style={{
-                  maxWidth: '1400px',
-                  margin: '0 auto',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '16px'
-                }}>
-                  <div style={{
-                    color: 'white',
-                    fontSize: '16px',
-                    fontWeight: '600'
-                  }}>
-                    Showing {filteredCountries.length} destination{filteredCountries.length !== 1 ? 's' : ''} for <span style={{ color: '#FF6B35', fontWeight: '800' }}>{selectedCourse}</span>
-                  </div>
-                  <button 
-                    onClick={handleClearFilter}
-                    style={{
-                      background: 'transparent',
-                      color: 'white',
-                      border: '2px solid rgba(255, 255, 255, 0.3)',
-                      padding: '10px 24px',
-                      borderRadius: '50px',
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                      e.currentTarget.style.borderColor = 'white';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    }}
-                  >
-                    Clear Filter ✕
-                  </button>
-                </div>
-              </div>
-
-              {/* Filtered Countries Display */}
-              <FilteredCountriesSection 
-                countries={filteredCountries}
-                selectedCourse={selectedCourse}
-              />
-              <ProgramsSection />
-          <DestinationsSection />
-          <Footer />
-            </>
-          )}
-        </>
-      ) : (
-        <>
-          {/* Default Homepage Content */}
-          <AdSlot 
-        db={db}
-        pageLocation="home" 
-        position="top" 
-        className="my-10" 
-      />
-          <ProgramsSection />
-          <DestinationsSection />
-          <Footer />
-        </>
+      {/* ── LOADING SPINNER ── */}
+      {isLoading && (
+        <div style={{
+          background: '#1E3A5F',
+          padding: '100px 20px',
+          textAlign: 'center',
+          fontFamily: '"Plus Jakarta Sans", sans-serif',
+        }}>
+          <style>{`
+            @keyframes spin {
+              0%   { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+          <div style={{
+            width: '56px', height: '56px', margin: '0 auto 24px',
+            border: '4px solid rgba(255,255,255,0.12)',
+            borderTop: '4px solid #FF6B35',
+            borderRadius: '50%',
+            animation: 'spin 0.9s linear infinite',
+          }} />
+          <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.65)', fontWeight: '600' }}>
+            Searching universities for{' '}
+            <span style={{ color: '#FF6B35', fontWeight: '800' }}>
+              {activeFilters?.course}
+            </span>
+            …
+          </p>
+        </div>
       )}
 
-      {/* Footer - Always Visible */}
-      
+      {/* ── FILTERED UNIVERSITIES — only visible after "Find Matches" is clicked ── */}
+      {!isLoading && activeFilters && (
+        <FilteredUniversitiesSection
+          universities={universities}
+          filters={activeFilters}
+          onClear={handleClear}
+        />
+      )}
+     <CountryCompareSection/>
+      {/* ── DESTINATIONS + FOOTER — always visible ── */}
+      <BudgetPlannerSection/>
+      <DestinationsSection />
+      <Footer />
     </>
   );
 }

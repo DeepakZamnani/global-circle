@@ -1,4 +1,3 @@
-
 import { 
   collection, 
   addDoc, 
@@ -870,6 +869,89 @@ export async function getUniversitiesByCountryAndCourse(
 
 
 
+
+// ============================================
+// UNIVERSITY MATCHER — all 4 filters applied
+// ============================================
+
+export interface MatcherFilters {
+  course: string;
+  budget: string;
+  region: string;
+  language: string;
+}
+
+// Map budget label → min/max tuition per year (USD)
+function parseBudgetRange(budget: string): { min: number; max: number } {
+  switch (budget) {
+    case 'Under $5,000 / year':        return { min: 0,     max: 4999  };
+    case '$5,000 – $10,000 / year':    return { min: 5000,  max: 10000 };
+    case '$10,000 – $20,000 / year':   return { min: 10000, max: 20000 };
+    case '$20,000+ / year':            return { min: 20000, max: Infinity };
+    default:                           return { min: 0,     max: Infinity };
+  }
+}
+
+// Map language preference → check against university.mediumOfInstruction
+function matchesLanguage(medium: string | undefined, preference: string): boolean {
+  if (!preference) return true; // no preference = match all
+  const m = (medium || '').toLowerCase();
+  switch (preference) {
+    case 'English Only':
+      return m.includes('english') && !m.includes('local') && !m.includes('russian')
+          && !m.includes('chinese') && !m.includes('arabic');
+    case 'English + Local':
+      // Must mention English AND at least one other language
+      return m.includes('english') && m.length > 'english'.length;
+    case 'Local Language OK':
+      return true; // accepts anything
+    default:
+      return true;
+  }
+}
+
+/**
+ * Get universities matching ALL 4 hero filters:
+ *  - course   → programs[].name exact match
+ *  - budget   → fees.tuitionPerYear within range
+ *  - region   → university's country is in the selected region
+ *  - language → mediumOfInstruction matches preference
+ */
+export async function getMatchedUniversities(filters: MatcherFilters): Promise<University[]> {
+  try {
+    // 1. Fetch all universities that offer the course (required)
+    let universities = await getUniversitiesByCourse(filters.course);
+
+    // 2. Budget filter
+    if (filters.budget) {
+      const { min, max } = parseBudgetRange(filters.budget);
+      universities = universities.filter((uni) => {
+        const fee = uni.fees?.tuitionPerYear;
+        if (fee == null) return false; // exclude if no fee info
+        return fee >= min && fee <= max;
+      });
+    }
+
+    // 3. Region filter — resolve which country slugs belong to the region
+    if (filters.region) {
+      const regionCountries = await getCountriesByRegion(filters.region);
+      const slugsInRegion = new Set(regionCountries.map((c) => c.slug));
+      universities = universities.filter((uni) => slugsInRegion.has(uni.countrySlug));
+    }
+
+    // 4. Language filter
+    if (filters.language) {
+      universities = universities.filter((uni) =>
+        matchesLanguage(uni.mediumOfInstruction, filters.language)
+      );
+    }
+
+    return universities;
+  } catch (error) {
+    console.error('Error in getMatchedUniversities:', error);
+    return [];
+  }
+}
 
 // Existing functions (getAllScholarships, getFeaturedScholarships) remain unchanged
 
