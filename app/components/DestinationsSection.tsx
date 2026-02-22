@@ -288,8 +288,8 @@ export default function DestinationsSection() {
                 lineHeight: '1.1'
               }}
             >
-              Explore The<br />
-              <span style={{ color: '#FF6B35' }}>World</span>
+              Discover Your<br />
+              <span style={{ color: '#FF6B35' }}>Global Future</span>
             </h2>
           </div>
 
