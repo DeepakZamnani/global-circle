@@ -155,7 +155,8 @@ export default function Home() {
           onClear={handleClear}
         />
       )}
-     <CountryCompareSection/>
+     <CountryCompareSection
+     />
       {/* ── DESTINATIONS + FOOTER — always visible ── */}
       <BudgetPlannerSection/>
       <DestinationsSection />

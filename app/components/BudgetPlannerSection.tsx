@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { getAllCountries, submitFormData } from '@/services/dbServices';
+import type { CountryDetailedInfo } from '@/app/data/countryData';
 
 // ============================================
 // BUDGET PLANNER SECTION
@@ -10,28 +12,68 @@ import Link from 'next/link';
 // Mixed clip-path shapes, polygon geometries
 // ============================================
 
+// Internal shape used by the calculator — derived from CountryDetailedInfo
 interface CountryCost {
-  tuitionMin: number;
+  tuitionMin: number;   // parsed from costs.tuitionFeeRange
   tuitionMax: number;
-  livingMin: number;
-  livingMax: number;
-  visaFee: number;
-  flightEstimate: number;
-  scholarshipChance: 'High' | 'Medium' | 'Low';
-  currency: string;
-  note: string;
+  livingMin:  number;   // parsed from hostelFees + foodExpenses + otherExpenses
+  livingMax:  number;
+  currency:   string;   // from stats.currency
+  note:       string;   // from overview.description
 }
 
-const COUNTRY_DATA: Record<string, CountryCost> = {
-  Russia:      { tuitionMin:2000,  tuitionMax:5000,  livingMin:4800,  livingMax:8400,  visaFee:160,  flightEstimate:600,  scholarshipChance:'High',   currency:'USD', note:'Govt. scholarships cover up to 100% of tuition' },
-  China:       { tuitionMin:3000,  tuitionMax:8000,  livingMin:4800,  livingMax:8400,  visaFee:140,  flightEstimate:700,  scholarshipChance:'High',   currency:'USD', note:'CSC scholarships widely available for international students' },
-  Germany:     { tuitionMin:0,     tuitionMax:3000,  livingMin:10800, livingMax:15600, visaFee:80,   flightEstimate:900,  scholarshipChance:'Medium', currency:'EUR', note:'Most public unis are tuition-free; pay only admin fees' },
-  Canada:      { tuitionMin:12000, tuitionMax:22000, livingMin:14400, livingMax:21600, visaFee:235,  flightEstimate:1000, scholarshipChance:'Medium', currency:'CAD', note:'Strong post-grad work permit (PGWP) up to 3 years' },
-  Georgia:     { tuitionMin:3000,  tuitionMax:6000,  livingMin:3600,  livingMax:6000,  visaFee:0,    flightEstimate:400,  scholarshipChance:'Low',    currency:'USD', note:'Visa-free for many nationalities; very low cost of living' },
-  Ireland:     { tuitionMin:10000, tuitionMax:18000, livingMin:13200, livingMax:19200, visaFee:100,  flightEstimate:900,  scholarshipChance:'Medium', currency:'EUR', note:'2-year stay-back visa post graduation' },
-  Poland:      { tuitionMin:2000,  tuitionMax:6000,  livingMin:6000,  livingMax:9600,  visaFee:80,   flightEstimate:700,  scholarshipChance:'Medium', currency:'PLN', note:'EU degree recognition; growing tech hub' },
-  Uzbekistan:  { tuitionMin:1500,  tuitionMax:4000,  livingMin:3600,  livingMax:6000,  visaFee:50,   flightEstimate:400,  scholarshipChance:'High',   currency:'USD', note:'One of the most affordable destinations available' },
-};
+// ─── Parsers ──────────────────────────────────────────────────────────────────
+
+/**
+ * Pull every positive integer out of a money string.
+ * "$2,000 – $5,000 / year"  →  [2000, 5000]
+ * "₹1,20,000"               →  [120000]   (handles Indian formatting too)
+ */
+function parseNums(str: string): number[] {
+  const matches = (str ?? '').match(/[\d,]+/g) ?? [];
+  return matches
+    .map(m => parseInt(m.replace(/,/g, ''), 10))
+    .filter(n => !isNaN(n) && n > 0);
+}
+
+/** "$2,000 – $5,000/year" → { min: 2000, max: 5000 }. Single value → both equal. */
+function parseRange(str: string): { min: number; max: number } {
+  const nums = parseNums(str);
+  if (nums.length === 0) return { min: 0, max: 0 };
+  if (nums.length === 1) return { min: nums[0], max: nums[0] };
+  return { min: nums[0], max: nums[1] };
+}
+
+/**
+ * Map a CountryDetailedInfo document (from the `screens` Firestore collection)
+ * to the flat CountryCost shape the calculator needs.
+ *
+ * Living cost = hostelFees + foodExpenses + otherExpenses  (all annual strings)
+ * Tuition     = costs.tuitionFeeRange
+ * Currency    = stats.currency
+ * Note        = overview.description
+ */
+function mapCountry(doc: CountryDetailedInfo): CountryCost {
+  const costs   = doc.costs      ?? {} as CountryDetailedInfo['costs'];
+  const stats   = doc.stats      ?? {} as CountryDetailedInfo['stats'];
+  const overview = doc.overview  ?? {} as CountryDetailedInfo['overview'];
+
+  const tuition  = parseRange(costs.tuitionFeeRange ?? '');
+  const hostel   = parseRange(costs.hostelFees      ?? '');
+  const food     = parseRange(costs.foodExpenses    ?? '');
+  const other    = parseRange(costs.otherExpenses   ?? '');
+
+  return {
+    tuitionMin: tuition.min,
+    tuitionMax: tuition.max,
+    livingMin:  hostel.min + food.min + other.min,
+    livingMax:  hostel.max + food.max + other.max,
+    currency:   stats.currency ?? 'USD',
+    note:       overview.description ?? '',
+  };
+}
+
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 const DURATIONS = [1, 2, 3, 4, 5, 6];
 
@@ -45,43 +87,98 @@ function fmt(n: number) {
   return '$' + Math.round(n).toLocaleString();
 }
 
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function BudgetPlannerSection() {
-  const [country, setCountry]       = useState('Russia');
-  const [duration, setDuration]     = useState(4);
-  const [scholarship, setScholarship] = useState<'None' | 'Partial' | 'Half' | 'Full'>('None');
+
+  // ── DB state ────────────────────────────────────────────────────────────────
+  const [countryData, setCountryData] = useState<Record<string, CountryCost>>({});
+  const [dbLoading,   setDbLoading]   = useState(true);
+  const [dbError,     setDbError]     = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    getAllCountries()
+      .then((docs: CountryDetailedInfo[]) => {
+        if (!active) return;
+
+        const mapped: Record<string, CountryCost> = {};
+        docs.forEach((doc) => {
+          if (doc.name) mapped[doc.name] = mapCountry(doc);
+        });
+
+        setCountryData(mapped);
+
+        // Default the selector to the first country alphabetically
+        const names = Object.keys(mapped).sort();
+        if (names.length) setCountry(names[0]);
+      })
+      .catch((err) => {
+        console.error('BudgetPlanner: failed to load countries', err);
+        if (active) setDbError(true);
+      })
+      .finally(() => { if (active) setDbLoading(false); });
+
+    return () => { active = false; };
+  }, []);
+
+  // ── Planner state ───────────────────────────────────────────────────────────
+  const [country,        setCountry]        = useState('');
+  const [duration,       setDuration]       = useState(4);
+  const [scholarship,    setScholarship]    = useState<'None' | 'Partial' | 'Half' | 'Full'>('None');
   const [showComparison, setShowComparison] = useState(false);
 
-  const data = COUNTRY_DATA[country];
+  const countryNames = useMemo(
+    () => Object.keys(countryData).sort(),
+    [countryData],
+  );
+
+  const data      = countryData[country];
   const reduction = SCHOLARSHIP_REDUCTIONS[scholarship];
 
   const calc = useMemo(() => {
+    if (!data) return { tuition: 0, living: 0, total: 0 };
     const tuition = ((data.tuitionMin + data.tuitionMax) / 2) * (1 - reduction) * duration;
-    const living  = ((data.livingMin + data.livingMax) / 2) * duration;
-    const visa    = data.visaFee;
-    const flight  = data.flightEstimate;
-    const misc    = duration * 300; // misc yearly expenses
-    const total   = tuition + living + visa + flight + misc;
-    return { tuition, living, visa, flight, misc, total };
+    const living  = ((data.livingMin  + data.livingMax)  / 2) * duration;
+    const misc    = duration * 300;
+    const total   = tuition + living + misc;
+    return { tuition, living, total };
   }, [country, duration, scholarship, data, reduction]);
 
-  const barData = [
-    { label: 'Tuition',  value: calc.tuition, pct: (calc.tuition / calc.total) * 100 },
-    { label: 'Living',   value: calc.living,  pct: (calc.living  / calc.total) * 100 },
-    { label: 'Visa',     value: calc.visa,    pct: (calc.visa    / calc.total) * 100 },
-    { label: 'Flights',  value: calc.flight,  pct: (calc.flight  / calc.total) * 100 },
-  ];
+  const barData = data ? [
+    { label: 'Tuition', value: calc.tuition, pct: (calc.tuition / calc.total) * 100 },
+    { label: 'Living',  value: calc.living,  pct: (calc.living  / calc.total) * 100 },
+  ] : [];
 
-  // Compare top 3 cheapest alternatives
-  const alternatives = Object.entries(COUNTRY_DATA)
+  const alternatives = Object.entries(countryData)
     .filter(([k]) => k !== country)
     .map(([k, v]) => {
       const t = ((v.tuitionMin + v.tuitionMax) / 2) * (1 - reduction) * duration;
-      const l = ((v.livingMin + v.livingMax) / 2) * duration;
-      return { name: k, total: t + l + v.visaFee + v.flightEstimate + duration * 300 };
+      const l = ((v.livingMin  + v.livingMax)  / 2) * duration;
+      return { name: k, total: t + l + duration * 300 };
     })
     .sort((a, b) => a.total - b.total)
     .slice(0, 3);
 
+  // ── Save budget estimate to Firestore when user clicks CTA ─────────────────
+  function handleCtaClick() {
+    if (!data) return;
+    submitFormData('budgetEstimates', {
+      country,
+      duration,
+      scholarship,
+      estimatedTotal:  Math.round(calc.total),
+      tuitionEstimate: Math.round(calc.tuition),
+      livingEstimate:  Math.round(calc.living),
+      currency:        data.currency,
+      source:          'BudgetPlannerSection',
+    }).catch((err) =>
+      console.error('BudgetPlanner: failed to save estimate', err),
+    );
+  }
+
+  // ─── Render ────────────────────────────────────────────────────────────────
   return (
     <section style={{
       background: '#ffffff',
@@ -126,9 +223,7 @@ export default function BudgetPlannerSection() {
         }
         .dur-btn:first-child { clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); }
         .dur-btn:last-child  { clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
-        .dur-btn.active {
-          background: #1E3A5F; border-color: #1E3A5F; color: white;
-        }
+        .dur-btn.active { background: #1E3A5F; border-color: #1E3A5F; color: white; }
         .dur-btn:hover:not(.active) { border-color: #1E3A5F; color: #1E3A5F; }
 
         /* Scholarship pills */
@@ -232,6 +327,18 @@ export default function BudgetPlannerSection() {
         /* Divider */
         .white-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0; }
 
+        /* Shimmer skeleton */
+        @keyframes bp-shimmer {
+          0%   { background-position: -600px 0; }
+          100% { background-position:  600px 0; }
+        }
+        .bp-skeleton {
+          border-radius: 0;
+          background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+          background-size: 1200px 100%;
+          animation: bp-shimmer 1.4s infinite linear;
+        }
+
         @media (max-width: 1024px) {
           .bp-layout { grid-template-columns: 1fr !important; }
           .controls-card { clip-path: none !important; border-radius: 16px !important; }
@@ -272,181 +379,212 @@ export default function BudgetPlannerSection() {
           </p>
         </div>
 
-        {/* Layout */}
-        <div className="bp-layout" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2px', alignItems:'stretch' }}>
-
-          {/* ─── LEFT: Controls ─── */}
-          <div className="controls-card">
-
-            {/* Country */}
-            <div style={{ marginBottom:'28px' }}>
-              <div className="bp-label">Destination Country</div>
-              <select
-                className="bp-select"
-                value={country}
-                onChange={e => setCountry(e.target.value)}
-              >
-                {Object.keys(COUNTRY_DATA).map(c => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Duration */}
-            <div style={{ marginBottom:'28px' }}>
-              <div className="bp-label">Duration of Study</div>
-              <div className="dur-btns" style={{ display:'flex', gap:'4px' }}>
-                {DURATIONS.map(d => (
-                  <button
-                    key={d}
-                    className={`dur-btn ${duration === d ? 'active' : ''}`}
-                    onClick={() => setDuration(d)}
-                  >
-                    {d} yr{d > 1 ? 's' : ''}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Scholarship */}
-            <div style={{ marginBottom:'36px' }}>
-              <div className="bp-label">Scholarship Expected</div>
-              <div className="sch-pills" style={{ display:'flex', gap:'8px' }}>
-                {(['None', 'Partial', 'Half', 'Full'] as const).map(s => (
-                  <button
-                    key={s}
-                    className={`sch-pill ${scholarship === s ? 'active' : ''}`}
-                    onClick={() => setScholarship(s)}
-                  >
-                    {s === 'Partial' ? '25%' : s === 'Half' ? '50%' : s === 'Full' ? '100%' : 'None'}
-                  </button>
-                ))}
-              </div>
-              {scholarship !== 'None' && (
-                <p style={{ fontSize:'12px', color:'#64748B', marginTop:'10px', fontWeight:'500' }}>
-                  Scholarship reduces tuition by {SCHOLARSHIP_REDUCTIONS[scholarship] * 100}%. 
-                  Final eligibility confirmed with counselor.
-                </p>
-              )}
-            </div>
-
-            {/* Scholar note */}
-            <div style={{
-              background:'white',
-              border:'2px solid #E2E8F0',
-              padding:'16px 18px',
-              borderRadius:'0',
-              clipPath:'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
-            }}>
-              <div style={{ fontSize:'12px', fontWeight:'800', color:'#94A3B8',
-                letterSpacing:'1.5px', textTransform:'uppercase', marginBottom:'8px' }}>
-                📌 Country Note
-              </div>
-              <div style={{ fontSize:'14px', color:'#1E3A5F', fontWeight:'600', lineHeight:1.6 }}>
-                {data.note}
-              </div>
-              <div style={{ marginTop:'10px', fontSize:'13px', color:'#94A3B8' }}>
-                Scholarship chances: <strong style={{ color: data.scholarshipChance === 'High' ? '#10B981' : data.scholarshipChance === 'Medium' ? '#FF6B35' : '#64748B' }}>
-                  {data.scholarshipChance}
-                </strong>
-              </div>
-            </div>
+        {/* ── Error state ── */}
+        {dbError && (
+          <div style={{
+            padding: '24px', background: '#FFF5F5', border: '2px solid #FED7D7',
+            borderRadius: '8px', color: '#C53030', fontWeight: 600, fontSize: '15px',
+          }}>
+            Unable to load country data. Please refresh the page.
           </div>
+        )}
 
-          {/* ─── RIGHT: Result ─── */}
-          <div className="result-card">
-            <div style={{ position:'relative', zIndex:1 }}>
+        {/* Layout */}
+        {!dbError && (
+          <div className="bp-layout" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2px', alignItems:'stretch' }}>
 
-              {/* Total */}
-              <div style={{ marginBottom:'36px' }}>
-                <div style={{ fontSize:'11px', fontWeight:'800', letterSpacing:'2px',
-                  textTransform:'uppercase', color:'rgba(255,255,255,0.4)', marginBottom:'16px' }}>
-                  Estimated Total Cost
-                </div>
-                <div className="total-num">
-                  {fmt(calc.total)}
-                </div>
-                <div style={{ fontSize:'15px', color:'rgba(255,255,255,0.5)', marginTop:'8px', fontWeight:'500' }}>
-                  Over {duration} year{duration > 1 ? 's' : ''} in {country}
-                  {scholarship !== 'None' ? ` · ${scholarship} scholarship applied` : ''}
-                </div>
+            {/* ─── LEFT: Controls ─── */}
+            <div className="controls-card">
+
+              {/* Country */}
+              <div style={{ marginBottom:'28px' }}>
+                <div className="bp-label">Destination Country</div>
+                {dbLoading ? (
+                  <div className="bp-skeleton" style={{ height: 56 }} />
+                ) : (
+                  <select
+                    className="bp-select"
+                    value={country}
+                    onChange={e => setCountry(e.target.value)}
+                  >
+                    {countryNames.map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                )}
               </div>
 
-              {/* Breakdown bars */}
-              <div style={{ marginBottom:'32px' }}>
-                <div style={{ fontSize:'11px', fontWeight:'800', letterSpacing:'1.5px',
-                  textTransform:'uppercase', color:'rgba(255,255,255,0.35)', marginBottom:'18px' }}>
-                  Cost Breakdown
-                </div>
-                {barData.map((b, i) => (
-                  <div key={b.label} style={{ marginBottom:'16px' }}>
-                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'4px' }}>
-                      <span style={{ fontSize:'13px', fontWeight:'700', color:'rgba(255,255,255,0.7)' }}>
-                        {b.label}
-                      </span>
-                      <span style={{ fontSize:'14px', fontWeight:'800', color:'white' }}>
-                        {fmt(b.value)}
-                      </span>
-                    </div>
-                    <div className="bar-track">
-                      <div className="bar-fill" style={{
-                        width: `${Math.max(b.pct, 2)}%`,
-                        background: BAR_COLORS[i],
-                      }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <hr className="white-divider" />
-
-              {/* India comparison */}
-              <div className="india-callout" style={{ marginBottom:'24px' }}>
-                💡 The same degree in India typically costs{' '}
-                <strong style={{ color:'white' }}>$50,000 – $80,000</strong>.
-                You save <strong style={{ color:'#FF6B35' }}>{fmt(70000 - calc.total)}</strong> by studying in {country}.
-              </div>
-
-              {/* Alt comparison toggle */}
-              <button
-                onClick={() => setShowComparison(!showComparison)}
-                style={{ background:'none', border:'none', cursor:'pointer', padding:0, marginBottom:'16px',
-                  fontSize:'13px', fontWeight:'700', color:'rgba(255,255,255,0.5)',
-                  fontFamily:'"Plus Jakarta Sans", sans-serif', display:'flex', alignItems:'center', gap:'6px' }}
-              >
-                {showComparison ? '▲ Hide' : '▼ Compare'} cheaper alternatives
-              </button>
-
-              {showComparison && (
-                <div style={{ marginBottom:'24px' }}>
-                  {alternatives.map(alt => (
-                    <div key={alt.name} className="alt-row">
-                      <span style={{ fontSize:'14px', fontWeight:'700', color:'white' }}>{alt.name}</span>
-                      <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
-                        <span style={{ fontSize:'14px', fontWeight:'800', color:'white' }}>
-                          {fmt(alt.total)}
-                        </span>
-                        {alt.total < calc.total && (
-                          <span className="savings-badge">
-                            Save {fmt(calc.total - alt.total)}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+              {/* Duration */}
+              <div style={{ marginBottom:'28px' }}>
+                <div className="bp-label">Duration of Study</div>
+                <div className="dur-btns" style={{ display:'flex', gap:'4px' }}>
+                  {DURATIONS.map(d => (
+                    <button
+                      key={d}
+                      className={`dur-btn ${duration === d ? 'active' : ''}`}
+                      onClick={() => setDuration(d)}
+                    >
+                      {d} yr{d > 1 ? 's' : ''}
+                    </button>
                   ))}
                 </div>
-              )}
+              </div>
 
-              {/* CTA */}
-              <Link href="/contact" className="bp-cta">
-                Get My Exact Quote from a Counselor →
-              </Link>
-              <p className="note-text" style={{ marginTop:'12px' }}>
-                * Estimates based on average costs. A counselor will confirm exact numbers based on your chosen university and program.
-              </p>
+              {/* Scholarship */}
+              <div style={{ marginBottom:'36px' }}>
+                <div className="bp-label">Scholarship Expected</div>
+                <div className="sch-pills" style={{ display:'flex', gap:'8px' }}>
+                  {(['None', 'Partial', 'Half', 'Full'] as const).map(s => (
+                    <button
+                      key={s}
+                      className={`sch-pill ${scholarship === s ? 'active' : ''}`}
+                      onClick={() => setScholarship(s)}
+                    >
+                      {s === 'Partial' ? '25%' : s === 'Half' ? '50%' : s === 'Full' ? '100%' : 'None'}
+                    </button>
+                  ))}
+                </div>
+                {scholarship !== 'None' && (
+                  <p style={{ fontSize:'12px', color:'#64748B', marginTop:'10px', fontWeight:'500' }}>
+                    Scholarship reduces tuition by {SCHOLARSHIP_REDUCTIONS[scholarship] * 100}%.
+                    Final eligibility confirmed with counselor.
+                  </p>
+                )}
+              </div>
+
+              {/* Country note — sourced from overview.description */}
+              <div style={{
+                background:'white',
+                border:'2px solid #E2E8F0',
+                padding:'16px 18px',
+                borderRadius:'0',
+                clipPath:'polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))',
+              }}>
+                <div style={{ fontSize:'12px', fontWeight:'800', color:'#94A3B8',
+                  letterSpacing:'1.5px', textTransform:'uppercase', marginBottom:'8px' }}>
+                  📌 Country Note
+                </div>
+                {dbLoading ? (
+                  <>
+                    <div className="bp-skeleton" style={{ height: 14, marginBottom: 8 }} />
+                    <div className="bp-skeleton" style={{ height: 14, width: '75%' }} />
+                  </>
+                ) : (
+                  <div style={{ fontSize:'14px', color:'#1E3A5F', fontWeight:'600', lineHeight:1.6 }}>
+                    {data?.note || '—'}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ─── RIGHT: Result ─── */}
+            <div className="result-card">
+              <div style={{ position:'relative', zIndex:1 }}>
+
+                {/* Total */}
+                <div style={{ marginBottom:'36px' }}>
+                  <div style={{ fontSize:'11px', fontWeight:'800', letterSpacing:'2px',
+                    textTransform:'uppercase', color:'rgba(255,255,255,0.4)', marginBottom:'16px' }}>
+                    Estimated Total Cost
+                  </div>
+                  {dbLoading ? (
+                    <div className="bp-skeleton" style={{ height: 64, width: '60%', background: 'rgba(255,255,255,0.1)' }} />
+                  ) : (
+                    <div className="total-num">{fmt(calc.total)}</div>
+                  )}
+                  <div style={{ fontSize:'15px', color:'rgba(255,255,255,0.5)', marginTop:'8px', fontWeight:'500' }}>
+                    Over {duration} year{duration > 1 ? 's' : ''}{country ? ` in ${country}` : ''}
+                    {scholarship !== 'None' ? ` · ${scholarship} scholarship applied` : ''}
+                  </div>
+                </div>
+
+                {/* Breakdown bars */}
+                <div style={{ marginBottom:'32px' }}>
+                  <div style={{ fontSize:'11px', fontWeight:'800', letterSpacing:'1.5px',
+                    textTransform:'uppercase', color:'rgba(255,255,255,0.35)', marginBottom:'18px' }}>
+                    Cost Breakdown
+                  </div>
+                  {dbLoading ? (
+                    [0, 1].map(i => (
+                      <div key={i} style={{ marginBottom: 16 }}>
+                        <div className="bp-skeleton" style={{ height: 12, marginBottom: 8, background: 'rgba(255,255,255,0.1)' }} />
+                        <div className="bp-skeleton" style={{ height: 10, background: 'rgba(255,255,255,0.1)' }} />
+                      </div>
+                    ))
+                  ) : (
+                    barData.map((b, i) => (
+                      <div key={b.label} style={{ marginBottom:'16px' }}>
+                        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'4px' }}>
+                          <span style={{ fontSize:'13px', fontWeight:'700', color:'rgba(255,255,255,0.7)' }}>
+                            {b.label}
+                          </span>
+                          <span style={{ fontSize:'14px', fontWeight:'800', color:'white' }}>
+                            {fmt(b.value)}
+                          </span>
+                        </div>
+                        <div className="bar-track">
+                          <div className="bar-fill" style={{
+                            width: `${Math.max(b.pct, 2)}%`,
+                            background: BAR_COLORS[i],
+                          }} />
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <hr className="white-divider" />
+
+                {/* India comparison */}
+                <div className="india-callout" style={{ marginBottom:'24px' }}>
+                  💡 The same degree in India typically costs{' '}
+                  <strong style={{ color:'white' }}>$50,000 – $80,000</strong>.
+                  {calc.total > 0 && (
+                    <> You save <strong style={{ color:'#FF6B35' }}>{fmt(70000 - calc.total)}</strong> by studying{country ? ` in ${country}` : ' abroad'}.</>
+                  )}
+                </div>
+
+                {/* Alt comparison toggle */}
+                <button
+                  onClick={() => setShowComparison(!showComparison)}
+                  style={{ background:'none', border:'none', cursor:'pointer', padding:0, marginBottom:'16px',
+                    fontSize:'13px', fontWeight:'700', color:'rgba(255,255,255,0.5)',
+                    fontFamily:'"Plus Jakarta Sans", sans-serif', display:'flex', alignItems:'center', gap:'6px' }}
+                >
+                  {showComparison ? '▲ Hide' : '▼ Compare'} cheaper alternatives
+                </button>
+
+                {showComparison && (
+                  <div style={{ marginBottom:'24px' }}>
+                    {alternatives.map(alt => (
+                      <div key={alt.name} className="alt-row">
+                        <span style={{ fontSize:'14px', fontWeight:'700', color:'white' }}>{alt.name}</span>
+                        <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+                          <span style={{ fontSize:'14px', fontWeight:'800', color:'white' }}>
+                            {fmt(alt.total)}
+                          </span>
+                          {alt.total < calc.total && (
+                            <span className="savings-badge">
+                              Save {fmt(calc.total - alt.total)}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* CTA — saves the estimate to Firestore then navigates */}
+                <Link href="/contact" className="bp-cta" onClick={handleCtaClick}>
+                  Get My Exact Quote from a Counselor →
+                </Link>
+                <p className="note-text" style={{ marginTop:'12px' }}>
+                  * Estimates based on average costs. A counselor will confirm exact numbers based on your chosen university and program.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
