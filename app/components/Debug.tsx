@@ -4,12 +4,7 @@ import { useEffect, useState } from 'react';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-/**
- * DEBUG COMPONENT
- * Use this to verify what's actually in Firestore
- * 
- * Add this to any page temporarily to debug
- */
+
 export default function FirestoreDebugger() {
   const [allScreens, setAllScreens] = useState<any[]>([]);
   const [specificScreen, setSpecificScreen] = useState<any>(null);

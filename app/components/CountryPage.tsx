@@ -1,19 +1,15 @@
 
-
-
 'use client';
 
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getUniversitiesByCountry , getCoursesForCountry } from '../../services/dbServices';
+import { getUniversitiesByCountry, getCoursesForCountry } from '../../services/dbServices';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import LeadFormModal from './LeadForm';
-import PromoAd from './PromoAd';
-import { Shield } from 'lucide-react';
 import type { CountryDetailedInfo } from '../data/countryData';
-import { count } from 'console';
 import { University } from '../data/universityData';
+
 interface CountryPageProps {
   countrySlug: string;
   countryData: CountryDetailedInfo;
@@ -21,2109 +17,834 @@ interface CountryPageProps {
 
 export default function CountryPage({ countrySlug, countryData }: CountryPageProps) {
   const country = countryData;
-  // State for universities data
-const [universities, setUniversities] = useState<University[]>([]);
-const [loadingUniversities, setLoadingUniversities] = useState(false);
+  const [universities, setUniversities] = useState<University[]>([]);
+  const [loadingUniversities, setLoadingUniversities] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<string>('All');
   const [activeTab, setActiveTab] = useState<'about' | 'universities'>('about');
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
-const [availableCourses, setAvailableCourses] = useState<string[]>([]);
-const [loadingCourses, setLoadingCourses] = useState(true);
-  // Fetch universities when tab switches to 'universities'
-useEffect(() => {
-  if (activeTab === 'universities') {
-    setLoadingUniversities(true);
-    
-    getUniversitiesByCountry(countrySlug)
-      .then(data => {
-        setUniversities(data);
-        setLoadingUniversities(false);
-      })
-      .catch(error => {
-        console.error('Error fetching universities:', error);
-        setUniversities([]);
-        setLoadingUniversities(false);
-      });
-  }
-  const fetchCourses = async () => {
-    try {
-      setLoadingCourses(true);
-      const courses = await getCoursesForCountry(countrySlug);
-      setAvailableCourses(courses);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-      setAvailableCourses([]);
-    } finally {
-      setLoadingCourses(false);
+  const [availableCourses, setAvailableCourses] = useState<string[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+
+  useEffect(() => {
+    if (activeTab === 'universities') {
+      setSelectedCourse('All');
+      setLoadingUniversities(true);
+      getUniversitiesByCountry(countrySlug)
+        .then(d => { setUniversities(d); setLoadingUniversities(false); })
+        .catch(() => { setUniversities([]); setLoadingUniversities(false); });
     }
-  };
-  
-  fetchCourses();
-}, [countrySlug, activeTab]);
-  if (!country) {
-    return <div>Country not found</div>;
-  }
+    (async () => {
+      try {
+        setLoadingCourses(true);
+        setAvailableCourses(await getCoursesForCountry(countrySlug));
+      } catch { setAvailableCourses([]); }
+      finally { setLoadingCourses(false); }
+    })();
+  }, [countrySlug, activeTab]);
+
+  if (!country) return <div>Country not found</div>;
+
+  const topPoints = country.whyStudyHere.points.slice(0, 4);
+
+  // Derive unique course filter options from universities
+  const courseFilters = ['All', ...Array.from(new Set(
+    universities.flatMap(u => u.programs?.map((p: any) => p.name || p) ?? [])
+  )).slice(0, 6)];
+
+  const filteredUniversities = selectedCourse === 'All'
+    ? universities
+    : universities.filter(u => u.programs?.some((p: any) => (p.name || p) === selectedCourse));
 
   return (
     <>
       <Navbar />
+      <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '"Plus Jakarta Sans", sans-serif' }}>
 
-    <div style={{
-      minHeight: '100vh',
-      background: '#FFFFFF',
-      fontFamily: '"Plus Jakarta Sans", sans-serif',
-    }}>
-      
-      {/* Application Modal */}
-      {/* <ApplicationModal
-        isOpen={isApplicationModalOpen}
-        onClose={() => setIsApplicationModalOpen(false)}
-        countryCode={countrySlug}
-        countryName={country.name}
-      /> */}
-   <LeadFormModal
-  isOpen={isApplicationModalOpen}
-  onClose={() => setIsApplicationModalOpen(false)}
-  countryCode={countrySlug}
-  countryName={country.name}
-/>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        <LeadFormModal
+          isOpen={isApplicationModalOpen}
+          onClose={() => setIsApplicationModalOpen(false)}
+          countryCode={countrySlug}
+          countryName={country.name}
+        />
 
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+          *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* CURVED ELEMENTS */
-        .curved-card {
-          background: white;
-          border: 2px solid #E2E8F0;
-          border-radius: 20px;
-          padding: 28px;
-          transition: all 0.3s ease;
-        }
+          .hide-scrollbar::-webkit-scrollbar { display: none; }
+          .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .curved-card:hover {
-          border-color: #FF6B35;
-          box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-        }
+          /* ── TABS (Acadfly style — inline with breadcrumb) ── */
+          .page-tabs {
+            background: #fff;
+            border-bottom: 1px solid #E2E8F0;
+          }
+          .page-tabs-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 32px;
+            display: flex; align-items: center; gap: 0;
+          }
+          .page-tab {
+            padding: 16px 28px; background: transparent; border: none;
+            border-bottom: 2px solid transparent;
+            font-size: 14px; font-weight: 600; font-family: inherit;
+            color: #64748B; cursor: pointer; transition: all 0.2s ease;
+          }
+          .page-tab.active { color: #1E3A5F; border-bottom-color: #FF6B35; }
+          .page-tab:hover:not(.active) { color: #1E3A5F; }
 
-        .pill-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 20px;
-          background: white;
-          border: 2px solid #E2E8F0;
-          border-radius: 50px;
-          font-size: 13px;
-          font-weight: 700;
-          color: #1E3A5F;
-          transition: all 0.3s ease;
-        }
+          /* ── LIFE BAR ── */
+          .life-bar {
+            display: flex;
+            border: 1px solid #E2E8F0;
+            background: #E2E8F0;
+            gap: 1px;
+          }
+          .life-bar-item {
+            flex: 1 1 0;
+            display: flex; align-items: center; gap: 12px;
+            padding: 20px 22px;
+            background: #fff;
+            transition: background 0.2s;
+            min-width: 0;
+          }
+          .life-bar-item:hover { background: #FAFBFC; }
 
-        .pill-badge:hover {
-          border-color: #FF6B35;
-          background: #FFF7ED;
-        }
-
-        /* SHARP BOX ELEMENTS */
-        .sharp-card {
-          background: white;
-          border: 1px solid #E2E8F0;
-          padding: 28px;
-          transition: all 0.3s ease;
-        }
-
-        .sharp-card:hover {
-          border-color: #CBD5E1;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-        }
-
-        .sharp-badge {
-          display: inline-flex;
-          align-items: center;
-          padding: 8px 16px;
-          background: #10B981;
-          color: white;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-        }
-
-        /* Tab System - SHARP */
-        .tab-bar {
-          position: sticky;
-          top: 80px;
-          background: rgba(255, 255, 255, 0.98);
-          backdrop-filter: blur(20px);
-          border-bottom: 1px solid #E2E8F0;
-          z-index: 40;
-        }
-
-        .tab-container {
-          max-width: 1400px;
-          margin: 0 auto;
-          padding: 0 20px;
-          display: flex;
-          gap: 0;
-        }
-
-        .tab-button {
-          flex: 1;
-          max-width: 280px;
-          padding: 20px 32px;
-          background: transparent;
-          border: none;
-          border-bottom: 3px solid transparent;
-          font-size: 15px;
-          font-weight: 700;
-          color: #64748B;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          letter-spacing: 0.3px;
-        }
-
-        .tab-button.active {
-          color: #1E3A5F;
-          border-bottom-color: #FF6B35;
-        }
-
-        .tab-button:hover:not(.active) {
-          color: #1E3A5F;
-          background: #F8FAFC;
-        }
-
-        /* Number Badge - SHARP */
-        .number-badge {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 40px;
-          height: 40px;
-          background: #1E3A5F;
-          color: white;
-          font-weight: 800;
-          font-size: 14px;
-        }
-
-        /* Stats Box - CURVED */
-        .stat-box-curved {
-          background: white;
-          border: 2px solid #E2E8F0;
-          border-radius: 16px;
-          padding: 28px 24px;
-          text-align: center;
-          transition: all 0.3s ease;
-        }
-
-        .stat-box-curved:hover {
-          border-color: #FF6B35;
-          transform: translateY(-4px);
-          box-shadow: 0 12px 24px rgba(0,0,0,0.08);
-        }
-
-        /* Info Grid Item - mix of curves and sharp */
-        .info-grid-curved {
-          background: white;
-          border: 2px solid #E2E8F0;
-          border-radius: 16px;
-          padding: 24px;
-          transition: all 0.3s ease;
-        }
-
-        .info-grid-curved:hover {
-          border-color: #FF6B35;
-          background: #FAFBFC;
-        }
-
-        .info-grid-sharp {
-          background: white;
-          border: 1px solid #E2E8F0;
-          padding: 24px;
-          transition: all 0.3s ease;
-        }
-
-        .info-grid-sharp:hover {
-          border-color: #CBD5E1;
-          background: #FAFBFC;
-        }
-
-        /* University Card - CURVED */
-        .university-card-curved {
-          background: white;
-          border: 2px solid #E2E8F0;
-          border-radius: 20px;
-          padding: 28px;
-          transition: all 0.3s ease;
-          position: relative;
-        }
-
-        .university-card-curved:hover {
-          border-color: #FF6B35;
-          box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-          transform: translateY(-2px);
-        }
-
-        /* Section Label */
-        .section-label {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 16px;
-        }
-
-        .section-label-line {
-          width: 32px;
-          height: 2px;
-          background: #FF6B35;
-        }
-
-        .section-label-text {
-          font-size: 11px;
-          font-weight: 700;
-          color: #64748B;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-        }
-
-        /* Button - CURVED */
-        .btn-curved {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 18px 36px;
-          background: #FF6B35;
-          color: white;
-          border: none;
-          border-radius: 50px;
-          font-weight: 700;
-          font-size: 15px;
-          letter-spacing: 0.3px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          text-decoration: none;
-        }
-
-        .btn-curved:hover {
-          background: #F7931E;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 16px rgba(255,107,53,0.3);
-        }
-
-        /* Button - SHARP */
-        .btn-sharp {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 18px 36px;
-          background: #1E3A5F;
-          color: white;
-          border: none;
-          font-weight: 700;
-          font-size: 15px;
-          letter-spacing: 0.3px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .btn-sharp:hover {
-          background: #0F2744;
-          transform: translateY(-2px);
-        }
-
-        /* Hide scrollbar for horizontal scroll */
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-
-        /* Responsive */
-        @media (min-width: 768px) {
-          .tab-button {
-            padding: 24px 40px;
-            font-size: 16px;
+          @media (max-width: 768px) {
+            .life-bar {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr;
+            }
+            .life-bar-item:last-child {
+              grid-column: 1 / -1;
+              border-top: none;
+            }
           }
 
-          .curved-card {
-            padding: 36px;
+          /* ── LIFE GRID RESPONSIVE ── */
+          @media (max-width: 768px) {
+            .life-info-grid { grid-template-columns: repeat(2, 1fr) !important; }
           }
 
-          .sharp-card {
-            padding: 36px;
+          /* ── SECTION HEADING ── */
+          .section-h2 {
+            font-size: clamp(22px, 3.5vw, 32px);
+            font-weight: 800; color: #1E3A5F;
+            letter-spacing: -0.8px; margin-bottom: 8px;
+          }
+          .section-sub {
+            font-size: 15px; color: #64748B; font-weight: 500; margin-bottom: 36px;
           }
 
-          .stat-box-curved {
-            padding: 36px 28px;
+          /* ── MID-PAGE CTA BANNER ── */
+          .cta-banner {
+            background: #1E3A5F;
+            padding: 52px 40px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 32px; flex-wrap: wrap;
+            position: relative; overflow: hidden;
           }
-        }
-
-        @media (min-width: 1024px) {
-          .curved-card {
-            padding: 40px;
+          .cta-banner::before {
+            content: '';
+            position: absolute; right: -60px; top: -60px;
+            width: 200px; height: 200px;
+            border: 1px solid rgba(255,255,255,0.07);
+            transform: rotate(15deg);
           }
-
-          .sharp-card {
-            padding: 40px;
-          }
-
-          .stat-box-curved {
-            padding: 40px 32px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .tab-container {
-            overflow-x: auto;
+          .cta-banner::after {
+            content: '';
+            position: absolute; right: 40px; bottom: -40px;
+            width: 120px; height: 120px;
+            border: 1px solid rgba(255,255,255,0.05);
           }
 
-          .tab-button {
-            min-width: 150px;
+          /* ── COST CARDS ── */
+          .cost-card {
+            padding: 28px 24px; background: #fff;
+            border: 1px solid #E2E8F0;
+            transition: all 0.25s ease;
           }
-        }
-      `}</style>
+          .cost-card:hover { border-color: #FF6B35; box-shadow: 0 8px 24px rgba(255,107,53,0.08); transform: translateY(-3px); }
 
-      {/* Hero Section with Backdrop */}
-      <section style={{
-        position: 'relative',
-        minHeight: '100vh',
-        overflow: 'hidden'
-      }}>
-        {/* Background Image */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `url(${country.heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }} />
-        
-        {/* Dark Overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.75) 100%)'
-        }} />
+          /* ── ELIGIBILITY ROWS ── */
+          .elig-item {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 20px 0; border-bottom: 1px solid #F1F5F9;
+          }
+          .elig-item:last-child { border-bottom: none; }
 
-        {/* Hero Content */}
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          padding: '100px 20px 60px',
-          maxWidth: '1400px',
-          margin: '0 auto'
-        }}>
-          {/* Back Link */}
-          <Link 
-            href="/destinations"
-            style={{
-              position: 'absolute',
-              top: '100px',
-              left: '20px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              color: 'white',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '14px',
-              opacity: 0.9,
-              letterSpacing: '0.3px'
-            }}
-          >
-            ← Back to Destinations
-          </Link>
+          /* ── ADVANTAGE ITEM ── */
+          .adv-item {
+            display: flex; align-items: flex-start; gap: 20px;
+            padding: 24px; border: 1px solid #E2E8F0; background: #fff;
+            transition: all 0.25s ease; position: relative;
+          }
+          .adv-item::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; background: transparent; transition: background 0.2s;
+          }
+          .adv-item:hover::before { background: #FF6B35; }
+          .adv-item:hover { box-shadow: 0 8px 28px rgba(30,58,95,0.08); border-color: rgba(255,107,53,0.2); }
 
-          {/* Country Badge - CURVED PILL */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '12px 24px',
-            background: 'rgba(255,255,255,0.12)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: '50px',
-            marginBottom: '24px',
-            width: 'fit-content'
+          /* ── UNI CARD ── */
+          .uni-card {
+            background: #fff; border: 1px solid #E2E8F0;
+            display: flex; flex-direction: column; overflow: hidden;
+            transition: all 0.25s ease;
+          }
+          .uni-card:hover { border-color: #1E3A5F; box-shadow: 0 12px 40px rgba(30,58,95,0.1); transform: translateY(-3px); }
+          .uni-card-btn {
+            padding: 16px; background: #1E3A5F; color: #fff;
+            font-size: 11px; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; text-align: center; transition: background 0.2s;
+          }
+          .uni-card:hover .uni-card-btn { background: #FF6B35; }
+
+          /* ── COURSE PILL ── */
+          .course-pill {
+            flex-shrink: 0; padding: 16px 24px;
+            border: 1px solid #E2E8F0; background: #fff;
+            transition: all 0.2s ease; cursor: pointer;
+          }
+          .course-pill:hover { border-color: #FF6B35; background: #FFFAF8; transform: translateY(-3px); }
+
+          /* ── CTA BUTTONS ── */
+          .btn-orange {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 15px 36px; background: #FF6B35; color: #fff;
+            border: 2px solid #FF6B35; font-size: 14px; font-weight: 700;
+            letter-spacing: 0.3px; font-family: inherit; cursor: pointer;
+            text-decoration: none; transition: all 0.2s ease;
+          }
+          .btn-orange:hover { background: #E85D29; border-color: #E85D29; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,53,0.3); }
+
+          .btn-white {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 15px 36px; background: #fff; color: #1E3A5F;
+            border: 2px solid #fff; font-size: 14px; font-weight: 700;
+            letter-spacing: 0.3px; font-family: inherit; cursor: pointer;
+            text-decoration: none; transition: all 0.2s ease;
+          }
+          .btn-white:hover { background: transparent; color: #fff; }
+
+          .btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 13px 32px; background: transparent; color: #1E3A5F;
+            border: 1px solid #E2E8F0; font-size: 13px; font-weight: 700;
+            font-family: inherit; cursor: pointer; text-decoration: none;
+            transition: all 0.2s ease;
+          }
+          .btn-outline:hover { border-color: #1E3A5F; }
+
+          /* ── VISA INFO CELL ── */
+          .visa-cell {
+            padding: 28px 24px; background: #fff; border: 1px solid #E2E8F0;
+            position: relative; overflow: hidden;
+            transition: all 0.2s ease;
+          }
+          .visa-cell::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            height: 2px; width: 0; background: #FF6B35;
+            transition: width 0.3s ease;
+          }
+          .visa-cell:hover::after { width: 100%; }
+
+          /* ── DOC TAG ── */
+          .doc-tag {
+            padding: 8px 14px; border: 1px solid #E2E8F0; background: #F8FAFC;
+            font-size: 12px; font-weight: 600; color: #1E3A5F;
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: all 0.2s ease;
+          }
+          .doc-tag:hover { border-color: #FF6B35; color: #FF6B35; background: #fff; }
+
+          /* ── RESPONSIVE ── */
+          @media (max-width: 1024px) {
+            .cost-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .adv-grid { grid-template-columns: 1fr !important; }
+            .visa-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .uni-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
+          @media (max-width: 768px) {
+            .hero-inner { padding: 120px 20px 48px !important; }
+            .page-tabs-inner { padding: 0 16px; overflow-x: auto; }
+            .content-pad { padding-left: 20px !important; padding-right: 20px !important; }
+            .two-col { grid-template-columns: 1fr !important; }
+            .elig-grid { grid-template-columns: 1fr !important; }
+            .cost-grid { grid-template-columns: 1fr 1fr !important; }
+            .visa-grid { grid-template-columns: 1fr 1fr !important; }
+            .uni-grid { grid-template-columns: 1fr !important; }
+            .cta-banner { padding: 36px 20px !important; flex-direction: column !important; align-items: flex-start !important; }
+            .btn-orange, .btn-white { width: 100% !important; justify-content: center !important; }
+            .section-h2 { letter-spacing: -0.5px !important; }
+          }
+          @media (max-width: 420px) {
+            .cost-grid { grid-template-columns: 1fr !important; }
+            .visa-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
+
+        {/* ════════════════════════════════════════
+            HERO
+        ════════════════════════════════════════ */}
+        <section style={{ position: 'relative', minHeight: '580px', height: '72vh', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${country.heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(12,24,48,0.68)' }} />
+
+          <div className="hero-inner" style={{
+            position: 'relative', zIndex: 2,
+            height: '100%', display: 'flex', flexDirection: 'column',
+            justifyContent: 'center', alignItems: 'flex-start',
+            maxWidth: '1200px', margin: '0 auto', padding: '140px 32px 60px',
           }}>
-            <span style={{ 
-              color: 'white', 
-              fontWeight: '700', 
-              fontSize: '13px',
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase'
+            {/* Breadcrumb */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+              <Link href="/destinations" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', textDecoration: 'none', fontWeight: '500' }}>Destinations</Link>
+              <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px' }}>›</span>
+              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.55)', fontWeight: '500' }}>{country.name}</span>
+            </div>
+
+            <h1 style={{
+              fontSize: 'clamp(32px, 5.5vw, 64px)',
+              fontWeight: '800', color: '#fff',
+              letterSpacing: '-2px', lineHeight: '1.0',
+              marginBottom: '16px', maxWidth: '700px',
             }}>
-              Study  in {country.name}
-            </span>
-          </div>
+              Study in {country.name} {country.flag}
+            </h1>
 
-          {/* Title */}
-          <h1 style={{
-            fontSize: 'clamp(36px, 8vw, 72px)',
-            fontWeight: '800',
-            color: 'white',
-            letterSpacing: '-2px',
-            lineHeight: '1.1',
-            marginBottom: '20px',
-            maxWidth: '900px'
-          }}>
-            {country.overview.title}
-          </h1>
+            <p style={{
+              fontSize: 'clamp(14px, 1.6vw, 16px)',
+              color: 'rgba(255,255,255,0.72)', fontWeight: '500',
+              lineHeight: '1.7', maxWidth: '480px', marginBottom: '36px',
+            }}>
+              {country.overview.description}
+            </p>
 
-          {/* Description */}
-          <p style={{
-            fontSize: 'clamp(16px, 2.5vw, 20px)',
-            color: 'rgba(255,255,255,0.95)',
-            lineHeight: '1.7',
-            maxWidth: '700px',
-            marginBottom: '40px',
-            fontWeight: '500'
-          }}>
-            {country.overview.description}
-          </p>
-
-          {/* CTAs - Mix of curved and not */}
-          <div style={{ 
-            display: 'flex', 
-            flexWrap: 'wrap',
-            gap: '16px',
-            maxWidth: '600px'
-          }}>
-            {/* APPLY NOW BUTTON - Opens Modal */}
-            <button 
-              onClick={() => setIsApplicationModalOpen(true)}
-              className="btn-curved"
-            >
-              Apply Now →
+            <button onClick={() => setIsApplicationModalOpen(true)} className="btn-orange">
+              Get Started →
             </button>
-            
-            <button style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '18px 36px',
-              background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(12px)',
-              color: 'white',
-              border: '1px solid rgba(255,255,255,0.3)',
-              fontWeight: '700',
-              fontSize: '15px',
-              letterSpacing: '0.3px',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
-            }}>
-              Download Guide
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════
+            PAGE TABS — Acadfly style
+        ════════════════════════════════════════ */}
+        <div className="page-tabs" style={{ position: 'sticky', top: '80px', zIndex: 40 }}>
+          <div className="page-tabs-inner">
+            <button className={`page-tab ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>
+              About
+            </button>
+            <button className={`page-tab ${activeTab === 'universities' ? 'active' : ''}`} onClick={() => setActiveTab('universities')}>
+              Universities
             </button>
           </div>
         </div>
-      </section>
 
-      Statsboxcomponent · TSX
-Copy
+        {/* ════════════════════════════════════════
+            ABOUT TAB
+        ════════════════════════════════════════ */}
+        {activeTab === 'about' && (
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
- <section style={{
-        padding: '20px',
-        marginTop: '-50px',
-        position: 'relative',
-        zIndex: 3
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-            gap: '16px'
-          }}>
-            <div className="stat-box-curved">
-              <div style={{ 
-                fontSize: 'clamp(24px, 3vw, 36px)', 
-                fontWeight: '800', 
-                color: '#1E3A5F', 
-                marginBottom: '8px',
-                letterSpacing: '-1px'
-              }}>
-                {country.stats.totalUniversities}
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#64748B', 
-                fontWeight: '700',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                Universities
-              </div>
-            </div>
+            {/* ── LIFE IN [COUNTRY] — Icon tile row ── */}
+            <section style={{ padding: '56px 32px 0' }} className="content-pad">
+              <h2 className="section-h2">Life in {country.name} {country.flag}</h2>
+              <p className="section-sub">Know all about your favourite study destination</p>
 
-            <div className="stat-box-curved">
-              <div style={{ 
-                fontSize: 'clamp(24px, 3vw, 36px)', 
-                fontWeight: '800', 
-                color: '#1E3A5F', 
-                marginBottom: '8px',
-                letterSpacing: '-1px'
-              }}>
-                {country.stats.currency}
+              {/* Single horizontal info bar — 5 items, 2-col grid on mobile */}
+              <div className="life-bar">
+                {[
+                  { icon: '🗣️', label: 'Language',    value: country.livingInfo.language      },
+                  { icon: '💱', label: 'Currency',     value: country.livingInfo.currency      },
+                  { icon: '🌤️', label: 'Climate',      value: country.livingInfo.climate       },
+                  { icon: '🛡️', label: 'Safety',       value: country.livingInfo.safetyRating  },
+                  { icon: '📞', label: 'Dialing Code', value: country.stats.dialingCode        },
+                ].map((tile, i) => (
+                  <div key={i} className="life-bar-item">
+                    <span style={{ fontSize: '22px', flexShrink: 0, lineHeight: 1 }}>{tile.icon}</span>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '3px' }}>
+                        {tile.label}
+                      </div>
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: '#1E3A5F', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {tile.value}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#64748B', 
-                fontWeight: '700',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                Currency
-              </div>
-            </div>
- <div className="stat-box-curved">
-              <div style={{ 
-                fontSize: 'clamp(18px, 2vw, 28px)', 
-                fontWeight: '800', 
-                color: '#1E3A5F', 
-                marginBottom: '8px',
-                letterSpacing: '-1px'
-              }}>
-                {country.stats.gdp}
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#64748B', 
-                fontWeight: '700',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                GDP
-              </div>
-            </div>
- <div className="stat-box-curved">
-              <div style={{ 
-                fontSize: 'clamp(24px, 3vw, 36px)', 
-                fontWeight: '800', 
-                color: '#1E3A5F', 
-                marginBottom: '8px',
-                letterSpacing: '-1px'
-              }}>
-                {country.stats.dialingCode}
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#64748B', 
-                fontWeight: '700',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                Dialing Code
-              </div>
-            </div>
+            </section>
 
-            <div className="stat-box-curved">
-              <div style={{ 
-                fontSize: 'clamp(18px, 2vw, 28px)', 
-                fontWeight: '800', 
-                color: '#1E3A5F', 
-                marginBottom: '8px',
-                letterSpacing: '-1px'
-              }}>
-                {country.stats.programDuration}
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#64748B', 
-                fontWeight: '700',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                Duration
-              </div>
-            </div>
+            {/* ── ABOUT THE COUNTRY ── */}
+            <section style={{ padding: '64px 32px' }} className="content-pad">
+              <h2 className="section-h2">About {country.name}</h2>
+              <p className="section-sub">Everything you need to know before you apply</p>
 
-            <div className="stat-box-curved">
-              <div style={{ 
-                fontSize: 'clamp(18px, 1vw, 24px)', 
-                fontWeight: '800', 
-                color: '#FF6B35', 
-                marginBottom: '8px',
-                letterSpacing: '-0.5px'
-              }}>
-                {country.stats.averageFees}
-              </div>
-              <div style={{ 
-                fontSize: '12px', 
-                color: '#64748B', 
-                fontWeight: '700',
-                letterSpacing: '1px',
-                textTransform: 'uppercase'
-              }}>
-                Average Fees
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* Available Courses Horizontal Scroll Box */}
-      <section style={{
-        padding: '60px 20px',
-        background: '#F8FAFC',
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div className="section-label">
-            <div className="section-label-line" />
-            <span className="section-label-text">Available Courses</span>
-          </div>
-
-          <h2 style={{
-            fontSize: 'clamp(28px, 5vw, 42px)',
-            fontWeight: '800',
-            color: '#1E3A5F',
-            marginBottom: '32px',
-            letterSpacing: '-1px'
-          }}>
-            Courses You Can Study in {country.name}
-          </h2>
-
-          <div style={{
-            display: 'flex',
-            overflowX: 'auto',
-            gap: '16px',
-            paddingBottom: '16px',
-            scrollBehavior: 'smooth',
-            WebkitOverflowScrolling: 'touch',
-          }}
-          className="hide-scrollbar">
-            {loadingCourses ? (
-  // Loading state
-  <div style={{
-    padding: '40px',
-    textAlign: 'center',
-    color: '#64748B',
-    fontSize: '14px',
-    fontWeight: '600'
-  }}>
-    Loading available courses...
-  </div>
-) : availableCourses?.map((category, idx) => (
-              <div 
-                key={idx}
-                className="curved-card"
-                style={{
-                  minWidth: '260px',
-                  maxWidth: '260px',
-                  height: '140px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  padding: '24px 16px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#FF6B35';
-                  e.currentTarget.style.transform = 'translateY(-6px)';
-                  e.currentTarget.style.boxShadow = '0 16px 32px rgba(0,0,0,0.08)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#E2E8F0';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              >
-                <div style={{
-                  fontSize: 'clamp(20px, 4vw, 32px)',
-                  fontWeight: '800',
-                  color: '#FF6B35',
-                  marginBottom: '12px',
-                  lineHeight: '1'
-                }}>
-                  {category}
-                </div>
-                <div style={{
-                  fontSize: '13px',
-                  color: '#64748B',
-                  fontWeight: '600',
-                }}>
-                  {idx % 2 === 0 ? 'Popular Choice' : 'Growing Demand'}
-                </div>
-              </div>
-            ))}
-
-            {/* If no categories → fallback message */}
-            {(availableCourses && availableCourses.length === 0) && (
-              <div className="curved-card" style={{
-                minWidth: '320px',
-                padding: '32px',
-                textAlign: 'center',
-                color: '#64748B',
-                fontSize: '15px',
-                fontWeight: '500'
-              }}>
-                Course category information coming soon...
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Tab Navigation - SHARP */}
-      <div className="tab-bar">
-        <div className="tab-container">
-          <button
-            className={`tab-button ${activeTab === 'about' ? 'active' : ''}`}
-            onClick={() => setActiveTab('about')}
-          >
-            ABOUT {country.name.toUpperCase()}
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'universities' ? 'active' : ''}`}
-            onClick={() => setActiveTab('universities')}
-          >
-            UNIVERSITIES
-          </button>
-        </div>
-      </div>
-
-      {/* ABOUT TAB CONTENT */}
-      {activeTab === 'about' && (
-        <div>
-          {/* Detailed Overview - SHARP CARD */}
-          <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Overview</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 48px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '32px',
-                letterSpacing: '-1px',
-                lineHeight: '1.2',
-                maxWidth: '900px'
-              }}>
-               {country.name}
-              </h2>
-
-              <div style={{
-                display: 'grid',
-                gap: '24px',
-                maxWidth: '1000px'
-              }}>
-                {country.overview.detailedDescription.map((para, idx) => (
-                  <p key={idx} style={{
-                    fontSize: '17px',
-                    color: '#475569',
-                    lineHeight: '1.8',
-                    fontWeight: '500'
-                  }}>
-                    {para}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }} className="two-col">
+                {/* Left — description + why study here */}
+                <div>
+                  <p style={{ fontSize: '16px', color: '#334155', fontWeight: '500', lineHeight: '1.85', marginBottom: '32px' }}>
+                    {country.overview.detailedDescription?.[0]}
                   </p>
-                ))}
-              </div>
-            </div>
-          </section>
 
-          {/* Key Advantages - Mix of CURVED and SHARP */}
-           <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Advantages</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '48px',
-                letterSpacing: '-1px'
-              }}>
-                {country.whyStudyHere.title}
-              </h2>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '20px'
-              }}>
-                {country.whyStudyHere.points.slice(0, 12).map((point, idx) => (
-                  <div key={idx} className={idx % 2 === 0 ? 'info-grid-curved' : 'info-grid-sharp'}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: '16px'
-                    }}>
-                      <div className="number-badge">
-                        {String(idx + 1).padStart(2, '0')}
-                      </div>
-                      <p style={{
-                        fontSize: '15px',
-                        color: '#1E3A5F',
-                        fontWeight: '600',
-                        lineHeight: '1.6',
-                        flex: 1
-                      }}>
-                        {point}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>:<></>
-          </section>
-       {/* Top Universities Preview - CURVED */}
-          <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Top Universities</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '16px',
-                letterSpacing: '-1px'
-              }}>
-                Top Universities in {country.name}
-              </h2>
-
-              <p style={{
-                fontSize: '17px',
-                color: '#64748B',
-                marginBottom: '48px',
-                fontWeight: '500',
-                maxWidth: '700px'
-              }}>
-                Explore {country.topUniversities.length} internationally recognized medical universities
-              </p>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '16px'
-              }}>
-                {country.topUniversities.slice(0, 8).map((uni, idx) => (
-                  <div key={idx} className="curved-card" style={{ padding: '20px' }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '16px'
-                    }}>
-                      <div className="number-badge">
-                        {String(uni.rank).padStart(2, '0')}
-                      </div>
-                      <div style={{ flex: 1 }}>
+                  {/* Why study here — 4 items max */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {topPoints.map((point, i) => (
+                      <div key={i} className="adv-item">
                         <div style={{
-                          fontSize: '15px',
-                          fontWeight: '700',
-                          color: '#1E3A5F',
-                          marginBottom: '4px',
-                          lineHeight: '1.4'
+                          minWidth: '36px', height: '36px', background: '#FF6B35',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontSize: '12px', fontWeight: '800', color: '#fff', flexShrink: 0,
                         }}>
-                          {uni.name}
+                          {String(i + 1).padStart(2, '0')}
                         </div>
-                        <div style={{
-                          fontSize: '13px',
-                          color: '#64748B',
-                          fontWeight: '600'
-                        }}>
-                          {uni.city} • Est. {uni.established}
-                        </div>
-                      </div>
-                      {uni.nmcApproved && (
-                        <div className="sharp-badge">
-                          NMC
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ marginTop: '48px', textAlign: 'center' }}>
-                <button
-                  onClick={() => setActiveTab('universities')}
-                  className="btn-sharp"
-                >
-                  View All {country.topUniversities.length} Universities →
-                </button>
-              </div>
-            </div>
-          </section>
-
-          {/* Cost Breakdown - Mix CURVED and SHARP */}
-          <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Cost Breakdown</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '48px',
-                letterSpacing: '-1px'
-              }}>
-                Investment Required
-              </h2>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                gap: '20px',
-                marginBottom: '32px'
-              }}>
-                <div className="curved-card">
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#64748B',
-                    fontWeight: '700',
-                    marginBottom: '12px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Tuition Fees
-                  </div>
-                  <div style={{
-                    fontSize: 'clamp(20px, 3vw, 28px)',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '4px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.costs.tuitionFeeRange}
-                  </div>
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Per year
-                  </div>
-                </div>
-
-                <div className="sharp-card">
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#64748B',
-                    fontWeight: '700',
-                    marginBottom: '12px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Accommodation
-                  </div>
-                  <div style={{
-                    fontSize: 'clamp(20px, 3vw, 28px)',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '4px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.costs.hostelFees}
-                  </div>
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Per year
-                  </div>
-                </div>
-
-                <div className="curved-card">
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#64748B',
-                    fontWeight: '700',
-                    marginBottom: '12px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Food & Living
-                  </div>
-                  <div style={{
-                    fontSize: 'clamp(20px, 3vw, 28px)',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '4px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.costs.foodExpenses}
-                  </div>
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Per month
-                  </div>
-                </div>
-
-                <div className="sharp-card">
-                  <div style={{
-                    fontSize: '12px',
-                    color: '#64748B',
-                    fontWeight: '700',
-                    marginBottom: '12px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Other Expenses
-                  </div>
-                  <div style={{
-                    fontSize: 'clamp(20px, 3vw, 28px)',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '4px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.costs.otherExpenses}
-                  </div>
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Per year
-                  </div>
-                </div>
-              </div>
-
-              {/* Total Cost Highlight - CURVED */}
-              <div className="curved-card" style={{
-                background: 'linear-gradient(135deg, #1E3A5F 0%, #0F2744 100%)',
-                border: 'none',
-                maxWidth: '600px'
-              }}>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '32px'
-                }}>
-                  <div>
-                    <div style={{
-                      fontSize: '12px',
-                      color: 'rgba(255,255,255,0.7)',
-                      fontWeight: '700',
-                      marginBottom: '12px',
-                      letterSpacing: '1px',
-                      textTransform: 'uppercase'
-                    }}>
-                      First Year Total
-                    </div>
-                    <div style={{
-                      fontSize: 'clamp(22px, 4vw, 32px)',
-                      fontWeight: '800',
-                      color: 'white',
-                      letterSpacing: '-0.5px'
-                    }}>
-                      {country.costs.totalFirstYear}
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{
-                      fontSize: '12px',
-                      color: 'rgba(255,255,255,0.7)',
-                      fontWeight: '700',
-                      marginBottom: '12px',
-                      letterSpacing: '1px',
-                      textTransform: 'uppercase'
-                    }}>
-                      Complete Course
-                    </div>
-                    <div style={{
-                      fontSize: 'clamp(22px, 4vw, 32px)',
-                      fontWeight: '800',
-                      color: '#FF6B35',
-                      letterSpacing: '-0.5px'
-                    }}>
-                      {country.costs.totalCourse}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Eligibility & Documents - SHARP cards */}
-          <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Requirements</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '48px',
-                letterSpacing: '-1px'
-              }}>
-                Eligibility & Documents
-              </h2>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-                gap: '24px'
-              }}>
-                {/* Eligibility Card - SHARP */}
-                <div className="sharp-card">
-                  <h3 style={{
-                    fontSize: '20px',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '24px',
-                    letterSpacing: '-0.3px'
-                  }}>
-                    Eligibility Criteria
-                  </h3>
-                  
-                  <div style={{ display: 'grid', gap: '16px' }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '16px',
-                      background: '#F8FAFC',
-                      borderRadius: '8px'
-                    }}>
-                      <div style={{
-                        width: '8px',
-                        height: '8px',
-                        background: '#FF6B35',
-                        borderRadius: '50%'
-                      }} />
-                      <span style={{
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#1E3A5F'
-                      }}>
-                        {country.eligibility.neetRequirement}
-                      </span>
-                    </div>
-                    
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '16px',
-                      background: '#F8FAFC',
-                      borderRadius: '8px'
-                    }}>
-                      <div style={{
-                        width: '8px',
-                        height: '8px',
-                        background: '#FF6B35',
-                        borderRadius: '50%'
-                      }} />
-                      <span style={{
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#1E3A5F'
-                      }}>
-                        {country.eligibility.academicRequirement}
-                      </span>
-                    </div>
-                    
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px',
-                      padding: '16px',
-                      background: '#F8FAFC',
-                      borderRadius: '8px'
-                    }}>
-                      <div style={{
-                        width: '8px',
-                        height: '8px',
-                        background: '#FF6B35',
-                        borderRadius: '50%'
-                      }} />
-                      <span style={{
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        color: '#1E3A5F'
-                      }}>
-                        Age: {country.eligibility.ageLimit}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Documents Card - CURVED */}
-                <div className="curved-card">
-                  <h3 style={{
-                    fontSize: '20px',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '24px',
-                    letterSpacing: '-0.3px'
-                  }}>
-                    Required Documents
-                  </h3>
-                  
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '12px'
-                  }}>
-                    {country.eligibility.documents.map((doc, idx) => (
-                      <div key={idx} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        padding: '12px',
-                        background: '#FFF7ED',
-                        borderRadius: '8px'
-                      }}>
-                        <div style={{
-                          width: '6px',
-                          height: '6px',
-                          background: '#FF6B35',
-                          borderRadius: '50%'
-                        }} />
-                        <span style={{
-                          fontSize: '13px',
-                          fontWeight: '600',
-                          color: '#1E3A5F'
-                        }}>
-                          {doc}
-                        </span>
+                        <p style={{ fontSize: '15px', fontWeight: '600', color: '#1E3A5F', lineHeight: '1.55' }}>
+                          {point}
+                        </p>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
-          </section>
 
-          {/* Visa & Intake Info */}
-          <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Important Information</span>
-              </div>
-
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '48px',
-                letterSpacing: '-1px'
-              }}>
-                Visa & Intake Details
-              </h2>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '20px'
-              }}>
-                {/* Intake Info - CURVED */}
-                <div className="curved-card">
-                  <h4 style={{
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    color: '#64748B',
-                    marginBottom: '16px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Main Intake
-                  </h4>
-                  <div style={{
-                    fontSize: '28px',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '8px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.intakes.main}
+                {/* Right — key stats panel */}
+                <div style={{ border: '1px solid #E2E8F0', background: '#fff', position: 'sticky', top: '140px' }}>
+                  {/* Header */}
+                  <div style={{ padding: '20px 24px', background: '#1E3A5F' }}>
+                    <div style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.45)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '4px' }}>
+                      At a Glance
+                    </div>
+                    <div style={{ fontSize: '17px', fontWeight: '800', color: '#fff', letterSpacing: '-0.3px' }}>
+                      {country.name} — Key Facts
+                    </div>
                   </div>
-                  <p style={{
-                    fontSize: '14px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Application Deadline: {country.intakes.applicationDeadline}
-                  </p>
-                </div>
 
-                {/* Visa Type - SHARP */}
-                <div className="sharp-card">
-                  <h4 style={{
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    color: '#64748B',
-                    marginBottom: '16px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Visa Type
-                  </h4>
-                  <div style={{
-                    fontSize: '24px',
-                    fontWeight: '800',
-                    color: '#1E3A5F',
-                    marginBottom: '8px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.visa.type}
-                  </div>
-                  <p style={{
-                    fontSize: '14px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Processing: {country.visa.processingTime}
-                  </p>
-                </div>
+                  {/* Stat rows — label above value, never clipped */}
+                  {[
+                    { label: 'Total Universities', value: country.stats.totalUniversities + '+' },
+                    { label: 'NMC Approved',        value: country.stats.nmcApproved             },
+                    { label: 'Course Duration',     value: country.stats.programDuration         },
+                    { label: 'Avg. Fees / Year',    value: country.stats.averageFees             },
+                    { label: 'Indian Students',     value: country.stats.indianStudents          },
+                    { label: 'Medium',              value: country.stats.mediumOfInstruction     },
+                  ].map((row, i, arr) => (
+                    <div key={i} style={{
+                      padding: '14px 24px',
+                      borderBottom: i < arr.length - 1 ? '1px solid #F1F5F9' : 'none',
+                      display: 'flex', alignItems: 'center',
+                      justifyContent: 'space-between', gap: '12px',
+                    }}>
+                      <span style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', flexShrink: 0 }}>
+                        {row.label}
+                      </span>
+                      <span style={{ fontSize: '14px', fontWeight: '800', color: '#1E3A5F', textAlign: 'right', wordBreak: 'break-word' }}>
+                        {row.value}
+                      </span>
+                    </div>
+                  ))}
 
-                {/* Visa Validity - CURVED */}
-                <div className="curved-card">
-                  <h4 style={{
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    color: '#64748B',
-                    marginBottom: '16px',
-                    letterSpacing: '1px',
-                    textTransform: 'uppercase'
-                  }}>
-                    Visa Validity
-                  </h4>
-                  <div style={{
-                    fontSize: '24px',
-                    fontWeight: '800',
-                    color: '#FF6B35',
-                    marginBottom: '8px',
-                    letterSpacing: '-0.5px'
-                  }}>
-                    {country.visa.validity}
+                  <div style={{ padding: '20px 24px', borderTop: '1px solid #F1F5F9' }}>
+                    <button onClick={() => setIsApplicationModalOpen(true)} className="btn-orange" style={{ width: '100%', justifyContent: 'center' }}>
+                      Apply Now →
+                    </button>
                   </div>
-                  <p style={{
-                    fontSize: '14px',
-                    color: '#64748B',
-                    fontWeight: '600'
-                  }}>
-                    Renewable annually
-                  </p>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          {/* Living Info & Recognition */}
-          <section style={{ padding: '80px 20px', background: '#FFFFFF' }}>
-            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-              <div className="section-label">
-                <div className="section-label-line" />
-                <span className="section-label-text">Student Life</span>
+            {/* ── MID-PAGE CTA BANNER ── */}
+            <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <div className="cta-banner">
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '10px' }}>
+                    Your Future Awaits
+                  </div>
+                  <h3 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px', marginBottom: '8px' }}>
+                    Begin your journey to Study in {country.name}
+                  </h3>
+                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.65)', fontWeight: '500', maxWidth: '420px' }}>
+                    Expert counselors guide you from inquiry to enrollment — at zero cost.
+                  </p>
+                </div>
+                <button onClick={() => setIsApplicationModalOpen(true)} className="btn-white" style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>
+                  Get Started →
+                </button>
+              </div>
+            </section>
+
+            {/* ── AVAILABLE COURSES ── */}
+            <section style={{ padding: '0 0 64px' }}>
+              <div style={{ padding: '0 32px 28px' }} className="content-pad">
+                <h2 className="section-h2">Courses Available in {country.name}</h2>
+                <p className="section-sub">Choose from a wide range of programmes offered at partner universities</p>
+              </div>
+              <div className="hide-scrollbar" style={{ display: 'flex', overflowX: 'auto', paddingLeft: '32px', gap: '12px' }}>
+                {loadingCourses ? (
+                  <div style={{ padding: '32px', color: '#94A3B8', fontSize: '13px', fontWeight: '600' }}>Loading…</div>
+                ) : availableCourses?.length > 0 ? availableCourses.map((course, i) => (
+                  <div key={i} className="course-pill" style={{ marginRight: i === availableCourses.length - 1 ? '32px' : 0 }}>
+                    <div style={{ fontSize: '13px', fontWeight: '800', color: '#1E3A5F', marginBottom: '4px' }}>{course}</div>
+                    <div style={{ fontSize: '10px', fontWeight: '700', color: '#FF6B35', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+                      {i % 3 === 0 ? 'High Demand' : i % 3 === 1 ? 'Popular' : 'Growing'}
+                    </div>
+                  </div>
+                )) : (
+                  <div className="course-pill" style={{ marginRight: '32px' }}>
+                    <span style={{ fontSize: '13px', color: '#94A3B8', fontWeight: '600' }}>Course info coming soon</span>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            {/* ── ELIGIBILITY & DOCUMENTS ── */}
+            <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <h2 className="section-h2">Eligibility for Studying in {country.name}</h2>
+              <p className="section-sub">Make sure you meet these requirements before applying</p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }} className="elig-grid">
+                {/* Left — eligibility criteria */}
+                <div>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>
+                    Criteria
+                  </div>
+                  {[
+                    { icon: '📋', label: 'NEET',      text: country.eligibility.neetRequirement     },
+                    { icon: '🎓', label: 'Academics', text: country.eligibility.academicRequirement },
+                    { icon: '🎂', label: 'Age Limit', text: country.eligibility.ageLimit            },
+                  ].map((item, i) => (
+                    <div key={i} className="elig-item">
+                      <div style={{
+                        width: '44px', height: '44px', background: '#F8FAFC',
+                        border: '1px solid #E2E8F0', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center',
+                        fontSize: '20px', flexShrink: 0,
+                      }}>{item.icon}</div>
+                      <div>
+                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#FF6B35', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '5px' }}>
+                          {item.label}
+                        </div>
+                        <div style={{ fontSize: '15px', fontWeight: '700', color: '#1E3A5F', lineHeight: '1.4' }}>
+                          {item.text}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Right — required documents */}
+                <div>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>
+                    Required Documents
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '28px' }}>
+                    {country.eligibility.documents.map((doc, i) => (
+                      <div key={i} className="doc-tag">
+                        <span style={{ color: '#FF6B35' }}>↗</span> {doc}
+                      </div>
+                    ))}
+                  </div>
+                  {/* Nudge box */}
+                  <div style={{
+                    padding: '20px', border: '1px solid #E2E8F0', background: '#F8FAFC',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap',
+                  }}>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: '700', color: '#1E3A5F', marginBottom: '4px' }}>Need help with documents?</div>
+                      <div style={{ fontSize: '12px', color: '#64748B' }}>Our team handles everything for you.</div>
+                    </div>
+                    <button onClick={() => setIsApplicationModalOpen(true)} className="btn-orange" style={{ padding: '11px 22px', fontSize: '12px' }}>
+                      Get Help →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* ── COST BREAKDOWN ── */}
+            <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '32px' }}>
+                <div>
+                  <h2 className="section-h2">Cost of Studying in {country.name}</h2>
+                  <p style={{ fontSize: '15px', color: '#64748B', fontWeight: '500', margin: 0 }}>
+                    Transparent fee structure so you can plan ahead · Currency: <strong style={{ color: '#1E3A5F' }}>{country.stats.currency}</strong>
+                  </p>
+                </div>
               </div>
 
-              <h2 style={{
-                fontSize: 'clamp(28px, 5vw, 42px)',
-                fontWeight: '800',
-                color: '#1E3A5F',
-                marginBottom: '48px',
-                letterSpacing: '-1px'
-              }}>
-                Living in {country.name}
-              </h2>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '16px',
-                marginBottom: '48px'
-              }}>
+              {/* Cost list rows */}
+              <div style={{ border: '1px solid #E2E8F0', background: '#fff', marginBottom: '1px' }}>
                 {[
-                  { label: 'Climate', value: country.livingInfo.climate },
-                  { label: 'Language', value: country.livingInfo.language },
-                  { label: 'Currency', value: country.livingInfo.currency },
-                  { label: 'Time Zone', value: country.livingInfo.timeZone },
-                  { label: 'Indian Community', value: country.livingInfo.indianCommunity },
-                  { label: 'Safety', value: country.livingInfo.safetyRating }
-                ].map((item, idx) => (
-                  <div key={idx} className={idx % 2 === 0 ? 'curved-card' : 'sharp-card'} style={{ padding: '20px' }}>
-                    <div style={{
-                      fontSize: '11px',
-                      fontWeight: '700',
-                      color: '#64748B',
-                      marginBottom: '8px',
-                      letterSpacing: '1px',
-                      textTransform: 'uppercase'
-                    }}>
-                      {item.label}
+                  { label: 'Tuition Fees',   value: country.costs.tuitionFeeRange, period: 'per year'  },
+                  { label: 'Accommodation',  value: country.costs.hostelFees,       period: 'per year'  },
+                  { label: 'Food & Living',  value: country.costs.foodExpenses,     period: 'per month' },
+                  { label: 'Other Expenses', value: country.costs.otherExpenses,    period: 'per year'  },
+                ].map((c, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '18px 24px', borderBottom: '1px solid #F1F5F9', gap: '16px',
+                    transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#FAFBFC')}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#fff')}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '3px', height: '20px', background: '#FF6B35', flexShrink: 0 }} />
+                      <span style={{ fontSize: '14px', fontWeight: '600', color: '#64748B' }}>{c.label}</span>
                     </div>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '700',
-                      color: '#1E3A5F',
-                      lineHeight: '1.4'
-                    }}>
-                      {item.value}
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: '17px', fontWeight: '800', color: '#1E3A5F', letterSpacing: '-0.3px' }}>{c.value}</div>
+                      <div style={{ fontSize: '10px', color: '#94A3B8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>{c.period}</div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Recognitions */}
+              {/* Total bar */}
               <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '12px',
-                alignItems: 'center'
+                background: '#1E3A5F', padding: '28px 32px',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px',
               }}>
-                <span style={{
-                  fontSize: '14px',
-                  fontWeight: '700',
-                  color: '#64748B',
-                  marginRight: '8px'
-                }}>
-                  Recognized by:
-                </span>
-                {country.recognitions.map((rec, idx) => (
-                  <div key={idx} className="pill-badge">
-                    {rec}
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.45)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>First Year Total</div>
+                  <div style={{ fontSize: 'clamp(20px, 3vw, 28px)', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px' }}>{country.costs.totalFirstYear}</div>
+                </div>
+                <div style={{ width: '1px', height: '48px', background: 'rgba(255,255,255,0.1)' }} />
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: '700', color: 'rgba(255,255,255,0.45)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>Complete Course</div>
+                  <div style={{ fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: '800', color: '#FF6B35', letterSpacing: '-1px' }}>{country.costs.totalCourse}</div>
+                </div>
+                <button onClick={() => setIsApplicationModalOpen(true)} className="btn-white" style={{ marginLeft: 'auto' }}>
+                  Get Full Breakdown →
+                </button>
+              </div>
+            </section>
+
+            {/* ── VISA & INTAKE ── */}
+            <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <h2 className="section-h2">Visa & Intake Details</h2>
+              <p className="section-sub">Everything you need to know before planning your move</p>
+
+              <div className="visa-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+                {[
+                  { label: 'Main Intake',   value: country.intakes.main,       sub: `Deadline: ${country.intakes.applicationDeadline}`  },
+                  { label: 'Visa Type',     value: country.visa.type,           sub: `Processing: ${country.visa.processingTime}`        },
+                  { label: 'Visa Validity', value: country.visa.validity,       sub: 'Extendable during course'                          },
+                  { label: 'Language',      value: country.livingInfo.language, sub: `Medium: ${country.stats.mediumOfInstruction}`      },
+                ].map((v, i) => (
+                  <div key={i} className="visa-cell">
+                    <div style={{ fontSize: '10px', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px' }}>{v.label}</div>
+                    <div style={{ fontSize: 'clamp(15px, 1.8vw, 20px)', fontWeight: '800', color: '#1E3A5F', letterSpacing: '-0.3px', marginBottom: '8px', lineHeight: '1.2' }}>
+                      {v.value}
+                    </div>
+                    <div style={{ fontSize: '12px', color: '#64748B', fontWeight: '600', lineHeight: '1.5' }}>{v.sub}</div>
                   </div>
                 ))}
               </div>
+            </section>
+
+            {/* ── RECOGNITIONS ── */}
+           
+
+          </div>
+        )}
+
+        {/* ════════════════════════════════════════
+            UNIVERSITIES TAB
+        ════════════════════════════════════════ */}
+        {activeTab === 'universities' && (
+          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '56px 32px 80px' }} className="content-pad">
+
+            {/* Header */}
+            <div style={{ marginBottom: '32px' }}>
+              <h2 className="section-h2">Popular Universities in {country.name}</h2>
+              <p style={{ fontSize: '15px', color: '#64748B', fontWeight: '500', marginTop: '4px' }}>
+                Selection of universities offering the best courses
+              </p>
             </div>
-          </section>
-        </div>
-      )}
 
-      {/* UNIVERSITIES TAB CONTENT */}
-
-
-{activeTab === 'universities' && (
-  <section style={{ padding: '80px 20px', background: '#F8FAFC' }}>
-    <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-      
-      {/* Section Header */}
-      <div className="section-label">
-        <div className="section-label-line" />
-        <span className="section-label-text">All Universities</span>
-      </div>
-      
-      <h2 style={{
-        fontSize: 'clamp(28px, 5vw, 48px)',
-        fontWeight: '800',
-        color: '#1E3A5F',
-        marginBottom: '16px',
-        letterSpacing: '-1.5px'
-      }}>
-        Top Universities in {country.name}
-      </h2>
-      
-      <p style={{
-        fontSize: '18px',
-        color: '#64748B',
-        fontWeight: '500',
-        maxWidth: '700px',
-        marginBottom: '48px'
-      }}>
-        Explore {universities.length > 0 ? universities.length : country.topUniversities?.length || 0} internationally recognized institutions
-      </p>
-
-      {/* Loading State */}
-      {loadingUniversities ? (
-        <div style={{
-          textAlign: 'center',
-          padding: '80px 20px',
-          marginTop: '48px'
-        }}>
-          <div style={{
-            display: 'inline-block',
-            width: '48px',
-            height: '48px',
-            border: '4px solid #E2E8F0',
-            borderTop: '4px solid #FF6B35',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }} />
-          <p style={{
-            fontSize: '18px',
-            color: '#64748B',
-            marginTop: '20px',
-            fontWeight: '600'
-          }}>
-            Loading universities...
-          </p>
-        </div>
-      ) : universities && universities.length > 0 ? (
-        /* University Cards Grid */
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
-          gap: '28px',
-          marginTop: '48px'
-        }}>
-          {universities.map((uni, idx) => (
-            <Link 
-              href={`/university/${uni.id}`}
-              key={uni.id || idx}
-              style={{ 
-                textDecoration: 'none',
-                display: 'block',
-                height: '100%'
-              }}
-            >
-              <div 
-                style={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  background: 'white',
-                  borderRadius: '24px 24px 0 0',
-                  overflow: 'hidden',
-                  border: '1px solid #E2E8F0',
-                  cursor: 'pointer',
-                  transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                  position: 'relative'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-8px)';
-                  e.currentTarget.style.boxShadow = '0 24px 48px rgba(30, 58, 95, 0.12), 0 12px 24px rgba(255, 107, 53, 0.08)';
-                  e.currentTarget.style.borderColor = '#FF6B35';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.05)';
-                  e.currentTarget.style.borderColor = '#E2E8F0';
-                }}
-              >
-                {/* Top Accent Bar - Sharp Edge */}
-                <div style={{
-                  height: '6px',
-                  background: 'linear-gradient(90deg, #1E3A5F 0%, #FF6B35 100%)',
-                  width: '100%'
-                }} />
-
-                {/* Card Content */}
-                <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  {/* University Header */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '16px',
-                    marginBottom: '24px'
-                  }}>
-                    {/* Logo with Mixed Edges */}
-                    {uni.logo && (
-                      <div style={{
-                        width: '72px',
-                        height: '72px',
-                        borderRadius: '16px 16px 0 16px',
-                        overflow: 'hidden',
-                        flexShrink: 0,
-                        border: '2px solid #E2E8F0',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.06)',
-                        background: 'white'
-                      }}>
-                        <img 
-                          src={uni.logo}
-                          alt={uni.name}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain',
-                            padding: '8px'
-                          }}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Name & Type */}
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{
-                        fontSize: '20px',
-                        fontWeight: '800',
-                        color: '#1E3A5F',
-                        marginBottom: '10px',
-                        letterSpacing: '-0.5px',
-                        lineHeight: '1.3'
-                      }}>
-                        {uni.name}
-                      </h3>
-                      <div style={{
-                        display: 'flex',
-                        gap: '8px',
-                        flexWrap: 'wrap'
-                      }}>
-                        <span style={{
-                          fontSize: '11px',
-                          color: '#1E3A5F',
-                          fontWeight: '700',
-                          background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-                          padding: '6px 12px',
-                          borderRadius: '6px 0 6px 0',
-                          letterSpacing: '0.3px',
-                          textTransform: 'uppercase',
-                          border: '1px solid #BFDBFE'
-                        }}>
-                          {uni.universityType}
-                        </span>
-                        {uni.establishedYear && (
-                          <span style={{
-                            fontSize: '11px',
-                            color: '#92400E',
-                            fontWeight: '700',
-                            background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
-                            padding: '6px 12px',
-                            borderRadius: '0 6px 0 6px',
-                            letterSpacing: '0.3px',
-                            border: '1px solid #FCD34D'
-                          }}>
-                            EST. {uni.establishedYear}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Decorative Divider */}
-                  <div style={{
-                    height: '1px',
-                    background: 'linear-gradient(90deg, transparent 0%, #E2E8F0 20%, #E2E8F0 80%, transparent 100%)',
-                    marginBottom: '20px'
-                  }} />
-
-                  {/* Tagline */}
-                  <p style={{
-                    fontSize: '14px',
-                    color: '#475569',
-                    lineHeight: '1.7',
-                    marginBottom: '24px',
-                    fontWeight: '500',
-                    minHeight: '42px'
-                  }}>
-                    {uni.tagline}
-                  </p>
-
-                  {/* Stats Grid - Mixed Edges */}
-                  <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '12px',
-                    marginBottom: '20px'
-                  }}>
-                    <div style={{ 
-                      background: 'linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%)',
-                      padding: '18px',
-                      borderRadius: '12px 0 12px 0',
-                      border: '1px solid #E2E8F0',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}>
-                      {/* Subtle Pattern Overlay */}
-                      <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        width: '40px',
-                        height: '40px',
-                        background: 'linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, transparent 100%)',
-                        borderRadius: '0 0 0 40px'
-                      }} />
-                      <div style={{
-                        fontSize: '11px',
-                        color: '#64748B',
-                        fontWeight: '700',
-                        marginBottom: '8px',
-                        letterSpacing: '0.5px',
-                        textTransform: 'uppercase',
-                        position: 'relative'
-                      }}>
-                        Tuition/Year
-                      </div>
-                      <div style={{
-                        fontSize: '17px',
-                        fontWeight: '800',
-                        color: '#1E3A5F',
-                        letterSpacing: '-0.5px',
-                        position: 'relative'
-                      }}>
-                        {uni.fees?.currency} {uni.fees?.tuitionPerYear?.toLocaleString()}
-                      </div>
-                    </div>
-                    
-                    <div style={{ 
-                      background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
-                      padding: '18px',
-                      borderRadius: '0 12px 0 12px',
-                      border: '1px solid #FCD34D',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}>
-                      <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '40px',
-                        height: '40px',
-                        background: 'linear-gradient(135deg, rgba(30, 58, 95, 0.05) 0%, transparent 100%)',
-                        borderRadius: '0 0 40px 0'
-                      }} />
-                      <div style={{
-                        fontSize: '11px',
-                        color: '#92400E',
-                        fontWeight: '700',
-                        marginBottom: '8px',
-                        letterSpacing: '0.5px',
-                        textTransform: 'uppercase',
-                        position: 'relative'
-                      }}>
-                        {uni.programs && uni.programs[0]?.duration ? 'Duration' : 'Students'}
-                      </div>
-                      <div style={{
-                        fontSize: '17px',
-                        fontWeight: '800',
-                        color: '#92400E',
-                        letterSpacing: '-0.5px',
-                        position: 'relative'
-                      }}>
-                        {uni.programs && uni.programs[0]?.duration || uni.stats?.totalStudents?.toLocaleString()}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quick Stats Badges - Mixed Edges */}
-                  <div style={{
-                    display: 'flex',
-                    gap: '8px',
-                    marginBottom: '24px',
-                    flexWrap: 'wrap'
-                  }}>
-                    {uni.stats?.passRate && (
-                      <div style={{
-                        fontSize: '11px',
-                        color: '#047857',
-                        fontWeight: '700',
-                        background: 'linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%)',
-                        padding: '8px 14px',
-                        borderRadius: '8px 0 8px 0',
-                        border: '1px solid #6EE7B7',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}>
-                        <span style={{ fontSize: '13px' }}>✓</span>
-                        <span>{uni.stats.passRate} Pass Rate</span>
-                      </div>
-                    )}
-                    {uni.ranking?.globalRank && (
-                      <div style={{
-                        fontSize: '11px',
-                        color: '#C2410C',
-                        fontWeight: '700',
-                        background: 'linear-gradient(135deg, #FFEDD5 0%, #FED7AA 100%)',
-                        padding: '8px 14px',
-                        borderRadius: '0 8px 0 8px',
-                        border: '1px solid #FDBA74',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}>
-                        <span style={{ fontSize: '13px' }}>🏆</span>
-                        <span>Top {uni.ranking.globalRank}</span>
-                      </div>
-                    )}
-                    {uni.stats?.facultyRatio && (
-                      <div style={{
-                        fontSize: '11px',
-                        color: '#1E40AF',
-                        fontWeight: '700',
-                        background: 'linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)',
-                        padding: '8px 14px',
-                        borderRadius: '8px 0 8px 0',
-                        border: '1px solid #93C5FD',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px'
-                      }}>
-                        <span style={{ fontSize: '13px' }}>👥</span>
-                        <span>{uni.stats.facultyRatio}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* View Details Button - Sharp Bottom */}
-                  <div 
-                    style={{ 
-                      width: '100%', 
-                      padding: '18px', 
-                      fontSize: '14px',
-                      background: 'linear-gradient(135deg, #1E3A5F 0%, #2A4A6F 100%)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '12px 12px 0 0',
-                      fontWeight: '700',
-                      textAlign: 'center',
-                      transition: 'all 0.3s ease',
-                      marginTop: 'auto',
-                      letterSpacing: '0.3px',
-                      textTransform: 'uppercase',
-                      boxShadow: '0 -4px 12px rgba(30, 58, 95, 0.1)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'linear-gradient(135deg, #FF6B35 0%, #FF8555 100%)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'linear-gradient(135deg, #1E3A5F 0%, #2A4A6F 100%)';
+            {/* Course filter pills — Acadfly style */}
+            {!loadingUniversities && universities.length > 0 && (
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                {courseFilters.map(filter => (
+                  <button
+                    key={filter}
+                    onClick={() => setSelectedCourse(filter)}
+                    style={{
+                      padding: '9px 22px',
+                      border: selectedCourse === filter ? '1.5px solid #1E3A5F' : '1.5px solid #E2E8F0',
+                      background: selectedCourse === filter ? '#1E3A5F' : '#fff',
+                      color: selectedCourse === filter ? '#fff' : '#64748B',
+                      fontSize: '13px', fontWeight: '700',
+                      cursor: 'pointer', fontFamily: 'inherit',
+                      transition: 'all 0.2s ease',
                     }}
                   >
-                    View University Details →
-                  </div>
-                </div>
+                    {filter}
+                    {filter !== 'All' && (
+                      <span style={{
+                        marginLeft: '8px',
+                        fontSize: '11px',
+                        opacity: 0.7,
+                        fontWeight: '600',
+                      }}>
+                        ({universities.filter(u => u.programs?.some((p: any) => (p.name || p) === filter)).length})
+                      </span>
+                    )}
+                  </button>
+                ))}
               </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        // Empty State - Production Ready
-        <div style={{
-          textAlign: 'center',
-          padding: '100px 40px',
-          maxWidth: '700px',
-          margin: '48px auto 0',
-          background: 'white',
-          borderRadius: '24px',
-          border: '1px solid #E2E8F0',
-          position: 'relative',
-          overflow: 'hidden'
-        }}>
-          {/* Background Pattern */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '6px',
-            background: 'linear-gradient(90deg, #1E3A5F 0%, #FF6B35 100%)'
-          }} />
-          
-          <div style={{
-            width: '120px',
-            height: '120px',
-            margin: '0 auto 32px',
-            borderRadius: '60px 60px 0 60px',
-            background: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '2px solid #BFDBFE',
-            fontSize: '56px'
-          }}>
-            🏛️
+            )}
+
+            {loadingUniversities ? (
+              <div className="uni-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+                {[1,2,3,4,5,6].map(i => (
+                  <div key={i} style={{ background: '#F8FAFC', height: '320px', border: '1px solid #E2E8F0' }} />
+                ))}
+              </div>
+            ) : filteredUniversities.length > 0 ? (
+              <>
+                <div style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', marginBottom: '20px' }}>
+                  {filteredUniversities.length} {filteredUniversities.length === 1 ? 'university' : 'universities'} found
+                  {selectedCourse !== 'All' && <span> for <strong style={{ color: '#1E3A5F' }}>{selectedCourse}</strong></span>}
+                </div>
+                <div className="uni-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+                  {filteredUniversities.map((uni, i) => (
+                    <Link key={uni.id || i} href={`/university/${uni.id || i}`} style={{ textDecoration: 'none' }}>
+                      <div className="uni-card" style={{ height: '100%' }}>
+                        {uni.heroImage ? (
+                          <div style={{
+                            height: '180px', position: 'relative',
+                            backgroundImage: `url(${uni.heroImage})`,
+                            backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden',
+                          }}>
+                            <div style={{ position: 'absolute', inset: 0, background: 'rgba(12,24,48,0.2)' }} />
+                            {uni.accreditations && (
+                              <div style={{
+                                position: 'absolute', top: '12px', right: '12px',
+                                padding: '5px 12px', background: '#FF6B35', color: '#fff',
+                                fontSize: '9px', fontWeight: '700', letterSpacing: '1.5px', textTransform: 'uppercase',
+                              }}>NMC</div>
+                            )}
+                          </div>
+                        ) : (
+                          <div style={{ height: '100px', background: '#1E3A5F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ fontSize: '32px' }}>{country.flag}</span>
+                          </div>
+                        )}
+                        <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                          {/* Program badges */}
+                          {uni.programs && uni.programs.length > 0 && (
+                            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                              {uni.programs.slice(0, 3).map((p: any, pi: number) => (
+                                <span key={pi} style={{
+                                  padding: '3px 10px', fontSize: '10px', fontWeight: '700',
+                                  background: '#F1F5F9', color: '#1E3A5F',
+                                  border: '1px solid #E2E8F0', letterSpacing: '0.3px',
+                                }}>
+                                  {p.name || p}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#1E3A5F', lineHeight: '1.3', marginBottom: '6px' }}>
+                            {uni.name}
+                          </h3>
+                          <div style={{ fontSize: '12px', color: '#94A3B8', fontWeight: '600', marginBottom: '16px' }}>
+                            {uni.location?.address || (uni as any).city}
+                            {(uni.establishedYear || (uni as any).established) ? ` · Est. ${uni.establishedYear || (uni as any).established}` : ''}
+                          </div>
+                          {uni.tagline && (
+                            <p style={{ fontSize: '13px', color: '#64748B', lineHeight: '1.6', marginBottom: '16px', fontWeight: '500' }}>
+                              {uni.tagline}
+                            </p>
+                          )}
+                          <div style={{ display: 'flex', gap: '1px', background: '#E2E8F0', marginTop: 'auto' }}>
+                            <div style={{ flex: 1, padding: '12px', background: '#F8FAFC', textAlign: 'center' }}>
+                              <div style={{ fontSize: '14px', fontWeight: '800', color: '#1E3A5F' }}>
+                                {uni.fees?.currency} {uni.fees?.tuitionPerYear?.toLocaleString() || '—'}
+                              </div>
+                              <div style={{ fontSize: '9px', color: '#94A3B8', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '4px' }}>Per Year</div>
+                            </div>
+                            <div style={{ flex: 1, padding: '12px', background: '#F8FAFC', textAlign: 'center' }}>
+                              <div style={{ fontSize: '14px', fontWeight: '800', color: '#1E3A5F' }}>
+                                {uni.programs?.[0]?.duration || uni.stats?.passRate || '—'}
+                              </div>
+                              <div style={{ fontSize: '9px', color: '#94A3B8', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '4px' }}>
+                                {uni.programs?.[0]?.duration ? 'Duration' : 'Pass Rate'}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="uni-card-btn">View Full Profile →</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : universities.length > 0 ? (
+              /* No results for this filter */
+              <div style={{ padding: '60px 32px', textAlign: 'center', border: '1px solid #E2E8F0', background: '#F8FAFC' }}>
+                <div style={{ fontSize: '32px', marginBottom: '16px' }}>🔍</div>
+                <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1E3A5F', marginBottom: '8px' }}>
+                  No universities for {selectedCourse}
+                </h3>
+                <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '20px' }}>Try a different course or view all universities.</p>
+                <button onClick={() => setSelectedCourse('All')} className="btn-orange" style={{ padding: '11px 28px', fontSize: '13px' }}>
+                  View All Universities
+                </button>
+              </div>
+            ) : (
+              <div style={{ padding: '80px 40px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
+                <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#1E3A5F', marginBottom: '12px' }}>Profiles Coming Soon</h3>
+                <p style={{ fontSize: '15px', color: '#64748B', marginBottom: '28px' }}>
+                  We're compiling profiles for universities in {country.name}.
+                </p>
+                <button onClick={() => setIsApplicationModalOpen(true)} className="btn-orange">Get Notified →</button>
+              </div>
+            )}
           </div>
-          
-          <h3 style={{
-            fontSize: 'clamp(24px, 4vw, 32px)',
-            fontWeight: '800',
-            color: '#1E3A5F',
-            marginBottom: '16px',
-            letterSpacing: '-1px'
-          }}>
-            Universities Coming Soon
-          </h3>
-          
-          <p style={{
-            fontSize: '16px',
-            color: '#64748B',
-            fontWeight: '500',
-            lineHeight: '1.7',
-            marginBottom: '32px'
-          }}>
-            We're currently compiling comprehensive information for {country.topUniversities?.length || 'all'} universities in {country.name}. Check back soon for detailed profiles, programs, and admission requirements.
-          </p>
+        )}
 
-          {/* Decorative Elements */}
-          <div style={{
-            display: 'flex',
-            gap: '12px',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}>
-            <div style={{
-              padding: '10px 20px',
-              background: 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)',
-              borderRadius: '8px 0 8px 0',
-              fontSize: '13px',
-              color: '#475569',
-              fontWeight: '600',
-              border: '1px solid #CBD5E1'
-            }}>
-              📚 University Profiles
-            </div>
-            <div style={{
-              padding: '10px 20px',
-              background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)',
-              borderRadius: '0 8px 0 8px',
-              fontSize: '13px',
-              color: '#92400E',
-              fontWeight: '600',
-              border: '1px solid #FCD34D'
-            }}>
-              🎓 Program Details
-            </div>
-            <div style={{
-              padding: '10px 20px',
-              background: 'linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)',
-              borderRadius: '8px 0 8px 0',
-              fontSize: '13px',
-              color: '#1E40AF',
-              fontWeight: '600',
-              border: '1px solid #93C5FD'
-            }}>
-              📝 Admission Info
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  </section>
-)}
-
-      {/* CTA Section - Backdrop with CURVED buttons */}
-      <section style={{
-        position: 'relative',
-        padding: '120px 20px',
-        overflow: 'hidden'
-      }}>
-        {/* Background Image */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundImage: `url(${country.galleryImages[0]})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }} />
-        
-        {/* Dark Overlay */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(135deg, rgba(30,58,95,0.95) 0%, rgba(15,39,68,0.95) 100%)'
-        }} />
-
-        <div style={{
-          position: 'relative',
-          zIndex: 2,
-          maxWidth: '800px',
-          margin: '0 auto',
-          textAlign: 'center'
-        }}>
-          <h2 style={{
-            fontSize: 'clamp(32px, 6vw, 56px)',
-            fontWeight: '800',
-            color: 'white',
-            marginBottom: '20px',
-            letterSpacing: '-1.5px',
-            lineHeight: '1.2'
-          }}>
-            Begin Your Medical Journey
-          </h2>
-          
-          <p style={{
-            fontSize: '18px',
-            color: 'rgba(255,255,255,0.9)',
-            marginBottom: '48px',
-            lineHeight: '1.7',
-            fontWeight: '500',
-            maxWidth: '600px',
-            margin: '0 auto 48px'
-          }}>
-            Schedule a consultation with our expert counselors for personalized guidance on studying in {country.name}
-          </p>
+        {/* ════════════════════════════════════════
+            FINAL CTA — Full width dark banner
+        ════════════════════════════════════════ */}
+        <section style={{ position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${country.galleryImages?.[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(12,24,48,0.91)' }} />
 
           <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            maxWidth: '500px',
-            margin: '0 auto'
+            position: 'relative', zIndex: 2,
+            maxWidth: '1200px', margin: '0 auto', padding: '100px 32px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: '48px', flexWrap: 'wrap',
           }}>
-            {/* APPLY NOW - Opens Modal */}
-            <button 
-              onClick={() => setIsApplicationModalOpen(true)}
-              className="btn-curved"
-              style={{ justifyContent: 'center' }}
-            >
-              Apply Now →
-            </button>
-
-            <Link href="/destinations" style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              padding: '20px 40px',
-              background: 'transparent',
-              color: 'white',
-              border: '1px solid rgba(255,255,255,0.3)',
-              borderRadius: '50px',
-              textDecoration: 'none',
-              fontWeight: '700',
-              fontSize: '16px',
-              letterSpacing: '0.3px',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'white';
-              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
-              e.currentTarget.style.background = 'transparent';
-            }}>
-              Explore Other Destinations
-            </Link>
+            <div>
+              <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.4)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '12px' }}>
+                Take the Next Step
+              </div>
+              <h2 style={{
+                fontSize: 'clamp(28px, 5vw, 56px)', fontWeight: '800', color: '#fff',
+                letterSpacing: '-2px', lineHeight: '1.0', marginBottom: '16px',
+              }}>
+                Your Medical Career<br />
+                <span style={{ color: '#FF6B35' }}>Starts in {country.name}</span>
+              </h2>
+              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)', fontWeight: '500', maxWidth: '440px' }}>
+                Expert counselors guide you from first inquiry to enrollment — at zero cost.
+              </p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '220px' }}>
+              <button onClick={() => setIsApplicationModalOpen(true)} className="btn-orange" style={{ justifyContent: 'center' }}>
+                Apply Now →
+              </button>
+              <Link href="/destinations" className="btn-white" style={{ justifyContent: 'center', color: '#1E3A5F' }}>
+                Explore Destinations
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      
-    </div>
-    <Footer />
+      </div>
+      <Footer />
     </>
   );
 }

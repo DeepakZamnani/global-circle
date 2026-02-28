@@ -9,6 +9,7 @@ import { notFound } from 'next/navigation';
 // ============================================
 
 // Generate static params for all universities at build time
+export const revalidate = 60; // revalidate every 60 seconds
 export async function generateStaticParams() {
   try {
     const slugs = await getAllUniversitySlugs();

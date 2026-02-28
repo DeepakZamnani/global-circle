@@ -206,7 +206,7 @@ export default function Navbar() {
           <div className="nav-links" style={{ display: 'flex', gap: '40px', alignItems: 'center' }}>
             <Link href="/" className="nav-link">Home</Link>
             <Link href="/destinations" className="nav-link">Destinations</Link>
-            <Link href="/programs" className="nav-link">Programs</Link>
+            <Link href="/services" className="nav-link">Services</Link>
             <Link href="/scholarships" className="nav-link">Scholarships</Link>
         
             <div className="nav-dropdown">

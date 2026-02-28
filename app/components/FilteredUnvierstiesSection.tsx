@@ -32,7 +32,7 @@ const CARD_SHAPES = [
   'polygon(24px 0, 100% 0, 100% 100%, 0 100%, 0 24px)',                            // cut top-left
   'polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%)',  // cut bottom-right
   'polygon(0 0, 100% 0, 100% 100%, 24px 100%, 0 calc(100% - 24px))',               // cut bottom-left
-  'polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, calc(100% - 24px) 100%, 0 calc(100% - 24px), 0 24px)',  // both top cuts
+  'polygon(24px 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, calc(100% - 24px) 100%, 0 calc(100% - 24px), 0 24px)',
 ];
 
 // ─── Empty State ───────────────────────────────────────────────────────────────
@@ -257,14 +257,17 @@ export default function FilteredUniversitiesSection({ universities, filters, onC
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+        .fu-section { box-sizing: border-box; }
+        .fu-section *, .fu-section *::before, .fu-section *::after { box-sizing: border-box; }
+
         /* Grid background pattern */
         .fu-grid-pat {
-          position:absolute; top:0; left:0; right:0; bottom:0;
+          position: absolute; top: 0; left: 0; right: 0; bottom: 0;
           background-image:
             linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
           background-size: 50px 50px;
-          pointer-events:none; z-index:0;
+          pointer-events: none; z-index: 0;
         }
 
         /* Card hover lift */
@@ -294,6 +297,7 @@ export default function FilteredUniversitiesSection({ universities, filters, onC
           font-family: 'Plus Jakarta Sans', sans-serif;
           font-size: 13px; font-weight: 700; cursor: pointer;
           transition: all 0.2s ease;
+          white-space: nowrap;
         }
         .clear-btn:hover { border-color: rgba(255,255,255,0.5); color: white; }
 
@@ -315,10 +319,10 @@ export default function FilteredUniversitiesSection({ universities, filters, onC
           .fu-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 640px) {
-          .fu-section  { padding: 60px 20px !important; }
-          .fu-grid     { grid-template-columns: 1fr !important; }
-          .filter-bar  { flex-direction: column !important; gap: 12px !important; align-items: flex-start !important; }
-          .f-chips-row { flex-wrap: wrap !important; }
+          .fu-section    { padding: 60px 20px !important; }
+          .fu-grid       { grid-template-columns: 1fr !important; }
+          .filter-bar    { flex-direction: column !important; gap: 12px !important; align-items: flex-start !important; }
+          .f-chips-row   { flex-wrap: wrap !important; }
         }
       `}</style>
 

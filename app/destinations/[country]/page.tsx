@@ -1,16 +1,22 @@
 import CountryPage from '../../components/CountryPage';
-import { getCountryBySlug } from '@/services/dbServices';
+import { getCountryBySlug, getAllCountrySlugs } from '@/services/dbServices';
 import { notFound } from 'next/navigation';
 
-// ============================================
-// DYNAMIC COUNTRY PAGE ROUTE
-// File: app/destinations/[country]/page.tsx
-// FIXED: Now fetches fresh data on EVERY request (no caching)
-// ============================================
 
-// 🔥 CRITICAL: Force dynamic rendering - fetches from Firebase on every request
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60; // Re-fetch from Firebase every 60 seconds
+
+// Generate static params for initial build (optional - helps with first load)
+export async function generateStaticParams() {
+  try {
+    const slugs = await getAllCountrySlugs();
+    return slugs.map((slug) => ({
+      country: slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
+}
 
 export default async function DestinationPage({ 
   params 
@@ -19,7 +25,7 @@ export default async function DestinationPage({
 }) {
   const { country } = await params;
   
-  // Fetch from Firestore on EVERY request (no cache)
+  // Fetch from Firestore - will re-fetch every 60 seconds
   const countryData = await getCountryBySlug(country);
   
   if (!countryData) {

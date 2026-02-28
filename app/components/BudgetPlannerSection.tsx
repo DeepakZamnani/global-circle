@@ -47,16 +47,11 @@ function parseRange(str: string): { min: number; max: number } {
 /**
  * Map a CountryDetailedInfo document (from the `screens` Firestore collection)
  * to the flat CountryCost shape the calculator needs.
- *
- * Living cost = hostelFees + foodExpenses + otherExpenses  (all annual strings)
- * Tuition     = costs.tuitionFeeRange
- * Currency    = stats.currency
- * Note        = overview.description
  */
 function mapCountry(doc: CountryDetailedInfo): CountryCost {
-  const costs   = doc.costs      ?? {} as CountryDetailedInfo['costs'];
-  const stats   = doc.stats      ?? {} as CountryDetailedInfo['stats'];
-  const overview = doc.overview  ?? {} as CountryDetailedInfo['overview'];
+  const costs    = doc.costs      ?? {} as CountryDetailedInfo['costs'];
+  const stats    = doc.stats      ?? {} as CountryDetailedInfo['stats'];
+  const overview = doc.overview   ?? {} as CountryDetailedInfo['overview'];
 
   const tuition  = parseRange(costs.tuitionFeeRange ?? '');
   const hostel   = parseRange(costs.hostelFees      ?? '');
@@ -180,7 +175,7 @@ export default function BudgetPlannerSection() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <section style={{
+    <section className="bp-section" style={{
       background: '#ffffff',
       fontFamily: '"Plus Jakarta Sans", sans-serif',
       padding: '90px 48px',
@@ -190,6 +185,9 @@ export default function BudgetPlannerSection() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        .bp-section { box-sizing: border-box; }
+        .bp-section *, .bp-section *::before, .bp-section *::after { box-sizing: border-box; }
 
         .bp-select {
           width: 100%;
@@ -214,6 +212,7 @@ export default function BudgetPlannerSection() {
         }
 
         /* Duration buttons */
+        .dur-btns { display: flex; gap: 4px; }
         .dur-btn {
           flex: 1; height: 48px;
           border: 2px solid #E2E8F0; background: white;
@@ -227,6 +226,7 @@ export default function BudgetPlannerSection() {
         .dur-btn:hover:not(.active) { border-color: #1E3A5F; color: #1E3A5F; }
 
         /* Scholarship pills */
+        .sch-pills { display: flex; gap: 8px; }
         .sch-pill {
           flex: 1; height: 46px;
           border: 2px solid #E2E8F0; background: white;
@@ -258,6 +258,14 @@ export default function BudgetPlannerSection() {
           position: absolute; top: -80px; right: -80px;
           width: 260px; height: 260px; border-radius: 50%;
           background: rgba(255,107,53,0.1); pointer-events: none;
+        }
+
+        /* Two-column layout */
+        .bp-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2px;
+          align-items: stretch;
         }
 
         /* Bar chart */
@@ -379,7 +387,7 @@ export default function BudgetPlannerSection() {
           </p>
         </div>
 
-        {/* ── Error state ── */}
+        {/* Error state */}
         {dbError && (
           <div style={{
             padding: '24px', background: '#FFF5F5', border: '2px solid #FED7D7',
@@ -391,7 +399,7 @@ export default function BudgetPlannerSection() {
 
         {/* Layout */}
         {!dbError && (
-          <div className="bp-layout" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2px', alignItems:'stretch' }}>
+          <div className="bp-layout">
 
             {/* ─── LEFT: Controls ─── */}
             <div className="controls-card">
@@ -417,7 +425,7 @@ export default function BudgetPlannerSection() {
               {/* Duration */}
               <div style={{ marginBottom:'28px' }}>
                 <div className="bp-label">Duration of Study</div>
-                <div className="dur-btns" style={{ display:'flex', gap:'4px' }}>
+                <div className="dur-btns">
                   {DURATIONS.map(d => (
                     <button
                       key={d}
@@ -433,7 +441,7 @@ export default function BudgetPlannerSection() {
               {/* Scholarship */}
               <div style={{ marginBottom:'36px' }}>
                 <div className="bp-label">Scholarship Expected</div>
-                <div className="sch-pills" style={{ display:'flex', gap:'8px' }}>
+                <div className="sch-pills">
                   {(['None', 'Partial', 'Half', 'Full'] as const).map(s => (
                     <button
                       key={s}

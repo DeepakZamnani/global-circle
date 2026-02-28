@@ -1,6 +1,6 @@
 
 
-'use client';
+"use client";
 import { useState } from 'react';
 import LeadFormModal from '../components/LeadForm';
 import React from 'react';
@@ -22,7 +22,7 @@ import Footer from '../components/Footer';
 // Modern boxy layout, bold typography, no emojis
 // Clean professional aesthetic inspired by CountryPage
 // ============================================
-
+export const revalidate = 60; // revalidate every 60 seconds
 interface UniversityPageProps {
   universitySlug: string;
   universityData: University;

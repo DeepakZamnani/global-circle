@@ -71,7 +71,7 @@ export default function SmartMatcherSection() {
   const result      = canMatch ? getResult(course, budget) : null;
 
   return (
-    <section style={{
+    <section className="sm-section" style={{
       background: '#F8FAFC',
       fontFamily: '"Plus Jakarta Sans", sans-serif',
       padding: '90px 48px',
@@ -81,6 +81,9 @@ export default function SmartMatcherSection() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        .sm-section { box-sizing: border-box; }
+        .sm-section *, .sm-section *::before, .sm-section *::after { box-sizing: border-box; }
 
         .sm-select {
           width: 100%;
@@ -130,12 +133,27 @@ export default function SmartMatcherSection() {
           transition: all 0.35s ease;
         }
 
+        /* Two-column layout */
+        .sm-layout {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2px;
+          align-items: stretch;
+        }
+
         /* Form card — diagonal cut bottom-right */
         .form-card {
           background: white;
           padding: 48px;
           box-shadow: 0 4px 40px rgba(30,58,95,0.08);
           clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+        }
+
+        /* Inner 2-col form grid */
+        .sm-inner-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 24px 20px;
         }
 
         /* Result panel — diagonal cut top-left */
@@ -239,15 +257,16 @@ export default function SmartMatcherSection() {
         .reset-btn:hover { color: rgba(255,255,255,0.7); }
 
         @media (max-width: 1024px) {
-          .sm-layout  { grid-template-columns: 1fr !important; }
-          .form-card  { clip-path: none !important; border-radius: 20px !important; }
-          .result-panel { clip-path: none !important; border-radius: 20px !important; }
+          .sm-layout     { grid-template-columns: 1fr !important; }
+          .form-card     { clip-path: none !important; border-radius: 20px !important; }
+          .result-panel  { clip-path: none !important; border-radius: 20px !important; }
         }
         @media (max-width: 768px) {
-          .sm-section  { padding: 60px 20px !important; }
-          .form-card   { padding: 28px 20px !important; }
-          .result-panel { padding: 32px 24px !important; }
-          .sm-inner-grid { grid-template-columns: 1fr !important; }
+          .sm-section      { padding: 60px 20px !important; }
+          .form-card       { padding: 28px 20px !important; }
+          .result-panel    { padding: 32px 24px !important; }
+          .sm-inner-grid   { grid-template-columns: 1fr !important; }
+          .sm-inner-grid > [style*="span 2"] { grid-column: span 1 !important; }
         }
       `}</style>
 
@@ -279,7 +298,7 @@ export default function SmartMatcherSection() {
         </div>
 
         {/* Two-column layout */}
-        <div className="sm-layout" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2px', alignItems:'stretch' }}>
+        <div className="sm-layout">
 
           {/* ─── LEFT: Form ─── */}
           <div className="form-card">
@@ -303,7 +322,7 @@ export default function SmartMatcherSection() {
             </div>
 
             {/* Fields */}
-            <div className="sm-inner-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'24px 20px' }}>
+            <div className="sm-inner-grid">
 
               {/* Course — full width */}
               <div style={{ gridColumn:'span 2' }}>
