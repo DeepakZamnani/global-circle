@@ -12,7 +12,6 @@ import {
 import type { University } from '@/app/data/universityData';
 import type { CountryDetailedInfo } from '@/app/data/countryData';
 import type { MatcherFilters } from './components/Hero';
-import ProgramsSection from './components/ProgramsSection';
 import BudgetPlannerSection from './components/BudgetPlannerSection';
 import CountryCompareSection from './components/CountryCompareScreen';
 
