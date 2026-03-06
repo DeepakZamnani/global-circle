@@ -2599,25 +2599,112 @@ import Footer from '../components/Footer';
 import LeadFormModal from '../components/LeadForm';
 import type { University } from '../data/universityData';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface UniversityPageProps {
-  university: University;
-}
-
+interface UniversityPageProps { university: University; }
 type TabId = 'overview' | 'programs' | 'admissions' | 'fees';
 
-// ─── Atoms ───────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// SVG Icon set — zero emoji, renders identically on every browser + OS
+// ─────────────────────────────────────────────────────────────────────────────
+const SVG = {
+  calendar: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  ),
+  building: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+    </svg>
+  ),
+  book: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
+  ),
+  users: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+  ),
+  graduationCap: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+    </svg>
+  ),
+  user: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </svg>
+  ),
+  globe: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  ),
+  barChart: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>
+    </svg>
+  ),
+  mapPin: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+    </svg>
+  ),
+  shield: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  ),
+  hospital: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="2" width="18" height="20" rx="1"/><line x1="9" y1="22" x2="9" y2="12"/><line x1="15" y1="22" x2="15" y2="12"/><rect x="9" y="12" width="6" height="10"/><line x1="12" y1="6" x2="12" y2="10"/><line x1="10" y1="8" x2="14" y2="8"/>
+    </svg>
+  ),
+  award: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+    </svg>
+  ),
+  trendUp: (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+    </svg>
+  ),
+  check: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  ),
+  arrowRight: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+    </svg>
+  ),
+  link: (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+    </svg>
+  ),
+  info: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  ),
+};
 
-function FieldLabel({ children }: { children: React.ReactNode }) {
+// ─── Icon wrapper for stat items ──────────────────────────────────────────────
+function StatIconBox({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{
-      fontSize: '10px', fontWeight: '700', color: '#94A3B8',
-      letterSpacing: '1.8px', textTransform: 'uppercase', marginBottom: '3px',
-    }}>
+    <div className="stat-icon-box" style={{ width: 36, height: 36, flexShrink: 0, background: '#F0F4FF', borderLeft: '3px solid #FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {children}
     </div>
   );
+}
+
+// ─── Misc atoms ───────────────────────────────────────────────────────────────
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return <div style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '1.8px', textTransform: 'uppercase', marginBottom: 1 }}>{children}</div>;
 }
 
 function SectionHead({ title, sub }: { title: string; sub: string }) {
@@ -2631,48 +2718,84 @@ function SectionHead({ title, sub }: { title: string; sub: string }) {
 
 function DocTag({ children }: { children: React.ReactNode }) {
   return (
-    <div className="doc-tag">
-      <span style={{ color: '#FF6B35' }}>↗</span> {children}
-    </div>
+    <span className="doc-tag">
+      <span style={{ color: '#FF6B35' }}>{SVG.link}</span>{children}
+    </span>
   );
 }
 
 function CheckBadge({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{
-      display: 'inline-flex', alignItems: 'center', gap: '8px',
-      padding: '8px 16px', border: '1px solid #E2E8F0', background: '#F8FAFC',
-      fontSize: '12px', fontWeight: '700', color: '#1E3A5F',
-    }}>
-      <span style={{ color: '#FF6B35', fontSize: '13px' }}>✓</span>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 12px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: 12, fontWeight: 700, color: '#1E3A5F' }}>
+      <span style={{ color: '#FF6B35', display: 'flex' }}>{SVG.check}</span>
       {children}
+    </span>
+  );
+}
+
+function VerifiedBadge({ label }: { label: string }) {
+  return (
+    <div
+      style={{ padding: '8px 14px', border: '1px solid #E2E8F0', background: '#fff', display: 'flex', alignItems: 'center', gap: 10, transition: 'border-color 0.2s', cursor: 'default' }}
+      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
+      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#E2E8F0'; }}
+    >
+      <div style={{ width: 26, height: 26, background: '#FF6B35', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>{SVG.check}</div>
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 800, color: '#1E3A5F' }}>{label}</div>
+        <div style={{ fontSize: 9, fontWeight: 700, color: '#FF6B35', letterSpacing: '1.2px', textTransform: 'uppercase', marginTop: 1 }}>Recognized</div>
+      </div>
     </div>
   );
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// Value panel row in fees/keyfacts sidebar — SVG icon
+function ValueRow({ svg, label, value }: { svg: React.ReactNode; label: string; value: string }) {
+  return (
+    <div style={{ padding: '9px 14px', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ width: 30, height: 30, flexShrink: 0, background: '#F0F4FF', borderLeft: '3px solid #FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {svg}
+      </div>
+      <div>
+        <div style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '0.8px', textTransform: 'uppercase' }}>{label}</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#1E3A5F', marginTop: 1 }}>{value}</div>
+      </div>
+    </div>
+  );
+}
 
+// Card section header with accent bar
+function CardHeader({ label, title }: { label: string; title: string }) {
+  return (
+    <div style={{ padding: '10px 14px', background: '#1E3A5F', display: 'flex', alignItems: 'center', gap: 0 }}>
+      <div style={{ width: 4, height: 32, background: '#FF6B35', marginRight: 12, flexShrink: 0 }} />
+      <div>
+        <FieldLabel>{label}</FieldLabel>
+        <div style={{ fontSize: 12, fontWeight: 800, color: '#fff', marginTop: 1 }}>{title}</div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main Page Component
+// ─────────────────────────────────────────────────────────────────────────────
 export default function UniversityPage({ university: uni }: UniversityPageProps) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ── Guard: uni prop missing (bad slug / data not found) ─────────────────────
   if (!uni) {
     return (
       <>
         <Navbar />
-        <div style={{
-          minHeight: '60vh', display: 'flex', alignItems: 'center',
-          justifyContent: 'center', fontFamily: '"Plus Jakarta Sans", sans-serif',
-        }}>
-          <p style={{ fontSize: '16px', color: '#64748B' }}>University not found.</p>
+        <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"Plus Jakarta Sans",sans-serif' }}>
+          <p style={{ fontSize: 16, color: '#64748B' }}>University not found.</p>
         </div>
         <Footer />
       </>
     );
   }
 
-  // ── Defensive shorthands — never crash on missing data ──────────────────────
   const accreditations   = uni.accreditations   ?? [];
   const programs         = uni.programs         ?? [];
   const whyChoose        = uni.whyChoose        ?? [];
@@ -2702,33 +2825,31 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
     { id: 'fees',       label: 'Fees'       },
   ];
 
-  // Stat bar — filter out any missing values
+  // SVG-icon stat items — no emoji at all
   const statBarItems = [
-    { icon: '🏛️', label: 'Established',     value: uni.establishedYear ? String(uni.establishedYear) : null },
-    { icon: '🏫', label: 'Type',            value: uni.universityType ?? null },
-    { icon: '📚', label: 'Medium',          value: uni.mediumOfInstruction ?? null },
-    { icon: '👥', label: 'Total Students',  value: stats.totalStudents != null ? stats.totalStudents.toLocaleString() : null },
-    { icon: '🇮🇳', label: 'Indian Students', value: stats.indianStudents != null ? stats.indianStudents.toLocaleString() : null },
-    { icon: '👨‍🏫', label: 'Faculty Ratio', value: stats.facultyRatio ?? null },
-    { icon: '🌍', label: 'Campus Size',     value: stats.campusSize ?? null },
-    { icon: '📊', label: 'Pass Rate',       value: stats.passRate ?? null },
+    { svg: SVG.calendar,      label: 'Established',     value: uni.establishedYear ? String(uni.establishedYear) : null },
+    // { svg: SVG.building,      label: 'Type',            value: uni.universityType ?? null },
+    // { svg: SVG.book,          label: 'Medium',          value: uni.mediumOfInstruction ?? null },
+    { svg: SVG.users,         label: 'Total Students',  value: stats.totalStudents != null ? stats.totalStudents.toLocaleString() : null },
+    // { svg: SVG.graduationCap, label: 'Indian Students', value: stats.indianStudents != null ? stats.indianStudents.toLocaleString() : null },
+    // { svg: SVG.user,          label: 'Faculty Ratio',   value: stats.facultyRatio ?? null },
+    { svg: SVG.globe,         label: 'Campus Size',     value: stats.campusSize ?? null },
+    { svg: SVG.barChart,      label: 'Pass Rate',       value: stats.passRate ?? null },
   ].filter(s => s.value !== null);
 
-  // Sticky key facts panel
   const keyFacts = [
-    { label: 'Global Rank',      value: ranking.globalRank  ? `#${ranking.globalRank}`  : null },
-    { label: 'Country Rank',     value: ranking.countryRank ? `#${ranking.countryRank}` : null },
-    { label: 'Category',         value: ranking.category ?? null },
-    { label: 'Accreditations',   value: accreditations.length ? accreditations.join(', ') : null },
-    { label: 'Total Students',   value: stats.totalStudents != null ? stats.totalStudents.toLocaleString() : null },
-    { label: 'International',    value: stats.internationalStudents != null ? stats.internationalStudents.toLocaleString() : null },
-    { label: 'Faculty',          value: (stats.facultyCount && stats.facultyRatio) ? `${stats.facultyCount} · ${stats.facultyRatio} ratio` : (stats.facultyRatio ?? null) },
-    { label: 'Pass Rate',        value: stats.passRate ?? null },
-    { label: 'Placement Rate',   value: stats.placementRate ?? null },
-    { label: 'Medium',           value: uni.mediumOfInstruction ?? null },
+    { label: 'Global Rank',    value: ranking.globalRank  ? `#${ranking.globalRank}`  : null },
+    { label: 'Country Rank',   value: ranking.countryRank ? `#${ranking.countryRank}` : null },
+    { label: 'Category',       value: ranking.category ?? null },
+    { label: 'Accreditations', value: accreditations.length ? accreditations.join(', ') : null },
+    { label: 'Total Students', value: stats.totalStudents != null ? stats.totalStudents.toLocaleString() : null },
+    { label: 'International',  value: stats.internationalStudents != null ? stats.internationalStudents.toLocaleString() : null },
+    { label: 'Faculty',        value: (stats.facultyCount && stats.facultyRatio) ? `${stats.facultyCount} · ${stats.facultyRatio} ratio` : (stats.facultyRatio ?? null) },
+    { label: 'Pass Rate',      value: stats.passRate ?? null },
+    { label: 'Placement Rate', value: stats.placementRate ?? null },
+    { label: 'Medium',         value: uni.mediumOfInstruction ?? null },
   ].filter(r => r.value !== null);
 
-  // Infrastructure grid items
   const infraItems = [
     { label: 'Libraries',        value: infrastructure.libraries },
     { label: 'Labs',             value: infrastructure.labs },
@@ -2738,303 +2859,291 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
     { label: 'Book Collection',  value: infrastructure.bookCollection },
   ].filter(r => r.value !== undefined && r.value !== null);
 
+  const valueItems = [
+    { svg: SVG.award,   label: 'Accreditations',   value: accreditations.length ? accreditations.join(', ') : null },
+    { svg: SVG.barChart,label: 'Pass Rate',         value: stats.passRate ?? null },
+    { svg: SVG.users,   label: "Int'l Students",    value: stats.internationalStudents != null ? `${stats.internationalStudents.toLocaleString()} students` : null },
+    { svg: SVG.user,    label: 'Faculty Ratio',     value: stats.facultyRatio ?? null },
+    { svg: SVG.globe,   label: 'Campus Size',       value: stats.campusSize ?? null },
+    { svg: SVG.hospital,label: 'Clinical Partners', value: trainingPartners[0] ? `${trainingPartners[0].count}+ ${trainingPartners[0].type}` : null },
+  ].filter(r => r.value !== null);
+
   return (
     <>
       <Navbar />
-      <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '"Plus Jakarta Sans", sans-serif' }}>
+      <div style={{ minHeight: '100vh', background: '#fff', fontFamily: '"Plus Jakarta Sans",sans-serif' }}>
 
-        <LeadFormModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          universityName={uni.name}
-          countryCode={uni.countrySlug}
-        />
+        <LeadFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} universityName={uni.name} countryCode={uni.countrySlug} />
 
-        {/* ── Global styles ── */}
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
           *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-          .hide-scrollbar::-webkit-scrollbar { display: none; }
-          .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+          button, a { -webkit-tap-highlight-color: transparent; }
 
           /* ── Tabs ── */
-          .page-tabs { background: #fff; border-bottom: 1px solid #E2E8F0; }
-          .page-tabs-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; }
-          .page-tab {
-            padding: 16px 28px; background: transparent; border: none;
-            border-bottom: 2px solid transparent; font-size: 14px; font-weight: 600;
-            font-family: inherit; color: #64748B; cursor: pointer; transition: all 0.2s ease;
-          }
+          .page-tabs { background: #fff; border-bottom: 1px solid #E2E8F0; position: sticky; top: 0; z-index: 40; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+          .page-tabs-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+          .page-tabs-inner::-webkit-scrollbar { display: none; }
+          .page-tab { padding: 12px 20px; background: transparent; border: none; border-bottom: 2px solid transparent; font-size: 13px; font-weight: 600; font-family: inherit; color: #64748B; cursor: pointer; transition: color 0.2s, border-color 0.2s; white-space: nowrap; flex-shrink: 0; min-height: 44px; }
           .page-tab.active { color: #1E3A5F; border-bottom-color: #FF6B35; }
           .page-tab:hover:not(.active) { color: #1E3A5F; }
 
-          /* ── Stat bar ── */
-          .stat-bar { display: flex; border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; background: #E2E8F0; gap: 1px; overflow-x: auto; }
-          .stat-bar-item { flex: 1 1 120px; display: flex; align-items: center; gap: 10px; padding: 18px 20px; background: #fff; transition: background 0.2s; min-width: 0; }
-          .stat-bar-item:hover { background: #FAFBFC; }
+          /* ── Stat bar — always CSS grid, reflows cleanly on all widths ── */
+          .stat-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1px;
+            background: #E2E8F0;
+            border-bottom: 2px solid #E2E8F0;
+          }
+          .stat-bar-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 13px 16px; background: #fff; transition: background 0.15s;
+            min-width: 0;
+          }
+          .stat-bar-item:hover { background: #F8FAFC; }
+          .stat-bar-label { font-size: 10px; font-weight: 700; color: #94A3B8; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
+          .stat-bar-value { font-size: 13px; font-weight: 700; color: #1E3A5F; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
           /* ── Section heading ── */
-          .section-h2 { font-size: clamp(22px, 3.5vw, 32px); font-weight: 800; color: #1E3A5F; letter-spacing: -0.8px; margin-bottom: 8px; }
-          .section-sub { font-size: 15px; color: #64748B; font-weight: 500; margin-bottom: 36px; }
+          .section-h2 { font-size: clamp(16px, 3.5vw, 22px); font-weight: 800; color: #1E3A5F; letter-spacing: -0.4px; margin-bottom: 3px; }
+          .section-sub { font-size: 13px; color: #64748B; font-weight: 500; margin-bottom: 20px; }
 
-          /* ── Why-choose item ── */
-          .why-item {
-            display: flex; align-items: flex-start; gap: 20px; padding: 24px;
-            border: 1px solid #E2E8F0; background: #fff; margin-bottom: 2px;
-            transition: all 0.25s ease; position: relative;
-          }
-          .why-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: transparent; transition: background 0.2s; }
+          /* ── Why-choose ── */
+          .why-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid #E2E8F0; background: #fff; margin-bottom: 2px; position: relative; transition: box-shadow 0.2s, border-color 0.2s; }
+          .why-item::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:transparent; transition: background 0.2s; }
           .why-item:hover::before { background: #FF6B35; }
-          .why-item:hover { box-shadow: 0 8px 28px rgba(30,58,95,0.08); border-color: rgba(255,107,53,0.2); }
+          .why-item:hover { box-shadow: 0 3px 12px rgba(30,58,95,0.07); border-color: rgba(255,107,53,0.2); }
 
           /* ── Highlight card ── */
-          .highlight-card { padding: 24px 20px; border: 1px solid #E2E8F0; background: #fff; text-align: center; transition: all 0.25s ease; }
-          .highlight-card:hover { border-color: #FF6B35; box-shadow: 0 8px 24px rgba(255,107,53,0.08); transform: translateY(-3px); }
+          .highlight-card { padding: 18px 14px; border: 1px solid #E2E8F0; background: #fff; transition: all 0.2s; position: relative; overflow: hidden; }
+          .highlight-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background: #FF6B35; transform: scaleX(0); transition: transform 0.2s; transform-origin: left; }
+          .highlight-card:hover::after { transform: scaleX(1); }
+          .highlight-card:hover { box-shadow: 0 4px 14px rgba(30,58,95,0.07); }
 
           /* ── Feature card ── */
-          .feature-card { padding: 20px; border: 1px solid #E2E8F0; background: #fff; display: flex; align-items: flex-start; gap: 14px; transition: all 0.2s ease; }
-          .feature-card:hover { border-color: rgba(255,107,53,0.3); box-shadow: 0 4px 16px rgba(30,58,95,0.06); }
+          .feature-card { padding: 13px; border: 1px solid #E2E8F0; background: #fff; display: flex; align-items: flex-start; gap: 11px; transition: border-color 0.2s, box-shadow 0.2s; }
+          .feature-card:hover { border-color: rgba(255,107,53,0.3); box-shadow: 0 2px 8px rgba(30,58,95,0.05); }
 
           /* ── Program card ── */
-          .prog-card {
-            border: 1px solid #E2E8F0; background: #fff;
-            display: flex; flex-direction: column; overflow: hidden;
-            transition: all 0.25s ease; position: relative;
-          }
-          .prog-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: transparent; transition: background 0.2s; }
+          .prog-card { border: 1px solid #E2E8F0; background: #fff; display: flex; flex-direction: column; overflow: hidden; position: relative; transition: box-shadow 0.2s, border-color 0.2s; }
+          .prog-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:transparent; transition: background 0.2s; }
           .prog-card:hover::before { background: #FF6B35; }
-          .prog-card:hover { box-shadow: 0 8px 28px rgba(30,58,95,0.08); border-color: rgba(255,107,53,0.25); }
+          .prog-card:hover { box-shadow: 0 4px 18px rgba(30,58,95,0.08); border-color: rgba(255,107,53,0.2); }
 
           /* ── Eligibility row ── */
-          .elig-item { display: flex; align-items: flex-start; gap: 16px; padding: 20px 0; border-bottom: 1px solid #F1F5F9; }
+          .elig-item { display: flex; align-items: flex-start; gap: 11px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; }
           .elig-item:last-child { border-bottom: none; }
 
           /* ── Step item ── */
-          .step-item { display: flex; align-items: flex-start; gap: 20px; padding: 24px 28px; border-bottom: 1px solid #F1F5F9; }
+          .step-item { display: flex; align-items: flex-start; gap: 13px; padding: 13px 18px; border-bottom: 1px solid #F1F5F9; }
           .step-item:last-child { border-bottom: none; }
 
           /* ── Doc tag ── */
-          .doc-tag { padding: 8px 14px; border: 1px solid #E2E8F0; background: #F8FAFC; font-size: 12px; font-weight: 600; color: #1E3A5F; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease; }
-          .doc-tag:hover { border-color: #FF6B35; color: #FF6B35; background: #fff; }
+          .doc-tag { padding: 5px 10px; border: 1px solid #E2E8F0; background: #F8FAFC; font-size: 11px; font-weight: 600; color: #1E3A5F; display: inline-flex; align-items: center; gap: 5px; transition: all 0.2s; }
+          .doc-tag:hover { border-color: #FF6B35; color: #FF6B35; }
 
           /* ── Fee row ── */
-          .fee-row { display: flex; align-items: center; padding: 18px 24px; border-bottom: 1px solid #F1F5F9; gap: 12px; transition: background 0.15s; }
+          .fee-row { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #F1F5F9; gap: 12px; transition: background 0.15s; }
           .fee-row:last-child { border-bottom: none; }
-          .fee-row:hover { background: #FAFBFC; }
+          .fee-row:hover { background: #F8FAFC; }
 
           /* ── Infra cell ── */
-          .infra-cell { padding: 24px 20px; background: #fff; text-align: center; transition: all 0.2s ease; }
-          .infra-cell:hover { background: #FAFBFC; }
+          .infra-cell { padding: 18px 10px; background: #fff; text-align: center; transition: background 0.15s; }
+          .infra-cell:hover { background: #F8FAFC; }
+
+          /* ── Data row ── */
+          .data-row { padding: 9px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; border-bottom: 1px solid #F1F5F9; }
+          .data-row:last-child { border-bottom: none; }
 
           /* ── Buttons ── */
-          .btn-orange {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 15px 36px; background: #FF6B35; color: #fff;
-            border: 2px solid #FF6B35; font-size: 14px; font-weight: 700;
-            letter-spacing: 0.3px; font-family: inherit; cursor: pointer;
-            text-decoration: none; transition: all 0.2s ease;
-          }
-          .btn-orange:hover { background: #E85D29; border-color: #E85D29; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,53,0.3); }
-          .btn-white {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 15px 36px; background: #fff; color: #1E3A5F;
-            border: 2px solid #fff; font-size: 14px; font-weight: 700;
-            letter-spacing: 0.3px; font-family: inherit; cursor: pointer;
-            text-decoration: none; transition: all 0.2s ease;
-          }
+          .btn-orange { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 12px 24px; background: #FF6B35; color: #fff; border: 2px solid #FF6B35; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; transition: background 0.2s, border-color 0.2s; min-height: 44px; }
+          .btn-orange:hover { background: #E85D29; border-color: #E85D29; }
+          .btn-white  { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 12px 24px; background: #fff; color: #1E3A5F; border: 2px solid #fff; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; transition: background 0.2s, color 0.2s; min-height: 44px; }
           .btn-white:hover { background: transparent; color: #fff; }
+          .btn-ghost  { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 12px 20px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.35); font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; min-height: 44px; transition: background 0.2s; }
+          .btn-ghost:hover { background: rgba(255,255,255,0.1); }
 
           /* ── CTA banner ── */
-          .cta-banner {
-            background: #1E3A5F; padding: 52px 40px;
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 32px; flex-wrap: wrap; position: relative; overflow: hidden;
-          }
-          .cta-banner::before {
-            content: ''; position: absolute; right: -60px; top: -60px;
-            width: 200px; height: 200px; border: 1px solid rgba(255,255,255,0.07); transform: rotate(15deg);
+          .cta-banner { background: #1E3A5F; padding: 32px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; position: relative; overflow: hidden; }
+          .cta-banner::before { content:''; position:absolute; right:-50px; top:-50px; width:140px; height:140px; border:1px solid rgba(255,255,255,0.07); transform:rotate(15deg); }
+
+          /* ══════════════════════════════════
+             TABLET ≤ 1024px
+          ══════════════════════════════════ */
+          @media (max-width: 1024px) {
+            .prog-grid    { grid-template-columns: repeat(2,1fr) !important; }
+            .feature-grid { grid-template-columns: repeat(2,1fr) !important; }
+            .fee-layout   { grid-template-columns: 1fr !important; }
+            .fee-sticky, .key-facts-sticky { position: static !important; }
           }
 
-          /* ── Responsive ── */
-          @media (max-width: 1024px) {
-            .prog-grid    { grid-template-columns: repeat(2, 1fr) !important; }
-            .feature-grid { grid-template-columns: repeat(2, 1fr) !important; }
-            .fee-layout   { grid-template-columns: 1fr !important; }
-          }
+          /* ══════════════════════════════════
+             MOBILE ≤ 768px
+          ══════════════════════════════════ */
           @media (max-width: 768px) {
-            .hero-inner      { padding: 120px 20px 48px !important; }
-            .page-tabs-inner { padding: 0 16px; overflow-x: auto; }
-            .content-pad     { padding-left: 20px !important; padding-right: 20px !important; }
-            .two-col         { grid-template-columns: 1fr !important; }
-            .elig-grid       { grid-template-columns: 1fr !important; }
-            .prog-grid       { grid-template-columns: 1fr !important; }
-            .highlight-grid  { grid-template-columns: repeat(2, 1fr) !important; }
-            .feature-grid    { grid-template-columns: 1fr !important; }
-            .infra-grid      { grid-template-columns: repeat(2, 1fr) !important; }
-            .cta-banner      { padding: 36px 20px !important; flex-direction: column !important; align-items: flex-start !important; }
-            .btn-orange, .btn-white { width: 100% !important; justify-content: center !important; }
+            /* Hero */
+            .hero-inner { padding: 80px 16px 32px !important; }
+            .hero-btns  { flex-direction: column !important; }
+            .hero-btns > * { width: 100% !important; }
+
+            /* Content */
+            .content-pad { padding-left: 16px !important; padding-right: 16px !important; }
+
+            /* Stat bar → 2-col card grid on mobile, text stacks vertically */
+            .stat-bar { grid-template-columns: repeat(2, 1fr) !important; }
+            .stat-bar-item {
+              flex-direction: column !important;
+              align-items: flex-start !important;
+              gap: 6px !important;
+              padding: 14px 16px !important;
+              border-left: 3px solid #FF6B35 !important;
+            }
+            .stat-bar-value { font-size: 15px !important; white-space: normal !important; }
+
+            /* Grids */
+            .two-col, .campus-grid, .elig-grid, .prog-grid,
+            .training-grid, .fee-layout { grid-template-columns: 1fr !important; }
+            .highlight-grid, .feature-grid, .infra-grid { grid-template-columns: repeat(2,1fr) !important; }
+
+            /* Sticky panels become static */
+            .key-facts-sticky, .fee-sticky { position: static !important; }
+
+            /* CTA */
+            .cta-banner { padding: 24px 16px !important; flex-direction: column !important; align-items: flex-start !important; }
+            .btn-orange, .btn-white { width: 100% !important; }
+
+            /* Final CTA */
+            .final-cta-inner { flex-direction: column !important; padding: 48px 16px !important; }
+            .final-cta-btns  { flex-direction: column !important; width: 100% !important; }
+            .final-cta-btns > * { width: 100% !important; }
+
+            /* Stat SVG icon hidden — item shows label+value card only */
+            .stat-icon-box { display: none !important; }
+          }
+
+          /* ══════════════════════════════════
+             SMALL PHONE ≤ 480px
+          ══════════════════════════════════ */
+          @media (max-width: 480px) {
+            .stat-icon-box  { display: none !important; }
+            .feature-grid   { grid-template-columns: 1fr !important; }
+            .highlight-grid { grid-template-columns: repeat(2,1fr) !important; }
+            .infra-grid     { grid-template-columns: repeat(2,1fr) !important; }
           }
         `}</style>
 
-        {/* ════════════════════════════════════════
-            HERO
-        ════════════════════════════════════════ */}
-        <section style={{ position: 'relative', minHeight: '540px', height: '66vh', overflow: 'hidden' }}>
+        {/* ════════════════ HERO ════════════════ */}
+        <section style={{ position: 'relative', minHeight: 420, overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${uni.heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(100deg, rgba(12,24,48,0.92) 50%, rgba(12,24,48,0.4) 100%)' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg,rgba(12,24,48,0.95) 40%,rgba(12,24,48,0.5) 100%)' }} />
 
-          <div className="hero-inner" style={{
-            position: 'relative', zIndex: 2, height: '100%',
-            display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-            maxWidth: '1200px', margin: '0 auto', padding: '140px 32px 56px',
-          }}>
+          <div className="hero-inner" style={{ position: 'relative', zIndex: 2, maxWidth: 1200, margin: '0 auto', padding: '110px 32px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
 
             {/* Breadcrumb */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
-              <Link href="/destinations" style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontWeight: '500' }}>
-                Destinations
-              </Link>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+              <Link href="/destinations" style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontWeight: 500 }}>Destinations</Link>
               <span style={{ color: 'rgba(255,255,255,0.3)' }}>›</span>
-              <Link href={`/destinations/${uni.countrySlug}`} style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontWeight: '500' }}>
-                {uni.country} {uni.flag}
-              </Link>
+              <Link href={`/destinations/${uni.countrySlug}`} style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontWeight: 500 }}>{uni.country}</Link>
               <span style={{ color: 'rgba(255,255,255,0.3)' }}>›</span>
-              <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', fontWeight: '500' }}>
-                {uni.shortName ?? uni.name}
-              </span>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>{uni.shortName ?? uni.name}</span>
             </div>
 
             {/* Badges */}
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '18px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
               {uni.universityType && (
-                <div style={{ padding: '5px 14px', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', fontSize: '11px', fontWeight: '700', color: '#fff', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                  {uni.universityType}
-                </div>
+                <span style={{ padding: '3px 10px', background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', fontSize: 10, fontWeight: 700, color: '#fff', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{uni.universityType}</span>
               )}
               {accreditations.map((acc, i) => (
-                <div key={i} style={{ padding: '5px 14px', background: acc === 'NMC' ? '#FF6B35' : 'rgba(255,255,255,0.12)', border: acc === 'NMC' ? 'none' : '1px solid rgba(255,255,255,0.2)', fontSize: '11px', fontWeight: '700', color: '#fff', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                  {acc}
-                </div>
+                <span key={i} style={{ padding: '3px 10px', background: acc === 'NMC' ? '#FF6B35' : 'rgba(255,255,255,0.12)', border: acc === 'NMC' ? 'none' : '1px solid rgba(255,255,255,0.2)', fontSize: 10, fontWeight: 700, color: '#fff', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{acc}</span>
               ))}
             </div>
 
-            <h1 style={{ fontSize: 'clamp(28px, 5vw, 58px)', fontWeight: '800', color: '#fff', letterSpacing: '-1.5px', lineHeight: '1.05', marginBottom: '10px', maxWidth: '720px' }}>
-              {uni.name}
-            </h1>
+            <h1 style={{ fontSize: 'clamp(22px,5vw,46px)', fontWeight: 800, color: '#fff', letterSpacing: '-1px', lineHeight: 1.1, marginBottom: 8, maxWidth: 680 }}>{uni.name}</h1>
 
-            <div style={{ fontSize: '15px', color: 'rgba(255,255,255,0.6)', fontWeight: '600', marginBottom: '10px' }}>
-              📍 {uni.city}{uni.state ? `, ${uni.state}` : ''}, {uni.country} {uni.flag}
+            {/* Location — pure SVG pin, no emoji */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+              <span style={{ display: 'flex', flexShrink: 0 }}>{SVG.mapPin}</span>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontWeight: 600 }}>
+                {uni.city}{uni.state ? `, ${uni.state}` : ''}, {uni.country}
+              </span>
             </div>
 
             {uni.tagline && (
-              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.65)', fontWeight: '500', lineHeight: '1.65', maxWidth: '520px', marginBottom: '32px' }}>
-                {uni.tagline}
-              </p>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', fontWeight: 500, lineHeight: 1.6, maxWidth: 500, marginBottom: 22 }}>{uni.tagline}</p>
             )}
 
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div className="hero-btns" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               <button onClick={() => setIsModalOpen(true)} className="btn-orange">Apply Now →</button>
-              <button
-                onClick={() => setActiveTab('programs')}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 28px', background: 'transparent', color: '#fff', border: '1px solid rgba(255,255,255,0.35)', fontSize: '14px', fontWeight: '700', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s ease' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.1)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
-              >
-                View Programs
-              </button>
+              <button onClick={() => setActiveTab('programs')} className="btn-ghost">View Programs</button>
               {uni.website && (
                 <a href={uni.website} target="_blank" rel="noopener noreferrer"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '13px 28px', background: 'transparent', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.2)', fontSize: '14px', fontWeight: '600', textDecoration: 'none', fontFamily: 'inherit' }}>
-                  Official Website ↗
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '12px 20px', background: 'transparent', color: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.2)', fontSize: 13, fontWeight: 600, textDecoration: 'none', fontFamily: 'inherit', minHeight: 44 }}>
+                  {SVG.link} Official Site
                 </a>
               )}
             </div>
           </div>
         </section>
 
-        {/* ════════════════════════════════════════
-            STAT BAR
-        ════════════════════════════════════════ */}
+        {/* ════════════════ STAT BAR ════════════════ */}
         {statBarItems.length > 0 && (
           <div className="stat-bar">
             {statBarItems.map((s, i) => (
               <div key={i} className="stat-bar-item">
-                <span style={{ fontSize: '18px', flexShrink: 0 }}>{s.icon}</span>
-                <div style={{ minWidth: 0 }}>
-                  <FieldLabel>{s.label}</FieldLabel>
-                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#1E3A5F', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {s.value}
-                  </div>
+                <StatIconBox>{s.svg}</StatIconBox>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div className="stat-bar-label">{s.label}</div>
+                  <div className="stat-bar-value">{s.value}</div>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* ════════════════════════════════════════
-            STICKY TABS
-        ════════════════════════════════════════ */}
-        <div className="page-tabs" style={{ position: 'sticky', top: '80px', zIndex: 40 }}>
+        {/* ════════════════ TABS ════════════════ */}
+        <div className="page-tabs">
           <div className="page-tabs-inner" role="tablist">
             {tabs.map(tab => (
-              <button
-                key={tab.id}
-                role="tab"
-                aria-selected={activeTab === tab.id}
-                className={`page-tab ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                {tab.label}
-              </button>
+              <button key={tab.id} role="tab" aria-selected={activeTab === tab.id} className={`page-tab${activeTab === tab.id ? ' active' : ''}`} onClick={() => setActiveTab(tab.id)}>{tab.label}</button>
             ))}
           </div>
         </div>
 
-        {/* ════════════════════════════════════════
-            OVERVIEW TAB
-        ════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════
+            OVERVIEW
+        ════════════════════════════════════════════ */}
         {activeTab === 'overview' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
 
-            {/* ── Why Choose + Key Facts ── */}
+            {/* Why Choose + Key Facts */}
             {(whyChoose.length > 0 || keyFacts.length > 0) && (
-              <section style={{ padding: '64px 32px' }} className="content-pad">
+              <section style={{ padding: '36px 32px' }} className="content-pad">
                 <SectionHead title={`Why Choose ${uni.shortName ?? uni.name}`} sub="The key reasons students pick this university" />
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '48px', alignItems: 'start' }} className="two-col">
-
-                  {/* Left — whyChoose list */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 278px', gap: 24, alignItems: 'start' }} className="two-col">
                   <div>
                     {whyChoose.map((point, i) => (
                       <div key={i} className="why-item">
-                        <div style={{ minWidth: '36px', height: '36px', background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: '800', color: '#fff', flexShrink: 0 }}>
-                          {String(i + 1).padStart(2, '0')}
-                        </div>
-                        <p style={{ fontSize: '15px', fontWeight: '600', color: '#1E3A5F', lineHeight: '1.55', margin: 0 }}>
-                          {point}
-                        </p>
+                        <div style={{ minWidth: 26, height: 26, background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, color: '#fff', flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</div>
+                        <p style={{ fontSize: 13, fontWeight: 600, color: '#1E3A5F', lineHeight: 1.55, margin: 0 }}>{point}</p>
                       </div>
                     ))}
                   </div>
 
-                  {/* Right — Key Facts panel */}
                   {keyFacts.length > 0 && (
-                    <div style={{ border: '1px solid #E2E8F0', background: '#fff', position: 'sticky', top: '140px' }}>
-                      <div style={{ padding: '20px 24px', background: '#1E3A5F' }}>
+                    <div className="key-facts-sticky" style={{ border: '1px solid #E2E8F0', background: '#fff', position: 'sticky', top: 54 }}>
+                      <div style={{ padding: '11px 14px', background: '#1E3A5F', borderLeft: '4px solid #FF6B35' }}>
                         <FieldLabel>At a Glance</FieldLabel>
-                        <div style={{ fontSize: '17px', fontWeight: '800', color: '#fff', letterSpacing: '-0.3px', marginTop: '4px' }}>Key Facts</div>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#fff', marginTop: 2 }}>Key Facts</div>
                       </div>
                       {keyFacts.map((row, i) => (
-                        <div key={i} style={{ padding: '14px 24px', borderBottom: i < keyFacts.length - 1 ? '1px solid #F1F5F9' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
-                          <span style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', flexShrink: 0 }}>{row.label}</span>
-                          <span style={{ fontSize: '13px', fontWeight: '800', color: '#1E3A5F', textAlign: 'right', wordBreak: 'break-word' }}>{row.value}</span>
+                        <div key={i} className="data-row">
+                          <span style={{ fontSize: 11, fontWeight: 600, color: '#94A3B8', flexShrink: 0 }}>{row.label}</span>
+                          <span style={{ fontSize: 12, fontWeight: 800, color: '#1E3A5F', textAlign: 'right', wordBreak: 'break-word' }}>{row.value}</span>
                         </div>
                       ))}
-                      <div style={{ padding: '20px 24px', borderTop: '1px solid #F1F5F9' }}>
-                        <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ width: '100%', justifyContent: 'center' }}>
-                          Apply Now →
-                        </button>
+                      <div style={{ padding: '12px 14px', borderTop: '1px solid #F1F5F9' }}>
+                        <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ width: '100%' }}>Apply Now →</button>
                       </div>
                     </div>
                   )}
@@ -3042,41 +3151,36 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
               </section>
             )}
 
-            {/* ── Highlights ── */}
+            {/* Highlights — SVG icon strip replaces emoji */}
             {highlights.length > 0 && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="By the Numbers" sub="What the data says about this university" />
-                <div className="highlight-grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(highlights.length, 4)}, 1fr)`, gap: '16px' }}>
+                <div className="highlight-grid" style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(highlights.length, 4)},1fr)`, gap: 1, background: '#E2E8F0', border: '1px solid #E2E8F0' }}>
                   {highlights.map((h, i) => (
                     <div key={i} className="highlight-card">
-                      <div style={{ fontSize: '28px', marginBottom: '12px' }}>{h.icon}</div>
-                      <div style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: '800', color: '#FF6B35', letterSpacing: '-1px', marginBottom: '6px' }}>
-                        {h.stat}
-                      </div>
-                      <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748B', letterSpacing: '1px', textTransform: 'uppercase' }}>
-                        {h.label}
-                      </div>
+                      {/* Accent line top — replaces unreliable emoji icon */}
+                      <div style={{ width: 28, height: 3, background: '#FF6B35', marginBottom: 10 }} />
+                      <div style={{ fontSize: 'clamp(20px,3.5vw,30px)', fontWeight: 800, color: '#1E3A5F', letterSpacing: '-0.8px', lineHeight: 1, marginBottom: 6 }}>{h.stat}</div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#64748B', letterSpacing: '0.6px', textTransform: 'uppercase', lineHeight: 1.4 }}>{h.label}</div>
                     </div>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* ── Key Features ── */}
+            {/* Key Features — CSS accent replaces emoji icon */}
             {keyFeatures.length > 0 && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="Key Features" sub="What sets this university apart" />
-                <div className="feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                <div className="feature-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 7 }}>
                   {keyFeatures.map((f, i) => (
                     <div key={i} className="feature-card">
-                      <div style={{ width: '42px', height: '42px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>
-                        {f.icon}
+                      <div style={{ width: 30, height: 30, background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#fff' }}>
+                        {SVG.check}
                       </div>
                       <div>
-                        <div style={{ fontSize: '13px', fontWeight: '800', color: '#1E3A5F', marginBottom: '2px' }}>{f.label}</div>
-                        {f.value && (
-                          <div style={{ fontSize: '12px', fontWeight: '700', color: '#FF6B35' }}>{f.value}</div>
-                        )}
+                        <div style={{ fontSize: 12, fontWeight: 800, color: '#1E3A5F', marginBottom: 1 }}>{f.label}</div>
+                        {f.value && <div style={{ fontSize: 11, fontWeight: 600, color: '#64748B' }}>{f.value}</div>}
                       </div>
                     </div>
                   ))}
@@ -3084,65 +3188,45 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
               </section>
             )}
 
-            {/* ── Accreditations ── */}
+            {/* Accreditations */}
             {accreditations.length > 0 && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="Recognition & Accreditations" sub="Globally accepted credentials for your medical career" />
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                  {accreditations.map((acc, i) => (
-                    <div key={i}
-                      style={{ padding: '18px 24px', border: '1px solid #E2E8F0', background: '#fff', display: 'flex', alignItems: 'center', gap: '14px', transition: 'all 0.2s ease', cursor: 'default' }}
-                      onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#FF6B35'; }}
-                      onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#E2E8F0'; }}
-                    >
-                      <div style={{ width: '40px', height: '40px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>✅</div>
-                      <div>
-                        <div style={{ fontSize: '15px', fontWeight: '800', color: '#1E3A5F' }}>{acc}</div>
-                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#FF6B35', letterSpacing: '1.5px', textTransform: 'uppercase', marginTop: '2px' }}>Recognized</div>
-                      </div>
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                  {accreditations.map((acc, i) => <VerifiedBadge key={i} label={acc} />)}
                 </div>
               </section>
             )}
 
-            {/* ── Infrastructure ── */}
+            {/* Infrastructure */}
             {infraItems.length > 0 && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="Infrastructure" sub="Campus facilities by the numbers" />
-                <div className="infra-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: '#E2E8F0', border: '1px solid #E2E8F0' }}>
+                <div className="infra-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 1, background: '#E2E8F0', border: '1px solid #E2E8F0' }}>
                   {infraItems.map((r, i) => (
                     <div key={i} className="infra-cell">
-                      <div style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: '800', color: '#1E3A5F', letterSpacing: '-1px', marginBottom: '6px' }}>
-                        {r.value}
-                      </div>
-                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
-                        {r.label}
-                      </div>
+                      <div style={{ fontSize: 'clamp(18px,3vw,28px)', fontWeight: 800, color: '#FF6B35', letterSpacing: '-0.5px', marginBottom: 4 }}>{r.value}</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#64748B', letterSpacing: '0.8px', textTransform: 'uppercase' }}>{r.label}</div>
                     </div>
                   ))}
                 </div>
               </section>
             )}
 
-            {/* ── Training Partners ── */}
+            {/* Training Partners */}
             {trainingPartners.length > 0 && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="Training & Clinical Partners" sub="Where students get real-world exposure" />
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                <div className="training-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 8 }}>
                   {trainingPartners.map((tp, i) => (
                     <div key={i} style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden' }}>
-                      <div style={{ padding: '16px 20px', background: '#1E3A5F', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ fontSize: '13px', fontWeight: '800', color: '#fff' }}>{tp.type}</div>
-                        <div style={{ padding: '4px 12px', background: '#FF6B35', fontSize: '11px', fontWeight: '700', color: '#fff', letterSpacing: '1px' }}>
-                          {tp.count}+
-                        </div>
+                      <div style={{ padding: '9px 13px', background: '#1E3A5F', borderLeft: '4px solid #FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span style={{ fontSize: 12, fontWeight: 800, color: '#fff' }}>{tp.type}</span>
+                        <span style={{ padding: '2px 9px', background: '#FF6B35', fontSize: 11, fontWeight: 700, color: '#fff' }}>{tp.count}+</span>
                       </div>
-                      <div style={{ padding: '16px 20px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ padding: '9px 13px', display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                         {(tp.notable ?? []).map((name, j) => (
-                          <span key={j} style={{ padding: '5px 12px', background: '#F8FAFC', border: '1px solid #E2E8F0', fontSize: '12px', fontWeight: '600', color: '#1E3A5F' }}>
-                            {name}
-                          </span>
+                          <span key={j} style={{ padding: '3px 9px', background: '#F8FAFC', border: '1px solid #E2E8F0', fontSize: 11, fontWeight: 600, color: '#1E3A5F' }}>{name}</span>
                         ))}
                       </div>
                     </div>
@@ -3151,89 +3235,76 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
               </section>
             )}
 
-            {/* ── Campus Life + Safety (side by side) ── */}
-            <section style={{ padding: '0 32px 64px' }} className="content-pad">
+            {/* Campus Life + Safety */}
+            <section style={{ padding: '0 32px 36px' }} className="content-pad">
               <SectionHead title="Campus Life" sub="Beyond the classroom" />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="two-col">
-
-                {/* Student Life */}
-                <div style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden' }}>
-                  <div style={{ padding: '16px 24px', background: '#1E3A5F' }}>
-                    <FieldLabel>Student Life</FieldLabel>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginTop: '4px' }}>Clubs, Sports & Culture</div>
-                  </div>
+              <div className="campus-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <div style={{ border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                  <CardHeader label="Student Life" title="Clubs, Sports & Culture" />
                   {[
-                    { label: 'Student Clubs',    value: studentLife.clubs != null ? `${studentLife.clubs} clubs` : null },
-                    { label: 'Cultural Events',  value: studentLife.culturalEvents != null ? `${studentLife.culturalEvents} events / year` : null },
-                    { label: 'Sports',           value: sportsAvailable.length > 0 ? sportsAvailable.join(', ') : null },
+                    { label: 'Student Clubs',      value: studentLife.clubs != null ? `${studentLife.clubs} clubs` : null },
+                    { label: 'Cultural Events',    value: studentLife.culturalEvents != null ? `${studentLife.culturalEvents} events / year` : null },
+                    { label: 'Sports',             value: sportsAvailable.length > 0 ? sportsAvailable.join(', ') : null },
                     { label: 'Indian Association', value: studentLife.indianAssociation != null ? (studentLife.indianAssociation ? 'Yes — active chapter' : 'Not available') : null },
-                  ].filter(r => r.value !== null).map((row, i, arr) => (
-                    <div key={i} style={{ padding: '14px 24px', borderBottom: i < arr.length - 1 ? '1px solid #F1F5F9' : 'none', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', flexShrink: 0 }}>{row.label}</span>
-                      <span style={{ fontSize: '13px', fontWeight: '700', color: '#1E3A5F', textAlign: 'right' }}>{row.value}</span>
+                  ].filter(r => r.value !== null).map((row, i) => (
+                    <div key={i} className="data-row">
+                      <span style={{ fontSize: 11, fontWeight: 600, color: '#94A3B8', flexShrink: 0 }}>{row.label}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#1E3A5F', textAlign: 'right' }}>{row.value}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Safety & Location */}
-                <div style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden' }}>
-                  <div style={{ padding: '16px 24px', background: '#1E3A5F' }}>
-                    <FieldLabel>Safety & Location</FieldLabel>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginTop: '4px' }}>Your Security Matters</div>
-                  </div>
+                <div style={{ border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                  <CardHeader label="Safety & Location" title="Your Security Matters" />
                   {[
-                    { label: 'Safety Rating',  value: safetyRating.overall ?? null },
-                    { label: 'Campus Security', value: safetyRating.campusSecurity != null ? (safetyRating.campusSecurity ? '24/7 Security Guards' : 'Standard security') : null },
-                    { label: '24/7 Support',   value: safetyRating.support247 != null ? (safetyRating.support247 ? 'Available round the clock' : 'Office hours only') : null },
-                    { label: 'Climate',        value: location.climate ?? null },
+                    { label: 'Safety Rating',   value: safetyRating.overall ?? null },
+                    { label: 'Campus Security', value: safetyRating.campusSecurity != null ? (safetyRating.campusSecurity ? '24/7 Security Guards' : 'Standard') : null },
+                    { label: '24/7 Support',    value: safetyRating.support247 != null ? (safetyRating.support247 ? 'Available round the clock' : 'Office hours only') : null },
+                    { label: 'Climate',         value: location.climate ?? null },
                     { label: 'Nearest Airport', value: (location.nearestAirport && location.distanceKm != null) ? `${location.nearestAirport} · ${location.distanceKm} km` : (location.nearestAirport ?? null) },
-                  ].filter(r => r.value !== null).map((row, i, arr) => (
-                    <div key={i} style={{ padding: '14px 24px', borderBottom: i < arr.length - 1 ? '1px solid #F1F5F9' : 'none', display: 'flex', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', flexShrink: 0 }}>{row.label}</span>
-                      <span style={{ fontSize: '13px', fontWeight: '700', color: '#1E3A5F', textAlign: 'right' }}>{row.value}</span>
+                  ].filter(r => r.value !== null).map((row, i) => (
+                    <div key={i} className="data-row">
+                      <span style={{ fontSize: 11, fontWeight: 600, color: '#94A3B8', flexShrink: 0 }}>{row.label}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#1E3A5F', textAlign: 'right' }}>{row.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </section>
 
-            {/* ── Facilities ── */}
+            {/* Facilities */}
             {facilities.length > 0 && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="Facilities" sub="What's available on campus" />
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                  {facilities.map((f, i) => (
-                    <div key={i} className="doc-tag">
-                      <span style={{ color: '#FF6B35' }}>✓</span> {f}
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                  {facilities.map((f, i) => <DocTag key={i}>{f}</DocTag>)}
                 </div>
               </section>
             )}
 
-            {/* ── Placements ── */}
+            {/* Placements */}
             {uni.placements && (
-              <section style={{ padding: '0 32px 64px' }} className="content-pad">
+              <section style={{ padding: '0 32px 36px' }} className="content-pad">
                 <SectionHead title="Placements" sub="Graduate outcomes and employer network" />
-                <div style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden' }}>
-                  <div style={{ display: 'flex', background: '#E2E8F0', gap: '1px' }}>
+                <div style={{ border: '1px solid #E2E8F0', overflow: 'hidden' }}>
+                  <div style={{ display: 'flex', background: '#E2E8F0', gap: 1 }}>
                     {[
-                      { label: 'Placement Rate',   value: uni.placements.rate },
-                      ...(uni.placements.averagePackage ? [{ label: 'Average Package', value: uni.placements.averagePackage }] : []),
+                      { label: 'Placement Rate', value: uni.placements.rate },
+                      ...(uni.placements.averagePackage ? [{ label: 'Avg Package', value: uni.placements.averagePackage }] : []),
                       ...(uni.placements.highestPackage ? [{ label: 'Highest Package', value: uni.placements.highestPackage }] : []),
                     ].map((s, i) => (
-                      <div key={i} style={{ flex: 1, padding: '24px', background: '#fff', textAlign: 'center' }}>
-                        <div style={{ fontSize: 'clamp(22px, 3vw, 32px)', fontWeight: '800', color: '#FF6B35', letterSpacing: '-1px', marginBottom: '6px' }}>{s.value}</div>
-                        <div style={{ fontSize: '11px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase' }}>{s.label}</div>
+                      <div key={i} style={{ flex: 1, padding: '16px 12px', background: '#fff', textAlign: 'center' }}>
+                        <div style={{ fontSize: 'clamp(16px,3vw,26px)', fontWeight: 800, color: '#FF6B35', letterSpacing: '-0.5px', marginBottom: 3 }}>{s.value}</div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '0.8px', textTransform: 'uppercase' }}>{s.label}</div>
                       </div>
                     ))}
                   </div>
                   {(uni.placements.topRecruiters ?? []).length > 0 && (
-                    <div style={{ padding: '20px 24px' }}>
-                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '14px' }}>Top Recruiters</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                    <div style={{ padding: '12px 16px' }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 8 }}>Top Recruiters</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                         {(uni.placements.topRecruiters ?? []).map((r, i) => (
-                          <span key={i} style={{ padding: '7px 16px', background: '#F8FAFC', border: '1px solid #E2E8F0', fontSize: '12px', fontWeight: '700', color: '#1E3A5F' }}>{r}</span>
+                          <span key={i} style={{ padding: '3px 10px', background: '#F8FAFC', border: '1px solid #E2E8F0', fontSize: 11, fontWeight: 700, color: '#1E3A5F' }}>{r}</span>
                         ))}
                       </div>
                     </div>
@@ -3242,188 +3313,162 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
               </section>
             )}
 
-            {/* ── Mid CTA ── */}
-            <section style={{ padding: '0 32px 64px' }} className="content-pad">
+            {/* Mid CTA */}
+            <section style={{ padding: '0 32px 36px' }} className="content-pad">
               <div className="cta-banner">
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                  <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.5)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '10px' }}>Your Seat Awaits</div>
-                  <h3 style={{ fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: '800', color: '#fff', letterSpacing: '-0.5px', marginBottom: '8px' }}>
+                <div style={{ position: 'relative', zIndex: 1, flex: 1, minWidth: 200 }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 6 }}>Your Seat Awaits</div>
+                  <h3 style={{ fontSize: 'clamp(15px,2.8vw,21px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.3px', marginBottom: 5 }}>
                     Start your journey at {uni.shortName ?? uni.name}
                   </h3>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.65)', fontWeight: '500', maxWidth: '400px' }}>
+                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.65)', fontWeight: 500, maxWidth: 360 }}>
                     Expert counselors guide you from inquiry to enrollment — at zero cost.
                   </p>
                 </div>
-                <button onClick={() => setIsModalOpen(true)} className="btn-white" style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>
-                  Get Free Counseling →
-                </button>
+                <button onClick={() => setIsModalOpen(true)} className="btn-white" style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>Get Free Counseling →</button>
               </div>
             </section>
 
           </div>
         )}
 
-        {/* ════════════════════════════════════════
-            PROGRAMS TAB
-        ════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════
+            PROGRAMS
+        ════════════════════════════════════════════ */}
         {activeTab === 'programs' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 32px 80px' }} className="content-pad">
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '36px 32px 60px' }} className="content-pad">
             <SectionHead
               title={`Programs at ${uni.shortName ?? uni.name}`}
               sub={programs.length > 0 ? `${programs.length} program${programs.length !== 1 ? 's' : ''} offered` : 'Contact us for the latest program list'}
             />
-
             {programs.length > 0 ? (
               <>
-                <div className="prog-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                <div className="prog-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
                   {programs.map((prog, i) => {
-                    const progDataRows = [
+                    const rows = [
                       { label: 'Duration', value: prog.duration },
                       { label: 'Seats',    value: prog.seats ? `${prog.seats} seats` : null },
                       { label: 'Intakes',  value: (prog.intakes ?? []).length > 0 ? (prog.intakes ?? []).join(' · ') : null },
                     ].filter(r => r.value !== null);
-
                     return (
                       <div key={i} className="prog-card">
-                        <div style={{ padding: '20px 24px', borderBottom: '1px solid #F1F5F9' }}>
-                          <div style={{ fontSize: '10px', fontWeight: '700', color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>
-                            {prog.category}
-                          </div>
-                          <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#1E3A5F', lineHeight: '1.25', marginBottom: '4px' }}>
-                            {prog.degree}
-                          </h3>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#64748B' }}>{prog.name}</div>
+                        <div style={{ padding: '13px 14px', borderBottom: '1px solid #F1F5F9', borderLeft: '4px solid #FF6B35' }}>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: '#FF6B35', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 5 }}>{prog.category}</div>
+                          <h3 style={{ fontSize: 15, fontWeight: 800, color: '#1E3A5F', lineHeight: 1.2, marginBottom: 2 }}>{prog.degree}</h3>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: '#64748B' }}>{prog.name}</div>
                         </div>
-
-                        <div style={{ background: '#E2E8F0', display: 'flex', flexDirection: 'column', gap: '1px', flex: 1 }}>
-                          {progDataRows.map((row, j) => (
-                            <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '13px 20px', background: '#fff', gap: '12px' }}>
-                              <span style={{ fontSize: '11px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1px', textTransform: 'uppercase', flexShrink: 0 }}>{row.label}</span>
-                              <span style={{ fontSize: '13px', fontWeight: '800', color: '#1E3A5F', textAlign: 'right' }}>{row.value}</span>
+                        <div style={{ background: '#E2E8F0', display: 'flex', flexDirection: 'column', gap: 1, flex: 1 }}>
+                          {rows.map((row, j) => (
+                            <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 13px', background: '#fff', gap: 12 }}>
+                              <span style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '0.8px', textTransform: 'uppercase', flexShrink: 0 }}>{row.label}</span>
+                              <span style={{ fontSize: 12, fontWeight: 800, color: '#1E3A5F', textAlign: 'right' }}>{row.value}</span>
                             </div>
                           ))}
                         </div>
-
                         <div
                           onClick={() => setIsModalOpen(true)}
-                          style={{ padding: '15px 20px', background: '#F8FAFC', fontSize: '11px', fontWeight: '700', color: '#1E3A5F', letterSpacing: '1.5px', textTransform: 'uppercase', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s ease', borderTop: '1px solid #E2E8F0' }}
+                          style={{ padding: '11px 13px', background: '#F8FAFC', fontSize: 10, fontWeight: 700, color: '#1E3A5F', letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s', borderTop: '1px solid #E2E8F0', minHeight: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                           onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = '#FF6B35'; (e.currentTarget as HTMLDivElement).style.color = '#fff'; }}
                           onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = '#F8FAFC'; (e.currentTarget as HTMLDivElement).style.color = '#1E3A5F'; }}
-                        >
-                          Enquire About This Program →
-                        </div>
+                        >Enquire About This Program →</div>
                       </div>
                     );
                   })}
                 </div>
-
                 {eligibleFor.length > 0 && (
-                  <div style={{ marginTop: '48px' }}>
-                    <div style={{ fontSize: '12px', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px' }}>
-                      Degree Eligible For
-                    </div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  <div style={{ marginTop: 28 }}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 10 }}>Degree Eligible For</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
                       {eligibleFor.map((exam, i) => <CheckBadge key={i}>{exam}</CheckBadge>)}
                     </div>
                   </div>
                 )}
               </>
             ) : (
-              <div style={{ padding: '80px 40px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1E3A5F', marginBottom: '12px' }}>Program Details Coming Soon</h3>
-                <p style={{ fontSize: '15px', color: '#64748B', marginBottom: '28px' }}>Contact us to get the full program list for {uni.name}.</p>
+              <div style={{ padding: '48px 24px', textAlign: 'center', border: '1px solid #E2E8F0' }}>
+                <h3 style={{ fontSize: 17, fontWeight: 800, color: '#1E3A5F', marginBottom: 8 }}>Program Details Coming Soon</h3>
+                <p style={{ fontSize: 13, color: '#64748B', marginBottom: 18 }}>Contact us to get the full program list for {uni.name}.</p>
                 <button onClick={() => setIsModalOpen(true)} className="btn-orange">Contact Us →</button>
               </div>
             )}
           </div>
         )}
 
-        {/* ════════════════════════════════════════
-            ADMISSIONS TAB
-        ════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════
+            ADMISSIONS
+        ════════════════════════════════════════════ */}
         {activeTab === 'admissions' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 32px 80px' }} className="content-pad">
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '36px 32px 60px' }} className="content-pad">
             <SectionHead title="Admissions" sub="Eligibility, documents, and the step-by-step process" />
 
-            {/* Eligibility + Docs */}
             {(eligibility.exam || eligibility.minScore || eligibility.minPercentage || eligibility.ageLimit || requiredDocs.length > 0) && (
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: '1px', background: '#E2E8F0', border: '1px solid #E2E8F0', marginBottom: '48px' }} className="elig-grid">
-
-                {/* Left — Criteria */}
-                <div style={{ background: '#fff', padding: '28px 28px 12px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>Eligibility Criteria</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: 1, background: '#E2E8F0', border: '1px solid #E2E8F0', marginBottom: 28 }} className="elig-grid">
+                <div style={{ background: '#fff', padding: '18px 18px 8px' }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 12 }}>Eligibility Criteria</div>
                   {[
-                    { icon: '📋', label: 'Exam Required',  value: eligibility.exam },
-                    { icon: '🎯', label: 'Min Score',      value: eligibility.minScore },
-                    { icon: '🎓', label: 'Min Percentage', value: eligibility.minPercentage },
-                    { icon: '🎂', label: 'Age Limit',      value: eligibility.ageLimit },
+                    { svg: SVG.book,          label: 'Exam Required',  value: eligibility.exam },
+                    { svg: SVG.barChart,      label: 'Min Score',      value: eligibility.minScore },
+                    { svg: SVG.graduationCap, label: 'Min Percentage', value: eligibility.minPercentage },
+                    { svg: SVG.calendar,      label: 'Age Limit',      value: eligibility.ageLimit },
                   ].filter(e => e.value).map((item, i) => (
                     <div key={i} className="elig-item">
-                      <div style={{ width: '44px', height: '44px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>
-                        {item.icon}
-                      </div>
+                      <div style={{ width: 30, height: 30, background: '#F0F4FF', borderLeft: '3px solid #FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{item.svg}</div>
                       <div>
-                        <div style={{ fontSize: '10px', fontWeight: '700', color: '#FF6B35', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>{item.label}</div>
-                        <div style={{ fontSize: '15px', fontWeight: '700', color: '#1E3A5F', lineHeight: '1.4' }}>{item.value}</div>
+                        <div style={{ fontSize: 9, fontWeight: 700, color: '#FF6B35', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 2 }}>{item.label}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: '#1E3A5F', lineHeight: 1.3 }}>{item.value}</div>
                       </div>
                     </div>
                   ))}
                 </div>
-
-                {/* Right — Documents */}
-                <div style={{ background: '#fff', padding: '28px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '20px' }}>Required Documents</div>
+                <div style={{ background: '#fff', padding: 18 }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: '#FF6B35', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: 12 }}>Required Documents</div>
                   {requiredDocs.length > 0 ? (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '28px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 16 }}>
                       {requiredDocs.map((doc, i) => <DocTag key={i}>{doc}</DocTag>)}
                     </div>
                   ) : (
-                    <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '28px' }}>Contact us for the full documents checklist.</p>
+                    <p style={{ fontSize: 13, color: '#64748B', marginBottom: 16 }}>Contact us for the full documents checklist.</p>
                   )}
-                  <div style={{ padding: '20px', border: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+                  <div style={{ padding: '12px 14px', border: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
                     <div>
-                      <div style={{ fontSize: '14px', fontWeight: '700', color: '#1E3A5F', marginBottom: '4px' }}>Need help with documents?</div>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Our team handles everything for you.</div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#1E3A5F', marginBottom: 2 }}>Need help with documents?</div>
+                      <div style={{ fontSize: 11, color: '#64748B' }}>Our team handles everything for you.</div>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ padding: '11px 22px', fontSize: '12px' }}>Get Help →</button>
+                    <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ padding: '9px 18px', fontSize: 12, minHeight: 40 }}>Get Help →</button>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Admission Steps */}
             {admissionSteps.length > 0 && (
               <>
-                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1E3A5F', letterSpacing: '-0.4px', marginBottom: '4px' }}>Admission Process</h3>
-                <p style={{ fontSize: '14px', color: '#64748B', fontWeight: '500', marginBottom: '28px' }}>Follow these steps to secure your seat</p>
-                <div style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1E3A5F', marginBottom: 3 }}>Admission Process</h3>
+                <p style={{ fontSize: 12, color: '#64748B', fontWeight: 500, marginBottom: 14 }}>Follow these steps to secure your seat</p>
+                <div style={{ border: '1px solid #E2E8F0', overflow: 'hidden' }}>
                   {admissionSteps.map((step, i) => (
                     <div key={i} className="step-item">
-                      <div style={{ minWidth: '40px', height: '40px', background: i === 0 ? '#FF6B35' : '#F8FAFC', border: i === 0 ? 'none' : '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '800', color: i === 0 ? '#fff' : '#1E3A5F', flexShrink: 0 }}>
+                      <div style={{ minWidth: 30, height: 30, background: i === 0 ? '#FF6B35' : '#F8FAFC', border: i === 0 ? 'none' : '1px solid #E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, color: i === 0 ? '#fff' : '#1E3A5F', flexShrink: 0 }}>
                         {String(i + 1).padStart(2, '0')}
                       </div>
-                      <p style={{ fontSize: '15px', fontWeight: '600', color: '#1E3A5F', lineHeight: '1.6', margin: 0, paddingTop: '8px' }}>{step}</p>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: '#1E3A5F', lineHeight: 1.55, margin: 0, paddingTop: 4 }}>{step}</p>
                     </div>
                   ))}
-                  <div style={{ padding: '24px 28px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-                    <div>
-                      <div style={{ fontSize: '14px', fontWeight: '700', color: '#1E3A5F', marginBottom: '4px' }}>Ready to get started?</div>
-                      <div style={{ fontSize: '12px', color: '#64748B' }}>Our counselors guide you through every step, free of charge.</div>
+                  <div style={{ padding: '14px 18px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: 160 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#1E3A5F', marginBottom: 2 }}>Ready to get started?</div>
+                      <div style={{ fontSize: 11, color: '#64748B' }}>Our counselors guide you through every step, free of charge.</div>
                     </div>
-                    <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ marginLeft: 'auto' }}>Start Application →</button>
+                    <button onClick={() => setIsModalOpen(true)} className="btn-orange">Start Application →</button>
                   </div>
                 </div>
               </>
             )}
 
-            {/* Eligible-for exams */}
             {eligibleFor.length > 0 && (
-              <div style={{ marginTop: '48px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1E3A5F', letterSpacing: '-0.4px', marginBottom: '4px' }}>Exam Eligibility</h3>
-                <p style={{ fontSize: '14px', color: '#64748B', fontWeight: '500', marginBottom: '20px' }}>
-                  Degrees from {uni.shortName ?? uni.name} are recognized for these licensing exams
-                </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ marginTop: 28 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 800, color: '#1E3A5F', marginBottom: 3 }}>Exam Eligibility</h3>
+                <p style={{ fontSize: 12, color: '#64748B', fontWeight: 500, marginBottom: 12 }}>Degrees from {uni.shortName ?? uni.name} are recognized for these licensing exams</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
                   {eligibleFor.map((exam, i) => <CheckBadge key={i}>{exam}</CheckBadge>)}
                 </div>
               </div>
@@ -3431,169 +3476,128 @@ export default function UniversityPage({ university: uni }: UniversityPageProps)
           </div>
         )}
 
-        {/* ════════════════════════════════════════
-            FEES TAB
-        ════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════
+            FEES
+        ════════════════════════════════════════════ */}
         {activeTab === 'fees' && (
-          <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '64px 32px 80px' }} className="content-pad">
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '36px 32px 60px' }} className="content-pad">
             <SectionHead title="Fee Structure" sub="Complete cost breakdown for your planning" />
+            <div className="fee-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 290px', gap: 20, alignItems: 'start' }}>
 
-            <div className="fee-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '32px', alignItems: 'start' }}>
-
-              {/* Left */}
               <div>
-                <div style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden', marginBottom: '24px' }}>
-                  <div style={{ padding: '20px 24px', background: '#1E3A5F' }}>
+                <div style={{ border: '1px solid #E2E8F0', overflow: 'hidden', marginBottom: 14 }}>
+                  <div style={{ padding: '11px 16px', background: '#1E3A5F', borderLeft: '4px solid #FF6B35' }}>
                     <FieldLabel>Annual Breakdown</FieldLabel>
-                    <div style={{ fontSize: '17px', fontWeight: '800', color: '#fff', marginTop: '4px' }}>
-                      {fees.currency ?? 'USD'} — Per Academic Year
-                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#fff', marginTop: 2 }}>{fees.currency ?? 'USD'} — Per Academic Year</div>
                   </div>
-
-                  {/* Tuition */}
                   {fees.tuitionPerYear != null && (
                     <div className="fee-row">
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#1E3A5F' }}>Tuition Fee / Year</div>
-                        <div style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '600', marginTop: '2px' }}>Academic fees per annum</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: '#1E3A5F' }}>Tuition Fee / Year</div>
+                        <div style={{ fontSize: 11, color: '#94A3B8', fontWeight: 600, marginTop: 1 }}>Academic fees per annum</div>
                       </div>
-                      <div style={{ fontSize: '16px', fontWeight: '800', color: '#1E3A5F', flexShrink: 0 }}>
-                        {fees.currency} {fees.tuitionPerYear.toLocaleString()}
-                      </div>
+                      <div style={{ fontSize: 14, fontWeight: 800, color: '#1E3A5F', flexShrink: 0 }}>{fees.currency} {fees.tuitionPerYear.toLocaleString()}</div>
                     </div>
                   )}
-
-                  {/* Hostel */}
                   {fees.hostelPerYear != null && (
                     <div className="fee-row">
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: '#1E3A5F' }}>Hostel Fee / Year</div>
-                        <div style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '600', marginTop: '2px' }}>Including meals / boarding</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: '#1E3A5F' }}>Hostel Fee / Year</div>
+                        <div style={{ fontSize: 11, color: '#94A3B8', fontWeight: 600, marginTop: 1 }}>Including meals / boarding</div>
                       </div>
-                      <div style={{ fontSize: '16px', fontWeight: '800', color: '#1E3A5F', flexShrink: 0 }}>
-                        {fees.currency} {fees.hostelPerYear.toLocaleString()}
-                      </div>
+                      <div style={{ fontSize: 14, fontWeight: 800, color: '#1E3A5F', flexShrink: 0 }}>{fees.currency} {fees.hostelPerYear.toLocaleString()}</div>
                     </div>
                   )}
-
-                  {/* Total first year */}
                   {fees.totalFirstYear != null && (
-                    <div style={{ padding: '16px 24px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ padding: '11px 16px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                       <div>
-                        <div style={{ fontSize: '12px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '3px' }}>Total First Year</div>
-                        <div style={{ fontSize: '11px', color: '#64748B' }}>All inclusive — first year</div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: '#94A3B8', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 1 }}>Total First Year</div>
+                        <div style={{ fontSize: 10, color: '#64748B' }}>All inclusive</div>
                       </div>
-                      <div style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: '800', color: '#1E3A5F', letterSpacing: '-0.5px' }}>
-                        {fees.currency} {fees.totalFirstYear.toLocaleString()}
-                      </div>
+                      <div style={{ fontSize: 'clamp(15px,2.5vw,20px)', fontWeight: 800, color: '#1E3A5F' }}>{fees.currency} {fees.totalFirstYear.toLocaleString()}</div>
                     </div>
                   )}
-
-                  {/* Total course */}
                   {fees.totalCourse != null && (
-                    <div style={{ padding: '16px 24px', background: '#1E3A5F', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ padding: '11px 16px', background: '#1E3A5F', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                       <div>
-                        <div style={{ fontSize: '12px', fontWeight: '700', color: 'rgba(255,255,255,0.45)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '3px' }}>Total Course Cost</div>
-                        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Complete {programs[0]?.duration ?? 'program'}</div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.45)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 1 }}>Total Course Cost</div>
+                        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)' }}>Complete {programs[0]?.duration ?? 'program'}</div>
                       </div>
-                      <div style={{ fontSize: 'clamp(22px, 3vw, 34px)', fontWeight: '800', color: '#FF6B35', letterSpacing: '-1px' }}>
-                        {fees.currency} {fees.totalCourse.toLocaleString()}
-                      </div>
+                      <div style={{ fontSize: 'clamp(17px,2.5vw,24px)', fontWeight: 800, color: '#FF6B35' }}>{fees.currency} {fees.totalCourse.toLocaleString()}</div>
                     </div>
                   )}
                 </div>
 
-                {/* Accommodation */}
                 {accommodation.available && (
-                  <div style={{ border: '1px solid #E2E8F0', background: '#fff', overflow: 'hidden', marginBottom: '24px' }}>
-                    <div style={{ padding: '16px 24px', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+                  <div style={{ border: '1px solid #E2E8F0', overflow: 'hidden', marginBottom: 14 }}>
+                    <div style={{ padding: '11px 16px', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
                       <div>
-                        <div style={{ fontSize: '15px', fontWeight: '800', color: '#1E3A5F' }}>Accommodation</div>
-                        <div style={{ fontSize: '12px', color: '#64748B', marginTop: '2px' }}>On-campus hostel</div>
+                        <div style={{ fontSize: 13, fontWeight: 800, color: '#1E3A5F' }}>Accommodation</div>
+                        <div style={{ fontSize: 11, color: '#64748B', marginTop: 1 }}>On-campus hostel</div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
                         {accommodation.costPerYear != null && (
-                          <div style={{ fontSize: '18px', fontWeight: '800', color: '#1E3A5F' }}>
-                            {fees.currency} {accommodation.costPerYear.toLocaleString()} <span style={{ fontSize: '11px', color: '#94A3B8', fontWeight: '600' }}>/year</span>
-                          </div>
+                          <div style={{ fontSize: 14, fontWeight: 800, color: '#1E3A5F' }}>{fees.currency} {accommodation.costPerYear.toLocaleString()} <span style={{ fontSize: 10, color: '#94A3B8', fontWeight: 600 }}>/yr</span></div>
                         )}
                         {accommodation.capacity != null && (
-                          <div style={{ fontSize: '11px', color: '#64748B', marginTop: '2px' }}>Capacity: {accommodation.capacity.toLocaleString()} students</div>
+                          <div style={{ fontSize: 10, color: '#64748B', marginTop: 1 }}>Capacity: {accommodation.capacity.toLocaleString()}</div>
                         )}
                       </div>
                     </div>
                     {(accommodation.features ?? []).length > 0 && (
-                      <div style={{ padding: '16px 24px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ padding: '9px 16px', display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                         {(accommodation.features ?? []).map((f, i) => (
-                          <span key={i} style={{ padding: '5px 12px', background: '#F8FAFC', border: '1px solid #E2E8F0', fontSize: '12px', fontWeight: '600', color: '#1E3A5F' }}>{f}</span>
+                          <span key={i} style={{ padding: '3px 9px', background: '#F8FAFC', border: '1px solid #E2E8F0', fontSize: 11, fontWeight: 600, color: '#1E3A5F' }}>{f}</span>
                         ))}
                       </div>
                     )}
                   </div>
                 )}
 
-                {/* Disclaimer */}
-                <div style={{ padding: '16px 20px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '18px', flexShrink: 0 }}>ℹ️</span>
-                  <p style={{ fontSize: '12px', color: '#64748B', fontWeight: '500', lineHeight: '1.6', margin: 0 }}>
+                <div style={{ padding: '11px 14px', background: '#F8FAFC', border: '1px solid #E2E8F0', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <span style={{ display: 'flex', flexShrink: 0, marginTop: 1 }}>{SVG.info}</span>
+                  <p style={{ fontSize: 11, color: '#64748B', fontWeight: 500, lineHeight: 1.6, margin: 0 }}>
                     All fees are approximate and subject to change. Exchange rate fluctuations may affect the final amount. Contact our counselors for the most current fee structure before making any payment.
                   </p>
                 </div>
               </div>
 
-              {/* Right — sticky value panel */}
-              <div style={{ border: '1px solid #E2E8F0', background: '#fff', position: 'sticky', top: '140px' }}>
-                <div style={{ padding: '20px 24px', background: '#FF6B35' }}>
+              {/* Right sticky — Cost vs Value */}
+              <div className="fee-sticky" style={{ border: '1px solid #E2E8F0', position: 'sticky', top: 54 }}>
+                <div style={{ padding: '11px 14px', background: '#FF6B35' }}>
                   <FieldLabel>Why It's Worth It</FieldLabel>
-                  <div style={{ fontSize: '17px', fontWeight: '800', color: '#fff', marginTop: '4px' }}>Cost vs Value</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#FFFFF', marginTop: 2 }}>Cost vs Value</div>
                 </div>
-                {[
-                  { icon: '🎓', label: 'Accreditations',   value: accreditations.length ? accreditations.join(', ') : null },
-                  { icon: '📊', label: 'Pass Rate',         value: stats.passRate ?? null },
-                  { icon: '👥', label: "Int'l Students",    value: stats.internationalStudents != null ? `${stats.internationalStudents.toLocaleString()} students` : null },
-                  { icon: '👨‍🏫', label: 'Faculty Ratio',  value: stats.facultyRatio ?? null },
-                  { icon: '🌍', label: 'Campus Size',       value: stats.campusSize ?? null },
-                  { icon: '🏥', label: 'Clinical Partners', value: trainingPartners[0] ? `${trainingPartners[0].count}+ ${trainingPartners[0].type}` : null },
-                ].filter(r => r.value !== null).map((item, i, arr) => (
-                  <div key={i} style={{ padding: '14px 20px', borderBottom: i < arr.length - 1 ? '1px solid #F1F5F9' : 'none', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '18px' }}>{item.icon}</span>
-                    <div>
-                      <div style={{ fontSize: '11px', fontWeight: '700', color: '#94A3B8', letterSpacing: '1px', textTransform: 'uppercase' }}>{item.label}</div>
-                      <div style={{ fontSize: '13px', fontWeight: '700', color: '#1E3A5F', marginTop: '2px' }}>{item.value}</div>
-                    </div>
-                  </div>
+                {valueItems.map((item, i) => (
+                  <ValueRow key={i} svg={item.svg} label={item.label} value={item.value!} />
                 ))}
-                <div style={{ padding: '20px 24px', borderTop: '1px solid #F1F5F9' }}>
-                  <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ width: '100%', justifyContent: 'center' }}>
-                    Get Full Fee Breakdown →
-                  </button>
+                <div style={{ padding: '12px 14px', borderTop: '1px solid #F1F5F9' }}>
+                  <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ width: '100%' }}>Get Full Fee Breakdown →</button>
                 </div>
               </div>
+
             </div>
           </div>
         )}
 
-        {/* ════════════════════════════════════════
-            FINAL CTA
-        ════════════════════════════════════════ */}
+        {/* ════════════════ FINAL CTA ════════════════ */}
         <section style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, backgroundImage: `url(${galleryImages[0] ?? uni.heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(12,24,48,0.91)' }} />
-          <div style={{ position: 'relative', zIndex: 2, maxWidth: '1200px', margin: '0 auto', padding: '100px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '48px', flexWrap: 'wrap' }}>
-            <div>
-              <div style={{ fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.4)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: '12px' }}>Take the Next Step</div>
-              <h2 style={{ fontSize: 'clamp(28px, 5vw, 52px)', fontWeight: '800', color: '#fff', letterSpacing: '-2px', lineHeight: '1.0', marginBottom: '16px' }}>
-                Your Medical Career<br />
-                <span style={{ color: '#FF6B35' }}>Starts at {uni.shortName ?? uni.name}</span>
+          <div className="final-cta-inner" style={{ position: 'relative', zIndex: 2, maxWidth: 1200, margin: '0 auto', padding: '64px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 32, flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 220 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.4)', letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 9 }}>Take the Next Step</div>
+              <h2 style={{ fontSize: 'clamp(22px,4vw,38px)', fontWeight: 800, color: '#fff', letterSpacing: '-1px', lineHeight: 1.1, marginBottom: 10 }}>
+                Your Medical Career<br /><span style={{ color: '#FF6B35' }}>Starts at {uni.shortName ?? uni.name}</span>
               </h2>
-              <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.55)', fontWeight: '500', maxWidth: '440px' }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)', fontWeight: 500, maxWidth: 380 }}>
                 Expert counselors guide you from first inquiry to enrollment — at zero cost.
               </p>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minWidth: '220px' }}>
-              <button onClick={() => setIsModalOpen(true)} className="btn-orange" style={{ justifyContent: 'center' }}>Apply Now →</button>
-              <Link href={`/destinations/${uni.countrySlug}`} className="btn-white" style={{ justifyContent: 'center', color: '#1E3A5F' }}>
-                More in {uni.country} {uni.flag}
+            <div className="final-cta-btns" style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 190 }}>
+              <button onClick={() => setIsModalOpen(true)} className="btn-orange">Apply Now →</button>
+              <Link href={`/destinations/${uni.countrySlug}`} className="btn-white" style={{ color: '#1E3A5F' }}>
+                More in {uni.country}
               </Link>
             </div>
           </div>
