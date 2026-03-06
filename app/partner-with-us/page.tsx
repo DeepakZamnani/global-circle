@@ -8,10 +8,7 @@ import type { PartnerFormData, Message } from '@/types';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-// ============================================
-// PARTNER WITH US PAGE
-// Luxury Professional Design - Mobile Responsive
-// ============================================
+
 
 export default function PartnerPage() {
   const [formData, setFormData] = useState<PartnerFormData>({
