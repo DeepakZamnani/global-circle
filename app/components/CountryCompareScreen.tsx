@@ -587,7 +587,7 @@ export default function CountryCompareSection() {
                         </div>
                       ))}
 
-                      {/* CTA */}
+                      {/* CcA */}
                       <div style={{
                         padding:'18px 20px',
                         borderTop:'1px solid rgba(255,255,255,0.07)',
